@@ -1,0 +1,169 @@
+
+<app-card  [classHeader]="true" [title]="'Thông tin đơn vị'">
+  <div class="md-tabs md-tabs-custom tab-org-infor" *ngIf="inforOrg && inforOrganization">
+    <form  name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm" autocomplete="off" class="form-infor-org"  *ngIf="inforOrg.organization" [class.ng-submitted]="editForm.submitted">
+      <div class="form-material form-profile">
+        <div class="cover-img ">
+          <div class="cover-logo border-radius" [style.height]="logo ? 'auto' : '320px'">
+          <!--<div class="cover-logo border-radius" [style.background-image]="logo ? 'url(' + logo + ')' : null">-->
+            <input type="file" class="form-control" id="img_logo" name="organizationLogo1" (ngModel)="inforOrg.organization.organizationLogo"  (change)="handleFileSelect($event)" />
+            <img src="{{logo}}" alt="" >
+            <label for="img_logo"><i class="fa fa-camera" aria-hidden="true"></i> {{'Cập nhật' | translate}}</label>
+          </div>
+          <div *ngIf="checkTypeFile" class="txt-red"> {{'Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB' | translate}}</div>
+        </div>
+        <div class="row content-profile">
+          <div class="col-6">
+            <div class="form-control"  [class.ng-invalid]="((editForm.controls?.organizationCode?.touched ||  editForm.submitted) &&
+                    editForm.controls?.organizationCode?.invalid)">
+              <label class="label-profile">Mã đơn vị <span class="txt-red">*</span></label>
+              <input type="text" name="organizationCode" disabled [(ngModel)]="inforOrganization.organizationCode" class="input-profile"
+                     required minlength="5" maxlength="255"  PatternOnly="^[a-zA-Z0-9]{0,}$"  >
+            </div>
+            <div [hidden]="!((editForm.controls?.organizationCode?.touched ||  editForm.submitted) &&
+                    editForm.controls?.organizationCode?.invalid)">
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationCode?.errors?.required">
+                {{'Thông tin không được để trống' | translate}}
+              </small>
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationCode?.errors?.pattern">
+                Sai định dạng mã đơn vị
+              </small>
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls?.organizationCode?.errors?.notUnique">
+                Thông tin đã tồn tại trên hệ thống
+              </small>
+            </div>
+            <div class="form-control"  [class.ng-invalid]="((editForm.controls?.organizationName?.touched || editForm.submitted ||  editForm.controls?.organizationName?.dirty) && editForm.controls?.organizationName?.invalid)">
+              <label class="label-profile">Tên đơn vị <span class="txt-red">*</span></label>
+              <input type="text" name="organizationName" [(ngModel)]="inforOrganization.organizationName" class="input-profile" [ControlTrim]="'deep'"
+                     required maxlength="100">
+            </div>
+            <div [hidden]="!((editForm.controls?.organizationName?.touched || editForm.submitted  ||  editForm.controls?.organizationName?.dirty) && editForm.controls?.organizationName?.invalid)">
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationName?.errors?.required">
+                {{'Thông tin không được để trống' | translate}}
+              </small>
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationName?.errors?.maxlength">
+                This field cannot be longer than 100 characters.
+              </small>
+            </div>
+            <div class="form-control" [class.ng-invalid]="((editForm.controls?.organizationEmail?.touched || editForm.submitted  || editForm.controls?.organizationEmail?.dirty) &&
+                    editForm.controls?.organizationEmail?.invalid)">
+              <label class="label-profile">Email <span class="txt-red">*</span></label>
+              <input type="text" name="organizationEmail"  class="input-profile"[(ngModel)]="inforOrganization.organizationEmail" PatternOnly="^[\d\w._@\s]*$"
+                     [textMask]="{mask: emailMask}"  required [pattern]="patternEmail" maxlength="255" >
+            </div>
+            <div [hidden]="!((editForm.controls?.organizationEmail?.touched || editForm.submitted || editForm.controls?.organizationEmail?.dirty) &&
+                    editForm.controls?.organizationEmail?.invalid)">
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationEmail?.errors?.required">
+                {{'Thông tin không được để trống' | translate}}
+              </small>
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationEmail?.errors?.pattern">
+                {{'Sai định dạng email' | translate}}
+              </small>
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls?.organizationEmail?.errors?.notUnique">
+                Thông tin đã tồn tại trên hệ thống
+              </small>
+            </div>
+            <div class="form-control"  [class.ng-invalid]="((editForm.controls?.organizationPhone?.touched || editForm.submitted || editForm.controls?.organizationPhone?.dirty)  && editForm.controls?.organizationPhone?.invalid)">
+              <label class="label-profile">Số điện thoại  <span class="txt-red">*</span></label>
+              <input type="text" name="organizationPhone"  class="input-profile" [(ngModel)]="inforOrganization.organizationPhone"
+                     required [maxlength]="12" minlength="10" [pattern]="maskUsMobile" PatternOnly="^\+?\d{0,12}$"
+              >
+            </div>
+            <div [hidden]="!((editForm.controls?.organizationPhone?.touched || editForm.submitted || editForm.controls?.organizationPhone?.dirty)  && editForm.controls?.organizationPhone?.invalid)">
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationPhone?.errors?.required">
+                {{'Thông tin không được để trống' | translate}}
+              </small>
+            </div>
+            <div class="form-control" [class.ng-invalid]="((editForm.controls?.organizationTaxCode?.touched || editForm.submitted || editForm.controls?.organizationTaxCode?.dirty)&&
+                    editForm.controls?.organizationTaxCode?.invalid)">
+              <label class="label-profile">Mã số thuế  <span class="txt-red">*</span></label>
+              <input type="text" name="organizationTaxCode"  class="input-profile"[(ngModel)]="inforOrganization.organizationTaxCode"
+                     required maxlength="15" PatternOnly="^\d{0,15}$"
+              >
+            </div>
+            <div [hidden]="!((editForm.controls?.organizationTaxCode?.touched || editForm.submitted || editForm.controls?.organizationTaxCode?.dirty)&&
+                    editForm.controls?.organizationTaxCode?.invalid)">
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls.organizationTaxCode?.errors?.required">
+                {{'Thông tin không được để trống' | translate}}
+              </small>
+              <small class="form-text text-danger"
+                     [hidden]="!editForm.controls?.organizationTaxCode?.errors?.notUnique">
+                Thông tin đã tồn tại trên hệ thống
+              </small>
+            </div>
+            <div class="form-control form-control-textarea">
+              <label class="label-profile">Địa chỉ</label>
+                <textarea rows="1" name="organizationAddress" [(ngModel)]="inforOrganization.organizationAddress" [ControlTrim]="'deep'" class="form-control input-profile-textarea input-profile"></textarea>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-control">
+              <label class="label-profile">Lĩnh vực hoạt động </label>
+              <select name="organizationRemark" [(ngModel)]="inforOrganization.organizationRemark" class="input-profile" *ngIf="categories">
+                <option [ngValue]="null"> -- Chọn lĩnh vực hoạt động --</option>
+                <option *ngFor="let data of categories.data" [ngValue]="data.categoryCode"> {{data.categoryName}}</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label class="label-profile">Website</label>
+              <input type="text" name="organizationHomePage"  class="input-profile"[(ngModel)]="inforOrganization.organizationHomePage" >
+            </div>
+            <div class="form-control">
+              <label class="label-profile">Gói dịch vụ sử dụng  <span class="txt-red">*</span></label>
+              <div class="input-profile" >
+                <span class="disabled-info">{{formatServicePack(inforOrg.servicePack) }} </span>
+              </div>
+            </div>
+            <div class="form-control">
+              <label class="label-profile">Thời hạn  <span class="txt-red">*</span></label>
+              <div class="input-profile disabled-info" >
+                <span class="disabled-info" *ngIf="inforOrganization.organizationFrom">{{inforOrganization.organizationFrom | date: 'dd/MM/yyyy'}}-</span>  <span class="disabled-info">{{inforOrganization.organizationTo | date: 'dd/MM/yyyy'}}</span>
+              </div>
+            </div>
+            <div class="form-control">
+              <label class="label-profile">Trạng thái</label>
+              <span class="input-profile disabled-info">{{'active.' + inforOrganization.isActive | translate}}</span>
+            </div>
+            <div class="form-control form-control-textarea">
+              <label class="label-profile">Ghi chú</label>
+                <textarea rows="1" name="organizationNote" [(ngModel)]="inforOrganization.organizationNote" [ControlTrim]="'deep'" class="form-control input-profile-textarea input-profile"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 pt-3 mb-5">
+        <button type="submit" id="save-entity" class="btn btn-primary float-right m-r-5" style="    text-transform: initial;">&nbsp;<span>{{'Cập nhật' | translate}}</span>
+        </button>
+        <button type="button" id="cancel-save" class="btn mr-3 btn-default float-right"  (click)="clear()">&nbsp;<span >{{'entity.action.cancel' | translate}}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+</app-card>
+
+<app-modal-basic #modalDefault class="confirm-common" [dialogClass]="'modal-sm'" [outsizeClose]="false">
+    <div class="app-modal-body">
+        <p>Hủy thông tin đã nhập và thoát </p>
+    </div>
+    <div class="app-modal-footer row" style="width: 100%;     margin-right: 0;">
+        <div class="col-6" style="  padding-right: 10px;  ">
+            <button type="button" class="btn btn-primary btn-sm float-right m-b-20 ripple light" (click)="agreeComfirm()">Có</button>
+        </div>
+        <div class="col-6" style="  padding-left: 10px;  ">
+            <button type="button" class="btn btn-default btn-sm float-left m-b-20 ripple light" (click)="modalDefault.hide()">Không</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+

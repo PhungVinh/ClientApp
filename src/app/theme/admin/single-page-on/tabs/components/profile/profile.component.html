@@ -1,0 +1,183 @@
+<!--<ng-container *ngIf="(organizations$ | async) === null">-->
+<!--Loading content-->
+<!--</ng-container>-->
+<app-card  [classHeader]="true">
+  <div class="md-tabs md-tabs-custom">
+  <ngb-tabset>
+      <ngb-tab title="{{'Thông tin chung' | translate}}">
+        <ng-template ngbTabContent>
+          <div [@fadeInOutTranslate] class="m-t-15">
+            <div class="tab-profile" *ngIf="account" >
+            <form  name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm" autocomplete="off" class="form-cover-profile" [class.ng-submitted]="editForm.submitted">
+              <div class="form-material form-profile">
+                <div class="cover-img ">
+                  <div class="cover-logo border-radius" [style.height]="avatar ? 'auto' : '320px'">
+                    <input type="file" class="form-control" id="avarta" name="avatar" (ngModel)="account.avatar"  (change)="handleFileSelectProfile($event)" />
+                    <img [src]="avatar" alt="">
+                    <label for="avarta"><i class="fa fa-camera" aria-hidden="true"></i> {{'Cập nhật' | translate}}</label>
+                  </div>
+                  <div *ngIf="checkTypeFile" class="txt-red"> {{'Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB' | translate}}</div>
+                </div>
+                <div class="row content-profile">
+                  <div class="col-md-6">
+                    <div class="form-control">
+                      <label class="label-profile">{{'Tên đăng nhập' | translate}}</label>
+                      <input type="text" name="userNames" [(ngModel)]="account.userName" disabled class="input-profile" style="background-color: #ecf0f5!important;">
+                    </div>
+                    <div class="form-control">
+                      <label class="label-profile">{{'Họ tên' | translate}} </label>
+                      <input type="text" name="fullNames" [(ngModel)]="account.fullName" class="input-profile" maxlength="100">
+                    </div>
+                    <div class="form-control">
+                      <label class="label-profile">{{'Đơn vị' | translate}}</label>
+                      <input type="text" disabled  class="input-profile" name="categoryCodeRoles" [(ngModel)]="account.categoryCodeRole" style="background-color: #ecf0f5!important;">
+                    </div>
+                    <div class="form-control">
+                      <label class="label-profile">{{'Phòng ban' | translate}} </label>
+                      <input type="text" disabled name="categoryCodeDepartments" [(ngModel)]="account.categoryCodeDepartment" class="input-profile" style="background-color: #ecf0f5!important;">
+                    </div>
+                    <div class="form-control">
+                      <label class="label-profile">{{'Chức vụ' | translate}}</label>
+                      <input type="text" disabled name="positions" [(ngModel)]="account.position" class="input-profile" style="background-color: #ecf0f5!important;">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-control">
+                      <label for="" class="label-profile">{{'Giới tính' | translate}}</label>
+                      <div class="form-radio input-profile">
+                        <div class="radio radio-inline">
+                          <label>
+                            <input type="radio" name="genders" [(ngModel)]="account.gender" [value]="1" class="">
+                            <i class="helper"></i>{{'Nam' | translate}}
+                          </label>
+                        </div>
+                        <div class="radio radio-inline">
+                          <label>
+                            <input type="radio" name="genders" [(ngModel)]="account.gender" [value]="0" class="">
+                            <i class="helper"></i>{{'Nữ' | translate}}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-control">
+                      <label for="" class="label-profile">{{'Ngày sinh' | translate}}</label>
+                      <div class="input-profile">
+                        <div class="form-inline">
+                          <input class="form-date-profile" readonly placeholder="" name="birthDays" [(ngModel)]="account.birthDay" ngbDatepicker #d="ngbDatepicker" [maxDate]="today"   [minDate]="{year: 1950, month: 1, day: 1}">
+                          <span type="button" class=""  (click)="d.toggle()">
+                                <i class="fa fa-calendar"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-control"  [class.ng-invalid]="((editForm.controls?.email?.touched || editForm.submitted  || editForm.controls?.email?.dirty) &&
+                    editForm.controls?.email?.invalid)">
+                      <label class="label-profile">Email <span class="txt-red">*</span></label>
+                      <input type="text" name="email" [(ngModel)]="account.email" class="input-profile" PatternOnly="^[\d\w._@\s]*$"
+                             [textMask]="{mask: emailMask}"  required [pattern]="patternEmail" maxlength="255">
+                    </div>
+                    <div [hidden]="!((editForm.controls?.email?.touched || editForm.submitted  || editForm.controls?.email?.dirty) &&
+                    editForm.controls?.email?.invalid)">
+                      <small class="form-text text-danger"
+                             [hidden]="!editForm.controls.email?.errors?.required">
+                        {{'Thông tin không được để trống' | translate}}
+                      </small>
+                      <small class="form-text text-danger"
+                             [hidden]="!editForm.controls.email?.errors?.pattern">
+                        {{'Sai định dạng email' | translate}}
+                      </small>
+                      <small class="form-text text-danger"
+                             [hidden]="!editForm.controls?.email?.errors?.notUnique">
+                        Thông tin đã tồn tại trên hệ thống
+                      </small>
+                    </div>
+                    <div class="form-control" [class.ng-invalid]="((editForm.controls?.phoneNumbers?.touched || editForm.submitted || editForm.controls?.phoneNumbers?.dirty)  && editForm.controls?.phoneNumbers?.invalid)">
+                      <label class="label-profile">Số điện thoại <span class="txt-red">*</span></label>
+                      <input type="text" name="phoneNumbers" [(ngModel)]="account.phoneNumber"  class="input-profile"
+                             required [maxlength]="12" minlength="10" [pattern]="maskUsMobiles" PatternOnly="^\+?\d{0,12}$"
+                      >
+                    </div>
+                    <div [hidden]="!((editForm.controls?.phoneNumbers?.touched || editForm.submitted || editForm.controls?.phoneNumbers?.dirty)  && editForm.controls?.phoneNumbers?.invalid)">
+                      <small class="form-text text-danger"
+                             [hidden]="!editForm.controls.phoneNumbers?.errors?.required">
+                        {{'Thông tin không được để trống' | translate}}
+                      </small>
+                      <small class="form-text text-danger"
+                             [hidden]="!editForm.controls?.phoneNumbers?.errors?.notUnique">
+                        Thông tin đã tồn tại trên hệ thống
+                      </small>
+                    </div>
+                    <div class="form-control">
+                      <label class="label-profile">{{'Địa chỉ' | translate}}</label>
+                      <input type="text" name="addresss" [(ngModel)]="account.address" class="input-profile" maxlength="250">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 pt-3 mb-5">
+                <button type="submit" id="save-entity" class="btn btn-primary float-right m-r-5" >&nbsp;<span>{{'Cập nhật' | translate}}</span>
+                </button>
+                <button type="button" id="cancel-save" class="btn mr-3 btn-default float-right"  (click)="clear()">&nbsp;<span >{{'entity.action.cancel' | translate}}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="{{'Thông tin phân quyền' | translate}}" *ngIf="isRole !== 'SuperAdmin'">
+        <ng-template ngbTabContent>
+          <div [@fadeInOutTranslate] class="m-t-15">
+          <div class="m-t-15" *ngIf="authorities">
+           <div class="">
+             <div class="col-4">
+               <div class="form-group row">
+                 <label class=" col-form-label pr-4">{{'Module' | translate}}</label>
+                 <div class="col-select">
+                   <select name="auth"  class="form-control" [(ngModel)]="auth" (ngModelChange)="onFilterAuth(auth)">
+                     <option [ngValue]="null">Tất cả</option>
+                     <option [ngValue]="item.parentCode" *ngFor="let item of authorityTemp" >{{item.parentName}}</option>
+                   </select>
+                 </div>
+               </div>
+             </div>
+           </div>
+            <div class="table-responsive">
+              <table class="table table-sm table-common table-profile">
+                <thead>
+                <tr>
+                  <th >{{'Tất cả chức năng' | translate}}</th>
+                  <th class="text-center">Mã hóa</th>
+                  <th class="text-center">{{'Xem tất cả'| translate }}</th>
+                  <th class="text-center">{{'Sửa tất cả' | translate}}</th>
+                  <th class="text-center">{{'Xóa tất cả' | translate}}</th>
+                  <th class="text-center">{{'Xem' | translate}}</th>
+                  <th class="text-center">{{'Thêm mới' | translate}}</th>
+                  <th class="text-center">{{'Sửa' | translate}}</th>
+                  <th class="text-center">{{'Xóa' | translate}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of authorities">
+                  <td >{{item.menuName}}</td>
+                  <td class="text-center"><i *ngIf="item.isEncypt" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isShowAll" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isEditAll" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isDeleteAll" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isShow" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isAdd" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isEdit" class="fa fa-check" ></i></td>
+                  <td class="text-center"><i *ngIf="item.isDelete" class="fa fa-check" ></i></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+  </ngb-tabset>
+  </div>
+
+</app-card>
+

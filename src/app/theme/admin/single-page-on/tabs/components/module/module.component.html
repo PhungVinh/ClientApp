@@ -1,0 +1,47 @@
+
+<div class="page-body box-infor-field">
+  <app-card [title]="'Danh sách Module'">
+    <div class="table-responsive">
+      <table class="table example-container">
+        <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên Module</th>
+          <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of (listModule$ | async); let i = index">
+          <td>{{i+1}}</td>
+          <td>{{item.data?.MenuName}}</td>
+          <td>
+            <i class="fa fa-pencil m-r-10" aria-hidden="true" (click)="openTab(item.tab)"></i>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </app-card>
+
+</div>
+<!-- modal large-->
+<form class="form">
+  <app-modal-basic #modalLarge [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+      <h4 class="modal-title">Cấu hình trường thông tin</h4>
+      <button type="button" class="close basic-close" (click)="modalLarge.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-default ripple" id="cancelModal" (click)="modalLarge.hide()">Hủy
+      </button>
+      <button type="submit" class="btn btn-primary ripple light m-l-10">Lưu</button>
+    </div>
+  </app-modal-basic>
+</form>
+
+

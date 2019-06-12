@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAM,CAAA;EACF,SAAS,EAAE,IAAI;CAClB;;AAED,AAAA,WAAW,CAAA;EACP,MAAM,EAAE,MAAM;CASjB;;AAVD,AAGI,WAHO,CAGP,CAAC,CAAA;EACG,SAAS,EAAE,IAAI;EACf,MAAM,EAAE,iBAAiB;EACzB,aAAa,EAAE,IAAI;EACnB,OAAO,EAAE,SAAS;EAClB,KAAK,EAAE,OAAO;CACjB",
+    "sources": [
+        "authority-delete.component.scss"
+    ],
+    "names": [],
+    "file": "authority-delete.component.css"
+}

@@ -1,0 +1,128 @@
+.form-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-profile .cover-img {
+  width: 23%;
+  border-right: 3px solid #e7e7e7;
+}
+
+.form-profile .content-profile {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.cover-logo {
+  border: 1px solid #cccccc;
+  position: relative;
+}
+
+.cover-logo input {
+  display: none;
+}
+
+.cover-logo label {
+  position: absolute;
+  right: 15px;
+  bottom: 5px;
+  padding: 7px 10px;
+  background: black;
+  border-radius: 4px;
+  color: white;
+  opacity: 0.4;
+}
+
+.cover-logo img {
+  width: 100%;
+  height: auto;
+}
+
+.cover-img {
+  padding-right: 30px;
+  margin-right: 20px;
+}
+
+.cover-img img {
+  border-radius: 10px;
+}
+
+.content-profile .form-control {
+  margin-top: 17px;
+}
+
+.content-profile .form-control .label-profile {
+  width: 40%;
+  float: left;
+  padding-left: 10px;
+}
+
+.content-profile .form-control .label-profile .txt-red {
+  float: right;
+  margin-right: 25px;
+}
+
+.content-profile .form-control .input-profile {
+  float: left;
+  width: calc(100% - 40%);
+  border: none;
+}
+
+.content-profile .form-control .input-profile .form-date-profile {
+  width: calc(100% - 40px);
+  border: none;
+}
+
+.content-profile .form-control .input-profile span {
+  -webkit-appearance: none;
+}
+
+.txt-red {
+  color: red;
+}
+
+.border-radius {
+  border-radius: 10px;
+}
+
+.table-profile {
+  border: 1px solid  #dee2e6;
+}
+
+.table-profile th {
+  background: #f8f8f8;
+}
+
+.border-b-red {
+  border-bottom: 1px solid red;
+}
+
+.ng-submitted .form-control.ng-invalid:not(form),
+.form-control.ng-invalid:not(form) {
+  border-bottom: 1px solid red;
+}
+
+.form-control.ng-invalid:not(form) + div.form-error {
+  border-bottom: 1px solid red;
+}
+
+.ng-dirty.ng-invalid:not(form) {
+  border-bottom: 1px solid red;
+}
+
+@media screen and (max-width: 1400px) {
+  .form-cover-profile {
+    width: 1200px !important;
+  }
+  .tab-profile {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+input[_ngcontent-c14]:disabled {
+  background-color: #ecf0f5 !important;
+}
+/*# sourceMappingURL=profile.component.css.map */

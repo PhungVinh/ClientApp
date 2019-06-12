@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AACE,aADW,CACX,eAAe,CAAA;EACb,YAAY,EAAE,IAAI;CACnB;;AAHH,AAIE,aAJW,CAIX,WAAW,CAAA;EACT,IAAI,EAAE,CAAC;CAKR;;AAVH,AAMI,aANS,CAIX,WAAW,CAET,KAAK,CAAA;EACH,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;CACb;;AAIL,AAAA,cAAc,CAAA;EACZ,OAAO,EAAE,MAAM;CAChB",
+    "sources": [
+        "cims.component.scss"
+    ],
+    "names": [],
+    "file": "cims.component.css"
+}

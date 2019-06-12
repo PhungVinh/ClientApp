@@ -1,0 +1,151 @@
+.basic.modal {
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+.basic.fade {
+  opacity: 0;
+  -webkit-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.basic.fade.in {
+  opacity: 1;
+}
+
+.basic.modal.fade.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+.basic.modal.fade .modal-dialog {
+  -webkit-transition: all .3s ease-out;
+  transition: all .3s ease-out;
+  -webkit-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p.confirm-icon {
+  position: relative;
+  margin: 1rem auto;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  line-height: 30px;
+  padding: 3px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  border: 1px solid;
+  background-color: transparent;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p.confirm-icon.confirm-delete {
+  border-color: #ed7362;
+  color: #ed7362;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p.confirm-icon.confirm-lost-connection {
+  border-color: #fe4e25;
+  background: -webkit-gradient(linear, left top, right top, from(#1c8eff), to(#1568f4));
+  background: linear-gradient(to right, #1c8eff 0%, #1568f4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p.confirm-icon.confirm-lost-connection::after {
+  content: '';
+  width: 2px;
+  height: 50px;
+  background-color: red;
+  display: block;
+  position: absolute;
+  z-index: 999999;
+  top: 0;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p.confirm-icon.confirm-warning {
+  border-color: #f8bb85;
+  color: #f8bb85;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-body > p > i {
+  font-size: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: auto;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: -webkit-fill-available;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.basic.modal.fade .modal-dialog .app-modal-footer input[type=submit][type=button][type=reset], .basic.modal.fade .modal-dialog .app-modal-footer button {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 0 .5rem;
+}
+
+.basic .basic-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 16px;
+  color: #292b2c;
+}
+
+.basic .basic-close-light-box {
+  position: absolute;
+  top: -31px;
+  right: -20px;
+  font-size: 30px;
+  color: white;
+  text-shadow: none;
+}
+
+.basic h5 {
+  margin-bottom: 0;
+  color: #757575;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-right: 10px;
+}
+/*# sourceMappingURL=modal-confirm.component.css.map */

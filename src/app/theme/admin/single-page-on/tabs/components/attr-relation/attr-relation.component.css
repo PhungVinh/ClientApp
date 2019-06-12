@@ -1,0 +1,117 @@
+.form-search-org {
+  width  : auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-search-org input {
+  border          : none;
+  -webkit-box-flex: 1;
+  -ms-flex        : 1;
+  flex            : 1;
+}
+
+.form-search-org .input-datepicker {
+  width: 100px;
+}
+
+.form-search-org .input-group-append {
+  width           : 25px;
+  -webkit-box-pack: center;
+  -ms-flex-pack   : center;
+  justify-content : center;
+  border          : navajowhite;
+  background      : transparent;
+}
+
+.form-search-org .input-group-append span {
+  display   : block;
+  font-size : 15px;
+  margin-top: 0px;
+}
+
+.table thead th {
+  border-top: none !important;
+  padding   : 17px 2rem;
+}
+
+.table tbody tr td {
+  padding: 17px 2rem;
+}
+
+.star {
+  color: red;
+}
+
+.itemdelete {
+  margin: 30px 0;
+}
+
+.itemdelete i {
+  font-size    : 50px;
+  border       : 4px solid #f27474;
+  border-radius: 53px;
+  padding      : 12px 18px;
+  color        : #f27474;
+}
+
+.text1 {
+  font-size: 20px;
+}
+
+.texttnotification {
+  display: block;
+  margin : 30px 0;
+}
+
+.texthave {
+  font-size     : 17px;
+  padding-left  : 25px;
+  padding-right : 25px;
+  padding-top   : 7px;
+  padding-bottom: 7px;
+}
+
+.textIsNot {
+  background: #aaaaaa;
+  font-size : 17px;
+  border    : none;
+  padding   : 8px 20px;
+}
+
+.textIsNot:hover {
+  opacity: 0.8;
+}
+
+.border-red {
+  border: 1px solid red !important;
+}
+
+.ng-invalid:not(form):not(.ng-untouched) {
+  border: 1px solid red;
+}
+
+.ng-submitted .form-control.ng-invalid:not(form),
+.form-control.ng-invalid.ng-touched:not(form) {
+  border-color: red;
+}
+
+.form-control.ng-invalid:not(form)+div.form-error {
+  color: red;
+}
+
+.ng-submitted .form-control.ng-invalid.ng-dirty:not(form),
+.form-control.ng-invalid.ng-dirty.ng-touched:not(form) {
+  border-color: red;
+}
+
+.ng-dirty.ng-invalid:not(form) {
+  border: 1px solid red;
+}
+
+.icon-action samp i {
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=attr-relation.component.css.map */

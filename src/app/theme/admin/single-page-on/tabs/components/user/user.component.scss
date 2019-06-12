@@ -1,0 +1,291 @@
+.cover-logo {
+    border  : 1px solid #cccccc;
+    height  : 128px;
+    position: relative;
+}
+
+.cover-logo input {
+    display: none;
+}
+
+.cover-logo label {
+    position     : absolute;
+    right        : 15px;
+    bottom       : 5px;
+    padding      : 7px 10px;
+    background   : black;
+    border-radius: 4px;
+    color        : white;
+    opacity      : 0.4;
+}
+
+.cover-logo img {
+    width : 100%;
+    height: 100%;
+}
+
+.common-action {
+    padding: 0 10px;
+}
+
+//.ng-invalid:not(form) {
+//    border-left: 5px solid red;
+//}
+.txt-red {
+    color: red;
+}
+
+select.form-control,
+select.form-control:focus,
+select.form-control:hover {
+    border: 1px solid #cccccc !important;
+}
+
+//.custom-day {
+//    text-align: center;
+//    padding   : 0.185rem 0.25rem;
+//    display   : inline-block;
+//    height    : 2rem;
+//    width     : 2rem;
+//}
+//.custom-day.focused {
+//    background-color: #e6e6e6!important;
+//}
+//.custom-day.range, .custom-day:hover {
+//    background-color: rgb(2, 117, 216)!important;
+//    color           : white!important;
+//}
+//.custom-day.faded {
+//    background-color: rgba(2, 117, 216, 0.5)!important;
+//}
+.form-search-org {
+    width  : auto;
+    display: flex;
+
+    input {
+        border: none;
+        flex  : 1;
+    }
+
+    .input-datepicker {
+        width: 100px;
+    }
+
+    .input-group-append {
+        width          : 25px;
+        justify-content: center;
+        border         : navajowhite;
+        background     : transparent;
+
+        span {
+            display   : block;
+            font-size : 15px;
+            margin-top: 0px;
+        }
+    }
+}
+
+.form-control-org {
+    width: auto;
+
+    .input-datepicker {
+        width : calc((100% - 23px)/2);
+        border: none;
+    }
+
+    span {
+        border            : none;
+        display           : inline-block;
+        font-size         : 15px;
+        text-align        : right;
+        margin-top        : 0px;
+        background        : transparent;
+        -webkit-appearance: none;
+    }
+}
+
+.table-common th,
+td {
+    padding: 0.6rem 1rem !important;
+}
+
+// .card-search{
+//     .col-form-label{margin-right: 20px}
+// }
+.col-select {
+    flex         : 1;
+    padding-left : 0;
+    padding-right: 0;
+}
+
+.form-time-org {
+    position: relative;
+
+    .datepicker_org {
+        position  : absolute;
+        background: white;
+        top       : 38px;
+    }
+
+}
+
+.datepicker-org-update {
+    position  : absolute;
+    bottom    : 38px;
+    background: white;
+}
+
+.ngb-dp-month[_ngcontent-c16] {
+    background: white !important;
+    z-index   : 99999 !important;
+}
+
+.ngb-dp-month[_ngcontent-c14] {
+    background: white !important;
+    z-index   : 99999 !important;
+}
+
+// style Vinhnp
+.UserAdd {
+    i {
+        font-size: 15px;
+    }
+}
+
+.logo-user {
+    height: 40px;
+    width : 42px;
+}
+
+.LH {
+    line-height: 40px;
+}
+
+p {
+    margin: 0;
+}
+
+.StatusLb {
+    padding-left : 0;
+    padding-right: 0;
+}
+
+
+input[type='text'] {
+    background: transparent;
+}
+
+.OrgWidth {
+    white-space  : nowrap;
+    width        : 30px;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+}
+
+.ellipsis {
+    position: relative;
+
+    &::after{
+        content: '';
+    }
+
+    span {
+        position     : absolute;
+        left         : 0;
+        right        : 0;
+        white-space  : nowrap;
+        overflow     : hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+
+@media all and (max-width: 1200px) {
+    input[type='text'] {
+        font-size: 9.5px;
+    }
+
+    .UserAdd {
+        display  : flex;
+        font-size: 11px;
+
+        i {
+            font-size: 14px;
+        }
+    }
+
+    .StatusLb1024 {
+        padding: 0;
+    }
+}
+
+@media all and (max-width: 1024px) {
+    input[type='text'] {
+        font-size: 8.5px;
+    }
+
+    .UserAdd {
+        display  : flex;
+        font-size: 11px;
+
+        i {
+            font-size: 14px;
+        }
+    }
+
+    .StatusLb1024 {
+        padding: 0;
+    }
+}
+
+@media all and (max-width: 991px) {
+    .Status {
+        padding-bottom: 0;
+
+        .row {
+            margin-bottom: 0;
+        }
+    }
+
+    .col-select {
+        flex         : 1;
+        padding-left : 15px;
+        padding-right: 15px;
+    }
+
+    .StatusLb {
+        padding-left : 15px;
+        padding-right: 15px;
+    }
+}
+
+@media all and (max-width: 768px) {
+    .UserAdd {
+        display   : block;
+        margin-top: 1em;
+        font-size : 15px;
+    }
+
+    input[type='text'] {
+        font-size: 15px;
+    }
+
+    .DivTrangThai {
+        padding-bottom: 0;
+
+        .row {
+            margin-bottom: 0;
+        }
+    }
+
+    .col-select {
+        flex         : 1;
+        padding-left : 15px;
+        padding-right: 15px;
+    }
+
+    .StatusLb {
+        font-size: 15px;
+        padding  : 7px 15px;
+    }
+}

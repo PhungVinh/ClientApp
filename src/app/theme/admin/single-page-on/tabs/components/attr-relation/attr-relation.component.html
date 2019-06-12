@@ -1,0 +1,316 @@
+<!--<ng-container *ngIf="(organizations$ | async) === null">-->
+<!--Loading content-->
+<!--</ng-container>-->
+<app-card [title]="'Danh sách ràng buộc'" [classHeader]="true"
+    [blockClass]="'table-border-style'" [cardOptionBlock]="true">
+
+    <div class="card-header card-search row">
+        <form class="col-xl-7 col-lg-9 col-md-12" name="searchForm" novalidate
+            #searchForm="ngForm" autocomplete="off"
+            (ngSubmit)="onSearch()">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-control form-search-org">
+                        <button class="input-group-append" type="submit">
+                            <span><i class="feather icon-search"></i></span>
+                        </button>
+                        <input type="text" name="TextSearch"
+                            [(ngModel)]="textSearch" class="" placeholder="Nhập tên ràng buộc">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-xl-5 col-lg-3 col-md-12">
+            <button class="btn btn-primary float-right AddBtn"
+                (click)="OpenModalADD()">
+                <i class="feather icon-plus"></i>
+                Thêm ràng buộc
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive m-t-20">
+        <table class="table table-sm table-common">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên ràng buộc</th>
+                    <th>Kiểu hiển thị</th>
+                    <th >Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listAttrRelation?.data; let i= index">
+                    <td>{{(page-1) * itemsPerPage + i + 1}}</td>
+                    <td class="ellipsis"><span>{{item.Name}}</span></td>
+                    <td>{{item.CategoryName}}</td>
+                    <td>
+                        <div class="icon-action">
+                            <samp (click)="OpenModalEdit()"><i class="fa
+                                    fa-pencil m-r-10" aria-hidden="true"
+                                    (click)="getAtrrRelationById(item.Id)"
+                                    title="Sửa"></i>
+                            </samp>
+                            <samp><i class="fa
+                                    fa-trash" aria-hidden="true" feature="delete"
+                                    (click)="getItemAttrRelationToDelete(item.Id)"
+                                    title="Xóa" ></i>
+                            </samp>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="(listAttrRelation?.data | json) == '[]'" class="text-center m-t-25">
+            <b>Không có kết quả thỏa mãn điều kiện nhập</b>
+          </div>
+    </div>
+    <!-- vinhnp -->
+    <app-modal-confirm #modalDefaultAttr [identity]="'modalDefaultAttr'"
+        [dialogClass]="'modal-sm'"
+        (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin
+        đã chọn'" [outsizeClose]="false">
+    </app-modal-confirm>
+    <!-- end -->
+
+    <div class="" *ngIf="listAttrRelation?.paging[0].TotalPage > 10">
+        <div class="col-12 d-flex justify-content-end" style="padding: 0;
+            margin: 0 0 50px;">
+            <ngb-pagination
+                [collectionSize]="listAttrRelation?.paging[0].TotalPage"
+                [(page)]="page"
+                [pageSize]="itemsPerPage" [maxSize]="5"
+                [rotate]="true" [boundaryLinks]="true"
+                (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</app-card>
+
+<!-- modal large add-->
+<form class="form" [formGroup]="attrRelationForm" (ngSubmit)="onSubmit()"
+    #clearForm="ngForm">
+    <app-modal-basic #modalLarge [dialogClass]="'modal-lg'" [outsizeClose]="false">
+        <div class="app-modal-header">
+            <h4 class="modal-title">Thêm mới ràng buộc</h4>
+            <button type="button" class="close basic-close"
+                (click)="cancelAddAttrRelation()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="app-modal-body">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group form-default">
+                        <label class="float-label">Tên ràng buộc <span
+                                class="star">*</span></label>
+                        <input type="text" name="name" class="form-control ng-invalid"
+                            formControlName="Name" required
+                            (change)="cancelValidateName()"
+                            (keyup)="cancelValidateName()" [ControlTrim]="'deep'">
+                        <div *ngIf="(name.invalid && (name.dirty || name.touched)) || (name.invalid && isSubmitAdd==true)">
+                            <div class="messages m-t-5">
+                                <p *ngIf="name.errors.required" class="text-danger
+                                    error">
+                                    Thông tin không được để trống
+                                </p>
+                            </div>
+                
+                            <span class="form-bar"></span>
+                        </div>
+                        <div *ngIf="isDuplicate && isSubmitAdd==true"
+                                class="messages m-t-5">
+                            <p class="text-danger error">
+                                Thông tin đã tồn tại trên hệ thống
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group form-default">
+                        <label class="float-label">Kiểu hiển thị <span
+                                class="star">*</span></label>
+                        <select class="form-control form-control-inverse ng-invalid"
+                            formControlName="ContraintsType" name="contraintsType">
+                            <!--<option>Chọn kiểu hiển thị</option>-->
+                            <option value="" [selected]="true" >--Chọn kiểu hiển thị--</option>
+                            <option *ngFor="let item of listTypeObject"
+                                value="{{item.CategoryCode}}">
+                                {{item.CategoryName}}
+                            </option>
+                        </select>
+                        <div *ngIf="(contraintsType.invalid && (contraintsType.dirty || contraintsType.touched)) || (contraintsType.invalid && isSubmitAdd==true)">
+                            <div class="messages m-t-5">
+                                <p *ngIf="contraintsType.errors.required" class="text-danger
+                                    error">
+                                    Thông tin không được để trống
+                                </p>
+                            </div>
+                            <span class="form-bar"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group form-default">
+                        <label class="float-label">Dữ liệu từ danh mục</label>
+                        <select class="form-control form-control-inverse"
+                            formControlName="LinkContraints"
+                            (change)="changeCate($event)">
+                            <option value="0">--Chọn danh mục--</option>
+                            <option *ngFor="let item of (selectCategory$ |
+                                async)" value="{{item?.CategoryCode}}">
+                                {{item.CategoryName}}
+                            </option>
+                        </select>
+                        <span class="form-bar"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label class="float-label">Giá trị mặc định</label>
+                    <select class="form-control form-control-inverse"
+                        formControlName="ContraintsValue">
+                        <option value="0">--Chọn giá trị mặc định--</option>
+                        <option *ngFor="let item of (selectCategoryChild$ |
+                            async)" value="{{item?.CategoryCode}}">{{item.CategoryName}}</option>
+                    </select>
+                    <span class="form-bar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="app-modal-footer" style="justify-content: inherit;">
+            <button type="button" class="btn btn-default ripple"
+                id="cancelModal" (click)="cancelAddAttrRelation()">Hủy 
+            </button>
+            <button type="submit" class="btn btn-primary ripple light m-l-10">Lưu</button>
+        </div>
+    </app-modal-basic>
+</form>
+<!--cancel modal add-->
+<app-modal-basic #modalConfig [hideHeader]="true" [hideFooter]="true"
+    class="confirm-common" [dialogClass]="'modal-sm'" [outsizeClose]="false">
+  
+    <div class="app-modal-body">
+        <div class="text-center texttnotification">Thông tin sẽ không được lưu?</div>
+        <div class="text-center">
+            <samp class="btn btn-primary texthave" (click)="cancelFormAdd()">Có</samp>
+            <samp class="btn btn-secondary m-l-10 textIsNot"
+                (click)="modalConfig.hide()">Không</samp>
+        </div>
+    </div>
+</app-modal-basic>
+
+<!--edit modal large-->
+<form class="form" [formGroup]="EditAttrRelationForm"
+    (ngSubmit)="editAttrRelation()" #clearFormEdit="ngForm">
+    <app-modal-basic #modalLargeEdit [dialogClass]="'modal-lg'" [outsizeClose]="false">
+        <div class="app-modal-header">
+            <h4 class="modal-title">Sửa ràng buộc</h4>
+            <button type="button" class="close basic-close"
+                (click)="cancelEditAttrRelation()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="app-modal-body">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group form-default">
+                        <label class="float-label">Tên ràng buộc <span
+                                class="star">*</span></label>
+                        <input type="text" name="nameEdit" class="form-control ng-invalid"
+                            formControlName="Name" (change)="cancelValidateName()"
+                            (keyup)="cancelValidateName()">
+                            <div *ngIf="(nameEdit.invalid && (nameEdit.dirty || nameEdit.touched)) || (nameEdit.invalid && isSubmitEdit==true)">
+                                <div class="messages m-t-5">
+                                    <p *ngIf="nameEdit.errors.required" class="text-danger
+                                        error">
+                                        Thông tin không được để trống
+                                    </p>
+                                </div>
+                                <span class="form-bar"></span>
+                            </div>
+                            <div *ngIf="nameEdit?.errors?.notUnique"
+                                    class="messages m-t-5">
+                                <p class="text-danger error">
+                                    Thông tin đã tồn tại trên hệ thống
+                                </p>
+                            </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group form-default">
+                        <label class="float-label">Kiểu hiển thị <span
+                                class="star">*</span></label>
+                        <select class="form-control form-control-inverse ng-invalid"
+                            formControlName="ContraintsType">
+                            <option value="" [selected]="true">--Chọn kiểu hiển thị--</option>
+                            <option *ngFor="let item of listTypeObject"
+                                value="{{item?.CategoryCode}}">
+                                {{item.CategoryName}}
+                            </option>
+                        </select>
+                        <div *ngIf="(contraintsTypeEdit.invalid && (contraintsTypeEdit.dirty || contraintsTypeEdit.touched)) || (contraintsTypeEdit.invalid && isSubmitEdit==true)">
+                            <div class="messages m-t-5">
+                                <p *ngIf="contraintsTypeEdit.errors.required" class="text-danger
+                                    error">
+                                    Thông tin không được để trống
+                                </p>
+                            </div>
+                            <span class="form-bar"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group form-default">
+                        <label class="float-label">Dữ liệu từ danh mục</label>
+                        <select class="form-control form-control-inverse"
+                            formControlName="LinkContraints"
+                            (change)="changeCateEdit($event)">
+                            <option value="0">--Chọn danh mục--</option>
+                            <option *ngFor="let item of (selectCategory$ |
+                                async)" value="{{item?.CategoryCode}}">
+                                {{item.CategoryName}}
+                            </option>
+                        </select>
+                        <span class="form-bar"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label class="float-label">Giá trị mặc định</label>
+                    <select class="form-control form-control-inverse"
+                        formControlName="ContraintsValue">
+                        <option value="0">--Chọn giá trị mặc định--</option>
+                        <option *ngFor="let item of (selectCategoryChild$ |
+                            async)" value="{{item?.CategoryCode}}">
+                            {{item.CategoryName}}
+                        </option>
+                    </select>
+                    <span class="form-bar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="app-modal-footer" style="justify-content: inherit;">
+            <button type="button" class="btn btn-default ripple"
+                id="cancelModalEdit"(click)="cancelEditAttrRelation()">
+                Hủy
+            </button>
+            <button type="submit" class="btn btn-primary ripple light m-l-10">Lưu</button>
+        </div>
+    </app-modal-basic>
+</form>
+
+<!--cancel modal edit-->
+<app-modal-basic #modalConfigEdit [hideHeader]="true" [hideFooter]="true"
+    class="confirm-common" [dialogClass]="'modal-sm'" [outsizeClose]="false">
+  
+    <div class="app-modal-body">
+        <div class="text-center texttnotification">Thông tin sẽ không được lưu?</div>
+        <div class="text-center">
+            <samp class="btn btn-primary texthave" (click)="cancelFormEdit()">Có</samp>
+            <samp class="btn btn-secondary m-l-10 textIsNot"
+                (click)="modalConfigEdit.hide()">Không</samp>
+        </div>
+    </div>
+</app-modal-basic>

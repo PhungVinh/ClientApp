@@ -1,0 +1,34 @@
+﻿<div class="page-body">
+  <ngb-tabset [justify]="'start'" [destroyOnHide]="false" [activeId]="(activedTab$ | async)" (tabChange)="beforeChange($event)">
+    <ngb-tab [id]="tab.code" *ngFor="let tab of (tabMenu$ | async) as tabMenu">
+      <ng-template ngbTabTitle>
+        <span>{{ tab.name }}</span>
+        <span class="close reload" (click)="onReloadClick(tab, $event)">&#x21bb;</span>
+        <span class="close" (click)="onCloseClick(tab, $event)">&times;</span>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div>
+          <div class="row">
+            <div class="col-sm-12">
+              <app-cims *ngIf="tab.code === 'CIMS_LIST'"></app-cims>
+              <app-voc *ngIf="tab.code === 'VOC_LIST'"></app-voc>
+              <app-kms-doc *ngIf="tab.code === 'KMS_DOC'"></app-kms-doc>
+              <app-oms *ngIf="tab.code === 'OMS_ADD'"></app-oms>
+              <!-- <app-attr-form *ngIf="tab.code === 'ATTR_FORM'"></app-attr-form> -->
+              <app-information-field *ngIf="tab.code === 'ATTR_FORM'"></app-information-field>
+              <app-attr-relation *ngIf="tab.code === 'ATTR_RELATION'"></app-attr-relation>
+              <app-user *ngIf="tab.code === 'ADMIN_USER'"></app-user>
+              <app-organization *ngIf="tab.code === 'ADMIN_DEPART'"></app-organization>
+              <app-authority *ngIf="tab.code === 'ADMIN_ROLE'"></app-authority>
+              <app-profile *ngIf="tab.code === 'PROFILE_USER'"></app-profile>
+              <app-module *ngIf="tab.code === 'ATTR_MODULE'"></app-module>
+              <app-category  *ngIf="tab.code === 'CATEGORY'"></app-category>
+              <!-- <app-encode *ngIf="tab.code === 'ENCODE'"></app-encode> -->
+              <app-info-organization  *ngIf="tab.code === 'INFOR_ORGANIZATION'"></app-info-organization>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

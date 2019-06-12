@@ -1,0 +1,18 @@
+.ng-submitted .form-control.ng-invalid:not(form),
+.form-control.ng-invalid.ng-touched:not(form) {
+  border-color: red;
+}
+
+.form-control.ng-invalid:not(form) + div.form-error {
+  color: red;
+}
+
+.ng-submitted .form-control.ng-invalid.ng-dirty:not(form),
+.form-control.ng-invalid.ng-dirty.ng-touched:not(form) {
+  border-color: red;
+}
+
+.ng-dirty.ng-invalid:not(form) {
+  border: 1px solid red;
+}
+/*# sourceMappingURL=cims-update.component.css.map */

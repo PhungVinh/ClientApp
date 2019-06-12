@@ -1,0 +1,60 @@
+:host {
+  .import-control {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    > div {
+      display: flex;
+      flex-direction: column;
+      > label {
+        display: flex;
+
+        > span {
+          display: inline-flex;
+        }
+
+        > input {
+          display: inline-flex;
+        }
+      }
+    }
+  }
+
+  .import-queue-progress {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+
+    > span {
+      display: inline-flex;
+      width: -webkit-fill-available;
+      white-space: nowrap;
+      > ngb-progressbar {
+        width: -webkit-fill-available;
+      }
+    }
+  }
+
+  ul {
+    &.import-note {
+      padding: 0 1rem;
+
+      > li {
+        padding: 0.5rem 0;
+
+        &::before {
+          content: "\25A0";
+          color: #8d8d8d;
+          font-weight: bold;
+          display: inline-block;
+          width: 1em;
+          margin-left: -1em;
+          vertical-align: text-bottom;
+        }
+      }
+    }
+  }
+}

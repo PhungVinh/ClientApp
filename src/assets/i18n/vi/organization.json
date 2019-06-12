@@ -1,0 +1,27 @@
+{
+    "Thời hạn": "Thời hạn",
+    "Mã đơn vị": "Mã đơn vị",
+    "Tên đơn vị": "Tên đơn vị",
+    "Gói dịch vụ": "Gói dịch vụ",
+    "Số tài khoản": "Số tài khoản",
+    "Thêm đơn vị": "Thêm đơn vị",
+    "Sửa đơn vị": "Sửa đơn vị",
+    "Thông tin dịch vụ sử dụng": "Thông tin dịch vụ sử dụng",
+    "Mã số thuế" : "Mã số thuế",
+    "Logo đơn vị" : "Logo đơn vị",
+    "Dung lượng file tối đa 5MB": "Dung lượng file tối đa 5MB",
+    "Chỉ cho phép chọn file có định dạng JPG, PNG": "Chỉ cho phép chọn file có định dạng JPG, PNG",
+    "Lĩnh vực hoạt động": "Lĩnh vực hoạt động",
+    "Công nghệ thông tin": "Công nghệ thông tin",
+    "Website": "Website",
+    "Gói dịch vụ sử dụng": "Gói dịch vụ sử dụng",
+    "Số điện thoại không đúng định dạng": "Số điện thoại không đúng định dạng",
+    "Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB": "Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB",
+    "Thông tin cơ bản": "Thông tin cơ bản",
+    "Ghi chú": "Ghi chú",
+    "Username or password is incorrect!": "Thông tin đăng nhập không chính xác",
+    "active" : {
+        "true" : "Hoạt động",
+        "false": "Khóa"
+    }
+}

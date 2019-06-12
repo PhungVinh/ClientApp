@@ -1,0 +1,100 @@
+.fixed_headers {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.fixed_headers th, .fixed_headers td {
+  padding: 5px;
+  padding-left: 10px;
+  text-align: left;
+}
+
+.fixed_headers td:nth-child(1), .fixed_headers th:nth-child(1) {
+  min-width: 50px;
+}
+
+.fixed_headers td:nth-child(2), .fixed_headers th:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fixed_headers thead {
+  background-color: #f1f1f1;
+  border-bottom: 2px solid #ccc;
+}
+
+.fixed_headers thead tr {
+  display: block;
+  position: relative;
+}
+
+.fixed_headers tbody {
+  display: block;
+  width: 100%;
+  height: 392px;
+}
+
+.block_center {
+  width: 80px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.edit-authority-user_header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.list-user_lable {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.modal-title {
+  font-size: 20px;
+}
+
+.form-header {
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.border-checkbox-section {
+  height: 20px;
+}
+
+.add-btn {
+  color: #448aff;
+  font-size: 14px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.btn-light {
+  border-color: #ccc;
+  color: #6c757d;
+}
+/*# sourceMappingURL=authority-edit-user.component.css.map */

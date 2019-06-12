@@ -1,0 +1,306 @@
+<form name="editForm" role="form" novalidate
+  #editForm="ngForm" autocomplete="off" class="update-user"
+  [class.ng-submitted]="editForm.submitted">
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="users.id === undefined">{{'Thêm tài khoản' |
+      translate}}</h4>
+    <h4 class="modal-title" *ngIf="users.id !== undefined">{{'Sửa tài khoản' |
+      translate}}</h4>
+    <button type="button" class="close"
+      (click)="openClose()" title="Hủy">&times;</button>
+  </div>
+  <div class="modal-body">
+    <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'"
+      [config]="{scrollXMarginOffset: 10}">
+      <div class="form-group row">
+        <div class="col-sm-12 col-md-12 col-lg-4 Grade">
+          <div class="Grade2">
+            <label class="form-control-label LbDistance">
+              {{'Tài khoản đăng nhập' | translate}}
+              <span class="txt-red">*</span>
+            </label>
+          </div>
+          <div class="input-group input-group-transparent focerunwmer" style="margin-bottom:
+            0;">
+            <!-- <samp class="Token" *ngIf="users.id === undefined">{{Token}}</samp> -->
+            <input type="text" id="usernameCheck" class="form-control ng-invalid
+              form-control-lowercase TokenText" [disabled]="users.id
+              !==
+              undefined" [(ngModel)]="users.userName" name="userName"
+              required minlength="4" maxlength="50"
+              (keypress)="keyPress($event)"
+              PatternOnly="^[a-zA-Z0-9]{0,}$"
+              [ngStyle]="{'padding-left': users.id !== undefined ? '10px' :
+              '0px'}"
+              />
+            <span *ngIf="users.id === undefined" class="input-group-prepend">
+              <label class="input-group-text TokenText2" style="font-size:
+                14px;">
+                {{Token}}
+              </label>
+            </span>
+          </div>
+          <div [hidden]="!((editForm.controls?.userName?.touched ||
+            editForm.submitted || editForm.controls?.userName?.dirty) &&
+            editForm.controls?.userName?.invalid)">
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.userName?.errors?.required">
+              {{'Thông tin không được để trống' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.userName?.errors?.minlength">
+              {{'Tên đăng nhập phải chứa từ 4-50 ký tự' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.userName?.errors?.maxlength">
+              {{'Tên đăng nhập không vượt quá 50 ký tự' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.userName?.errors?.pattern">
+              {{'Sai định dạng' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.userName?.errors?.notUnique">
+              {{'Thông tin đã tồn tại trên hệ thống' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <label class="form-control-label LbDistance">
+            {{'Họ tên' | translate}}
+            <span class="txt-red">*</span>
+          </label>
+          <input type="text" class="form-control ng-invalid" [ControlTrim]="'deep'"
+            [(ngModel)]="users.fullName"
+            name="fullName"
+            required
+            [maxlength]="100"
+            (keypress)="keyPressFullname($event)"
+            />
+          <div [hidden]="!((editForm.controls?.fullName?.touched ||
+            editForm.submitted || editForm.controls?.fullName?.dirty) &&
+            editForm.controls?.fullName?.invalid)">
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.fullName?.errors?.required">
+              {{'Thông tin không được để trống' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.fullName?.errors?.pattern">
+              {{'Sai định dạng' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.fullName?.errors?.notUnique">
+              {{'Thông tin đã tồn tại trên hệ thống' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <label class="form-control-label LbDistance">
+            {{'Ngày sinh' | translate}}
+          </label>
+          <div class="form-inline">
+            <div class="form-group">
+              <div class="input-group BirthDayInput">
+                <input class="form-control BirthDayInput2"
+                  name="birthDay" id="birthDay"
+                  ngbDatepicker #d="ngbDatepicker"
+                  type="text" [(ngModel)]="users.birthDay"
+                  [minDate]="{year: 1950, month: 1, day: 1}"
+                  placeholder="dd/mm/yyyy" (click)="d.toggle()"
+                  (keypress)="keyPressBirthDay($event)" [maxDate]="today"
+                  readonly/>
+                <div class="input-group-append">
+                  <span class="input-group-text calendar" (click)="d.toggle()">
+                    <i class="fa fal fa-calendar"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <label class="form-control-label LbDistance">{{'Email' | translate}} <span
+              class="txt-red">*</span></label>
+          <input type="text" class="form-control ng-invalid"
+            name="email" [textMask]="{mask: emailMask}"
+            [(ngModel)]="users.email"
+            required [pattern]="patternEmail" [maxlength]="255"
+            />
+          <div [hidden]="!((editForm.controls?.email?.touched ||
+            editForm.submitted || editForm.controls?.email?.dirty) &&
+            editForm.controls?.email?.invalid)">
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.email?.errors?.required">
+              {{'Thông tin không được để trống' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.email?.errors?.pattern">
+              {{'Sai định dạng email' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.email?.errors?.maxlength">
+              field cannot be longer than 255 characters.
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.email?.errors?.notUnique">
+              {{'Thông tin đã tồn tại trên hệ thống' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <label class="form-control-label LbDistance">{{'Số điện thoại' | translate}}
+            <span class="txt-red">*</span></label>
+          <input type="text" class="form-control ng-invalid"
+            name="phoneNumber"
+            [(ngModel)]="users.phoneNumber" required
+            [maxlength]="12" minlength="10" [pattern]="maskUsMobile"
+            PatternOnly="^\+?\d{0,12}$"
+            />
+          <div [hidden]="!((editForm.controls?.phoneNumber?.touched ||
+            editForm.submitted || editForm.controls?.phoneNumber?.dirty) &&
+            editForm.controls?.phoneNumber?.invalid)">
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.phoneNumber?.errors?.required">
+              {{'Thông tin không được để trống' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls?.phoneNumber?.errors?.minlength">
+              {{'Số điện thoại phải chứa từ 10-12 ký tự' | translate}}
+            </small>
+            <small class="form-text text-danger"
+              [hidden]="!editForm.controls.phoneNumber?.errors?.notUnique">
+              {{'Thông tin đã tồn tại trên hệ thống' | translate}}
+            </small>
+          </div>
+        </div>
+
+
+
+
+
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <label class="form-control-label LbDistance">
+            {{'Giới tính' | translate}}
+          </label>
+          <div class="form-radio">
+            <form>
+              <div class="radio radio-inline">
+                <label>
+                  <input type="radio" name="gender"
+                    [(ngModel)]="users.gender"
+                    [value]="1"
+                    [checked]='true'>
+                  <i class="helper"></i>{{'Nam' | translate}}
+                </label>
+              </div>
+              <div class="radio radio-inline">
+                <label>
+                  <input type="radio" name="gender"
+                    [(ngModel)]="users.gender"
+                    [value]="0">
+                  <i class="helper"></i>{{'Nữ' | translate}}
+                </label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4"
+          *ngIf="(categoryDepartment$ | async) as
+          categoryDepartment">
+          <label class="form-control-label LbDistance">
+            {{' Phòng ban' | translate}}
+          </label>
+          <select class="form-control form-control-inverse"
+            name="categoryCodeDepartment"
+            [(ngModel)]="users.categoryCodeDepartment" #categoryCodeDepartment>
+            <option [value]="0">--- Chọn phòng ban ---</option>
+            <option *ngFor="let item of categoryDepartment?.data"
+              value="{{item.organizationCode}}">{{item.organizationName}}</option>
+          </select>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4" *ngIf="(categoryPosition$
+          | async) as
+          categoryPosition">
+          <label class="form-control-label LbDistance">
+            {{'Chức vụ' | translate}}
+          </label>
+          <select class="form-control form-control-inverse"
+            name="categoryPosition" [(ngModel)]="users.position">
+            <option [value]="0">--- Chọn chức vụ ---</option>
+            <option *ngFor="let item2 of categoryPosition?.data"
+              value="{{item2.categoryCode}}">{{item2.categoryName}}</option>
+          </select>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <label class="form-control-label LbDistance">
+            {{'Trạng thái' | translate}}
+          </label>
+          <select class="form-control form-control-inverse"
+            name="isLock" [(ngModel)]="users.isLock">
+            <option [ngValue]="false">{{'Kích hoạt' | translate}}</option>
+            <option [ngValue]="true">{{'Khóa' | translate}}</option>
+          </select>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <label class="form-control-label LbDistance">
+            {{'Địa chỉ' | translate}}
+          </label>
+          <input type="text"
+            class="form-control" name="address"
+            placeholder="{{'Địa chỉ' | translate}}"
+            [(ngModel)]="users.address" [maxlength]="200" />
+        </div>
+        <div class="col-sm-12 col-md-12">
+          <label class="form-control-label LbDistance">
+            {{'Nhóm quyền' | translate}}
+          </label>
+          <form [formGroup]="searchAuthorityForm" class="form-control
+            form-search-org" (ngSubmit)="searchAuthority()">
+            <button class="input-group-append" type="submit">
+              <span><i class="feather icon-search"></i></span>
+            </button>
+            <input type="text" formControlName="searchInput"
+              placeholder="{{'Tìm kiếm' | translate}}">
+          </form>
+          <div class="list-service-user form-control" *ngIf="servicePacks">
+            <div class="list-option mb-2" *ngFor="let item of servicePacks; let
+              i= index">
+              <div class="border-checkbox-section">
+                <div class="border-checkbox-group
+                  border-checkbox-group-default">
+                  <input class="border-checkbox" type="checkbox"
+                    id="checkbox{{i}}"
+                    name="checkPack{{i}}" [(ngModel)]="item.checkPack">
+                  <label class="border-checkbox-label"
+                    for="checkbox{{i}}">{{item.authorityName}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </perfect-scrollbar>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default float-right" title="Hủy"
+      (click)="openClose()">&nbsp;<span>{{'Hủy' | translate}}</span>
+    </button>
+    <button type="submit" (click)="save()" class="btn btn-primary float-right
+      m-r-5"
+      title="Lưu">&nbsp;<span>{{'Lưu' | translate}}</span>
+    </button>
+    <button type="submit" class="btn btn-primary float-right m-r-5"
+      title="Lưu và tiếp tục" (click)="SaveAndSave()" *ngIf="users.id ===
+      undefined">&nbsp;<span>{{'Lưu và tiếp tục' | translate}}</span>
+    </button>
+  </div>
+</form>
+
+<!-- modal static hủy cấu hình trường thông tin-->
+<app-modal-confirm #modalDefault [identity]="'confirmCancelUser'"
+  [dialogClass]="'modal-sm'" [confirmType]="'None'"
+  (onAccepted)="CloseConfigAttr()" [confirmMessage]="'Thông tin sẽ không được
+  lưu?'" [outsizeClose]="false">
+</app-modal-confirm>

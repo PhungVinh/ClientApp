@@ -1,0 +1,97 @@
+// Account Api Constant
+export const API_ACCOUNT_LOGIN = 'Account/Login';
+export const API_ACCOUNT_GET_MENU_LIST = 'Account/GetMenuList';
+export const API_ACCOUNT_GET_USER = 'Account/GetUser';
+export const API_ACCOUNT_GET_USER_LIST = 'Account/SearchUser';
+export const API_ACCOUNT_POST_USER = 'Account/AddUser';
+export const API_ACCOUNT_DELETE_USER = 'Account/DeleteUser';
+export const API_ACCOUNT_PUT_USER = 'Account/EditUser';
+export const API_ACCOUNT_GET_USER_BY_ID = 'Account/GetUserById';
+export const API_ACCOUNT_GET_ALL_CATEGORY_DEPARTMENT = 'Account/GetAllCategory?CategoryTypeCode=Department';
+export const API_ACOOUNT_CATEGORY_DEPARTMENT = 'Account/GetDepartment?OrganizationCode=MP';
+export const API_ACCOUNT_GET_ALL_CATEGORY_POSITION = 'Account/GetAllCategory?CategoryTypeCode=Position';
+export const API_ACCOUNT_LOGOUT = 'Account/DeleteToken';
+export const API_GET_LIST_PERMISSON = 'Account/GetListPermission';
+export const API_GET_ALL_CATEGORY_ORGANIZATION = 'Organization/GetListOrg';
+export const API_USER_AUTHORITY_PACK = 'Authority/GetListAuthorityOfOrg';
+export const API_USER_AUTHORITY_PACK_BY_ID = 'Account/GetAuthorityByUserId';
+export const API_ACCOUNT_GET_MENU_PARENT = 'Account/GetTblMenuParent';
+
+// CIMS API constant
+export const API_CIMIS_MODULE = 'CIMS';
+export const API_ATTRIBUTE_GET_CIMS = 'Cims/GetCimsvalue';
+export const API_CIMS_POST_FORM = 'Cims/AddCimsValue';
+export const API_CIMS_PUT_FORM = 'Cims/EditCimsValue';
+export const API_CIMS_DELETE = 'Cims/DeleteCims';
+export const API_CIMS_GET_FORM_DATA = 'Cims/GetCustomerList_RecordId';
+// export const API_CHANGE_PASSWORD = 'Account/ChangePassword';
+export const API_CHANGE_PASSWORD = 'Account/ChangePasswordReset';
+export const API_CHANGE_PASSWORD_USER = 'Account/ChangePasswordUser';
+
+// Profile Api Constant
+export const API_PROFILE_UPLOAD = 'Account/UploadFile';
+export const API_PROFILE_UPDATE = 'Account/UpdateUser';
+export const API_AUTHORITY_INFO = 'Authority/AuthorityInformation';
+export const API_AUTHORITY_GET_GIANT = 'Authority/GetUsersToGrantAuthority';
+
+// Organization Api Constant
+export const API_ORGANIZATION_GET_ALL = 'Organization/GetOrganizationList';
+export const API_ORGANIZATION_ADD = 'Organization/AddOrganization';
+export const API_ORGANIZATION_UPDATE = 'Organization/UpdateOrganization';
+export const API_ORGANIZATION_DELETE = 'Organization/DeleteOrganization';
+export const API_ORGANIZATION_UPLOAD = 'Organization/UploadFile';
+export const API_ORGANIZATION_INFO = 'Organization/GetInforOrganization';
+export const API_CATEGORY_ALL = 'Account/GetAllCategory';
+export const API_ORGANIZATION_UPLOADFILE = 'Organization/UploadFileForOrganization';
+export const API_GET_IMAGE = 'Account/DownloadFile';
+export const API_ORGANIZATION_UPDATE_INFOR = 'Organization/UpdateInforOrganization';
+export const API_ORGANIZATION_SERVICE_PACK = 'Organization/GetServicePack';
+
+// User Api Constant
+export const API_UER_RESET_PASSWORD_USER = 'Account/ResetPass';
+export const API_RESET_PASSWORD_FINISH = 'Account/CheckTokenResetPass';
+
+// Attribute Api Constant
+export const API_ATTRIBUTE_GET_LIST = 'Attributes/GetAllAttributeCims';
+export const API_ATTRIBUTE_GET_LIST_PARENT = 'Attributes/GetListAttributes';
+export const API_ATTRIBUTE_GET_FORM = 'Attributes/GetAllAttributesCimsWithRowDetails';
+export const API_ATTRIBUTE_GET_CONSTRANT_ALL = 'Attributes/GetAllConstraints';
+export const API_ATTRIBUTE_GET_CONSTRANT_ALL_1 = 'Attributes/GetAllConstraints1';
+export const API_ATTRIBUTE_GET_CATEGORY_PARENT = 'Attributes/GetAllParentCategory';
+export const API_ATTRIBUTE_GET_CATEGORY_CHILD = 'Attributes/GetAllChildCategory';
+export const API_ATTRIBUTE_GET_DATETYPE_LIST = 'Attributes/GetListDataType';
+export const API_ATTRIBUTE_GET_CONTROLLER_LIST = 'Attributes/GetListController';
+export const API_ATTRIBUTE_GET_CONTROLLER_LIST_OBJECT = 'Attributes/GetListControllerObject';
+export const API_ATTRIBUTE_POST_ADD = 'Attributes/AddAttribute';
+export const API_ATTRIBUTE_POST_CONSTRAINT_ADD = 'Attributes/AddAttributeConstraint';
+export const API_ATTRIBUTE_POST_FORM_CIMS_ADD = 'Attributes/AddFormCims';
+export const API_ATTRIBUTE_PUT_UPDATE = 'Attributes/UpdateAttribute';
+export const API_ATTRIBUTE_PUT_CONSTRAINT_UPDATE = 'Attributes/UpdateAttributeConstraint';
+export const API_ATTRIBUTE_PUT_UPDATE_FORM_LIST = 'Attributes/UpdateAttributeFormList';
+export const API_ATTRIBUTE_PUT_UPDATE_FORM_CIMS = 'Attributes/UpdateFormCims';
+export const API_ATTRIBUTE_PUT_UPDATE_FORM_CIMS_LIST = 'Attributes/UpdateFormCimsList';
+export const API_ATTRIBUTE_PUT_UPDATE_TABLE_FORM_CIMS_LIST = 'Attributes/UpdateTableFormList';
+export const API_ATTRIBUTE_PUT_ADD_FORM_CIMS_LIST = 'Attributes/AddFormCimsList';
+export const API_ATTRIBUTE_PUT_DELETE_CONSTRAINT = 'Attributes/DeleteAttributesConstraint';
+
+// Category Api Constant
+export const API_CATEGORY_GET_ALL = 'Category/GetAllCategory';
+export const API_CATEGORY_GET_ALL_PARENT = 'Category/GetAllParentCategory';
+export const API_CATEGORY_GET_OBJECT = 'Category/GetObjectCategory';
+export const API_CATEGORY_POST_ADD = 'Category/AddCategory';
+export const API_CATEGORY_PUT_UPDATE = 'Category/UpdateCategory';
+export const API_CATEGORY_DELETE = 'Category/DeleteCategory';
+
+// Others
+
+export const IMG_BASE64_PREFIX = 'data:image/jpg;base64,';
+export const IMG_BASE_PLACEHOLDER = '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';
+export const EL_PCODE_EXPANDED_QUERY_SELECTOR = '#pcoded[vertical-nav-type=expanded]';
+export const EL_NAVBAR_QUERY_SELECTOR = '#main_navbar';
+export const EL_TAB_QUERY_SELECTOR = '#pcoded > div.pcoded-container.navbar-wrapper > div.pcoded-main-container > div > div > div.pcoded-inner-content > div.main-body > div > app-single-page-on > div > ngb-tabset > div';
+
+// encryption Api Constant
+export const API_ENCRYPTION_GET = 'Encryption/GetListAttributesEncryption';
+export const API_ENCRYPTION_GET_MODULE = 'Encryption/GetListModule ';
+export const API_ENCRYPTION_GET_FIELD_BY_MODULE = 'Encryption/GetListAttributesWithParentCode';
+export const API_ENCRYPTION_UPDATE = 'Encryption/ExecuteEncrpytion';

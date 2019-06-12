@@ -1,0 +1,8 @@
+<div class="dropdown">
+  <button class="btn btn-outline-primary dropdown-toggle" type="button" (click)="onToggle()">
+    {{ formatterSelected() }}
+  </button>
+  <div class="dropdown-menu" [class.show]="isShow" aria-labelledby="dropdownMenu2">
+    <button *ngFor="let item of datasource" class="dropdown-item" type="button" (click)="onSelectedChange(item[sourceKey])">{{item[sourceValue]}}</button>
+  </div>
+</div>

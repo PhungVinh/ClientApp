@@ -1,0 +1,245 @@
+.cover-logo {
+  border: 1px solid #cccccc;
+  height: 128px;
+  position: relative;
+}
+
+.cover-logo input {
+  display: none;
+}
+
+.cover-logo label {
+  position: absolute;
+  right: 15px;
+  bottom: 5px;
+  padding: 7px 10px;
+  background: black;
+  border-radius: 4px;
+  color: white;
+  opacity: 0.4;
+}
+
+.cover-logo img {
+  width: 100%;
+  height: 100%;
+}
+
+.common-action {
+  padding: 0 10px;
+}
+
+.txt-red {
+  color: red;
+}
+
+select.form-control, select.form-control:focus, select.form-control:hover {
+  border: 1px solid #cccccc !important;
+}
+
+.form-search-org {
+  width: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-search-org input {
+  border: none;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.form-search-org .input-datepicker {
+  width: 100px;
+}
+
+.form-search-org .input-group-append {
+  width: 25px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border: navajowhite;
+  background: transparent;
+}
+
+.form-search-org .input-group-append span {
+  display: block;
+  font-size: 15px;
+  margin-top: 0px;
+}
+
+.form-control-org {
+  width: auto;
+}
+
+.form-control-org .input-datepicker {
+  width: calc((100% - 23px)/2);
+  border: none;
+}
+
+.form-control-org span {
+  border: none;
+  display: inline-block;
+  font-size: 15px;
+  text-align: right;
+  margin-top: 0px;
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+.table-common th, td {
+  padding: 0.6rem 1rem !important;
+}
+
+.col-select {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.form-time-org {
+  position: relative;
+}
+
+.form-time-org .datepicker_org {
+  position: absolute;
+  background: white;
+  top: 38px;
+}
+
+.datepicker-org-update {
+  position: absolute;
+  bottom: 38px;
+  background: white;
+}
+
+.ngb-dp-month[_ngcontent-c16] {
+  background: white !important;
+  z-index: 99999 !important;
+}
+
+.ngb-dp-month[_ngcontent-c14] {
+  background: white !important;
+  z-index: 99999 !important;
+}
+
+.UserAdd i {
+  font-size: 15px;
+}
+
+.logo-user {
+  height: 40px;
+  width: 42px;
+}
+
+.LH {
+  line-height: 40px;
+}
+
+p {
+  margin: 0;
+}
+
+.StatusLb {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+input[type='text'] {
+  background: transparent;
+}
+
+.OrgWidth {
+  white-space: nowrap;
+  width: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media all and (max-width: 1200px) {
+  input[type='text'] {
+    font-size: 9.5px;
+  }
+  .UserAdd {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 11px;
+  }
+  .UserAdd i {
+    font-size: 14px;
+  }
+  .StatusLb1024 {
+    padding: 0;
+  }
+}
+
+@media all and (max-width: 1024px) {
+  input[type='text'] {
+    font-size: 8.5px;
+  }
+  .UserAdd {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 11px;
+  }
+  .UserAdd i {
+    font-size: 14px;
+  }
+  .StatusLb1024 {
+    padding: 0;
+  }
+}
+
+@media all and (max-width: 991px) {
+  .Status {
+    padding-bottom: 0;
+  }
+  .Status .row {
+    margin-bottom: 0;
+  }
+  .col-select {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .StatusLb {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .UserAdd {
+    display: block;
+    margin-top: 1em;
+    font-size: 15px;
+  }
+  input[type='text'] {
+    font-size: 15px;
+  }
+  .DivTrangThai {
+    padding-bottom: 0;
+  }
+  .DivTrangThai .row {
+    margin-bottom: 0;
+  }
+  .col-select {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .StatusLb {
+    font-size: 15px;
+    padding: 7px 15px;
+  }
+}
+/*# sourceMappingURL=user.component.css.map */

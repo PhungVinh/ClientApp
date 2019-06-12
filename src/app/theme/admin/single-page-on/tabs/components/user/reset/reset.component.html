@@ -1,0 +1,12 @@
+<div>
+  <div class="modal-header">
+    <h6 class="modal-title text-center" style="display: block; width: 100%;">Reset lại mật khẩu?</h6>
+  </div>
+  <div class="modal-body text-center">
+    <div class="alert alert-danger" *ngIf="error"  >
+      <strong>{{error.error.value.message}}</strong>
+    </div>
+    <button class="btn btn-primary mr-2" data-dismiss="modal" type="button"  (click)="reset()"><span>Có</span> </button>
+    <button class="btn  btn-default " data-dismiss="modal" type="button" style="background: #aaaaaa;" (click)="clear()"><span style="color:#fff">Không</span> </button>
+  </div>
+</div>

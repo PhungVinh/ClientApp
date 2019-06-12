@@ -1,0 +1,116 @@
+<div class="">
+  <div class="modal-header">
+    <h4 class="modal-title modal__title_20">{{ title }}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+  </div>
+  <form [formGroup]="categoryForm" class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="form-control-label label__black_14" for="authorityName">Tên danh mục <span
+              class="txt-red">*</span></label>
+          <input type="text" formControlName="CategoryName"
+            [ngClass]="{'form-control': true, 'is-invalid': categoryName.invalid && (categoryName.dirty || categoryName.touched)}"
+            required maxlength="100">
+          <small class="form-text text-danger"
+            *ngIf="categoryName.invalid && (categoryName.dirty || categoryName.touched)">{{ errorMsgs.categoryName }}</small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="form-control-label label__black_14" for="CategoryTypeCode">Danh mục liên kết</label>
+          <select class="form-control" formControlName="CategoryTypeCode">
+            <option selected value="">-- Chọn danh mục liên kết --</option>
+            <option *ngFor="let cate of (categoryParent$ | async)" [value]="cate.categoryCode">{{ cate.categoryName }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="form-control-label label__black_14" for="authorityDescription">Ghi chú</label>
+          <textarea class="form-control" rows="3" formControlName="CategoryDescription" maxlength="500"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="d-flex">
+          <div class="mr-auto">
+            <label class="form-control-label label__black_14" for="authorityDescription">Giá trị</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <perfect-scrollbar class="border py-2 px-4" style="border: 1px solid #cccccc; max-height: 300px">
+          <div style="display: flex">
+            <div style="flex: 2 0 0; padding-right: 25px" class="d-flex align-items-center">
+
+              <label class="form-control-label label__black_14 m-0">Giá trị liên kết</label>
+            </div>
+            <div style="flex: 3;">
+              <div class="d-flex align-items-center" style="position: relative">
+                <label class="form-control-label label__black_14 m-0" style="width: 100px">Giá trị (*)</label>
+                <input *ngIf="formType === 'edit'" [formControl]="search" (keyup.enter)="onSearch()" class="form-control" type="text" placeholder="Tìm kiếm" required>
+                <i *ngIf="formType === 'edit'" class="feather icon-search category_form_icon-search"></i>
+              </div>
+            </div>
+
+          </div>
+          <hr>
+          <div formArrayName="children" *ngFor="let child of children['controls']; let i=index; let last = last">
+            <div [formGroupName]="i" style="display: flex">
+              <div style="flex: 2 0 0; padding-right: 25px">
+                <div class="form-group">
+                  <select class="form-control" formControlName="ExtContent">
+                    <option selected value="">-- Chọn giá trị liên kết --</option>
+                    <option *ngFor="let cat of (categoryChildren$ | async)" [value]="cat.CategoryCode">
+                      {{cat.CategoryName}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div style="flex: 3;">
+                <div style="display: flex">
+                  <div class="form-group" style="flex: 1">
+                    <input class="form-control"
+                      [ngClass]="{'is-invalid': child.get('CategoryName').invalid && (child.get('CategoryName').dirty || child.get('CategoryName').touched)}"
+                      type="text" required maxlength="200" formControlName="CategoryName">
+                    <small class="form-text text-danger"
+                      *ngIf="child.get('CategoryName').invalid && (child.get('CategoryName').dirty || child.get('CategoryName').touched)">Thông
+                      tin không được để trống</small>
+                  </div>
+                  <input type="text" hidden="true" formControlName="CategoryCode">
+                  <input type="text" hidden="true" formControlName="CategoryTypeCode">
+                  <div class="category_form_action">
+                    <i class="fa fa-trash fa-lg" *ngIf="children.length>1"
+                      (click)="removeChildrenButtonClick(i, children.value[i].CategoryCode)"></i>
+                    <i class="fa fa-plus-circle fa-lg blue_color" (click)="addChildrenButtonClick()"
+                      [style.visibility]="last ? 'visible' : 'hidden'"></i>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <div class="row d-flex align-items-center">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-secondary mr-2" (click)="openClose()">Hủy</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-confirm #modalDefault [identity]="'confirmCancelAuthority'" [dialogClass]="'modal-sm'" [confirmType]="'None'"
+  (onAccepted)="agreeComfirm($event)" [confirmMessage]="'Hủy thông tin đã nhập và thoát'" [outsizeClose]="false">
+</app-modal-confirm>

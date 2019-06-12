@@ -1,0 +1,72 @@
+<div class="page-body box-infor-field tab-wrapper tab-authority">
+  <app-card [title]="'Danh sách nhóm quyền'">
+    <div class="row  m-b-20">
+      <div class="col-md-4 col-sm-12 mt-2">
+        <form [formGroup]="searchAuthorityForm" class="form-control
+          form-search-org" (ngSubmit)="search()">
+          <button class="input-group-append" type="submit">
+            <span><i class="feather icon-search"></i></span>
+          </button>
+          <input type="text" formControlName="searchInput" placeholder="Nhập tên nhóm quyền">
+        </form>
+      </div>
+      <div class="col-md-8 col-sm-12 mt-2">
+        <button class="btn btn-primary float-right" (click)="addAuthority()" hasAuthority="Admin,Member"
+          menuCode="ADMIN_ROLE" feature="add">
+          <i class="feather icon-plus" aria-hidden="true"></i>Thêm mới
+        </button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-framed">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên nhóm quyền</th>
+            <th>Người tạo</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th style="width: 100px">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let authority of (authorities$ | async)">
+            <th scope="row">{{ authority.index }}</th>
+            <td>{{ authority.authorityName }}</td>
+            <td>{{ authority.createBy }}</td>
+            <td>{{ authority.createDate }}</td>
+            <td>{{ authority.isLock ? 'Khóa' : 'Kích hoạt' }}</td>
+            <td>
+              <div class="d-flex justify-content-between">
+                <span class="action" (click)="editUserAuthority(authority)"><i class="feather icon-user-plus"></i></span>
+                <span class="action" (click)="updateAuthority(authority)" hasAuthority="Admin,Member" menuCode="ADMIN_ROLE"
+                  feature="edit" [createBy]="authority.createBy"><i class="feather icon-edit-2"></i></span>
+                <span class="action" (click)="deleteAuthority(authority)" hasAuthority="Admin,Member" menuCode="ADMIN_ROLE"
+                  feature="delete" [createBy]="authority.createBy"><i class="feather icon-trash-2"></i></span>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div>
+      <div *ngIf="searchAuthorityForm.value.searchInput && (authorities$ | async) && (authorities$ | async).length < 1"
+        style="text-align: center;    margin-top: 10px; font-weight: bold;">
+        Không có kết quả thỏa mãn điều kiện nhập
+      </div>
+    </div>
+
+    <div class="m-b-20" *ngIf="(paging$ | async) as paging">
+      <div *ngIf="paging.pageSize>1">
+        <ngb-pagination class="float-right" [collectionSize]="paging.totalPage" [pageSize]="perPage" [(page)]="page"
+          [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage(page)">
+        </ngb-pagination>
+      </div>
+    </div>
+  </app-card>
+</div>
+<app-modal-confirm #modalConfirm [identity]="'confirmDeleteAuthority'" [dialogClass]="'modal-sm'"
+  (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
+</app-modal-confirm>

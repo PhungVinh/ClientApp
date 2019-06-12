@@ -1,0 +1,246 @@
+.fa-times-circle {
+    position: absolute;
+    top: -9px;
+    right: -6px;
+    font-size: 17px;
+    color: red;
+    z-index: 100;
+    cursor: pointer;
+    display: none;
+}
+
+.fa-pencil-square {
+    position: absolute;
+    top: -9px;
+    right: 15px;
+    font-size: 17px;
+    color: #9CCC62;
+    z-index: 100;
+    cursor: pointer;
+    display: none;
+}
+
+.fa-plus-circle {
+    position: absolute;
+    top: -9px;
+    right: 32px;
+    font-size: 17px;
+    color: #9CCC62;
+    z-index: 100;
+    cursor: pointer;
+    display: none;
+}
+
+.fa-minus-circle {
+    position: absolute;
+    top: -9px;
+    right: 50px;
+    font-size: 17px;
+    color: #9CCC62;
+    z-index: 100;
+    cursor: pointer;
+    display: none;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:hover {
+    border: 1px solid #ccc;
+    background: #ccc6;;
+}
+
+.example-box:hover .fa-pencil-square {
+    display: block;
+}
+
+.example-box:hover .fa-times-circle {
+    display: block;
+}
+
+.example-box:hover .fa-plus-circle {
+    display: block;
+}
+
+.example-box:hover .fa-minus-circle {
+    display: block;
+}
+
+.box-add-drag {
+    min-height: 100px;
+    max-height: 110px;
+    border-top: 1px dotted #ccc;
+    margin-top: 20px;
+    /*display: none;*/
+}
+
+.box-right {
+    position: relative;
+}
+
+.fa-table {
+    cursor: pointer;
+}
+
+.fixed_headers {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.fixed_headers th, td {
+    padding: 5px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.fixed_headers td:nth-child(1), th:nth-child(1) {
+    min-width: 50px;
+}
+
+.fixed_headers td:nth-child(2), th:nth-child(2) {
+    max-width: 225px;
+    min-width: 225px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table-show-detail  td:nth-child(2), th:nth-child(2) {
+    width: 10% !important;
+}
+
+.fixed_headers td:nth-child(3), th:nth-child(3) {
+    width: 60px;
+}
+
+.fixed_headers thead {
+    background-color: #fff;
+/ / color: #FDFDFD;
+}
+
+.fixed_headers thead tr {
+   border-bottom: 2px solid #ccc;
+    padding: 5px 0 !important;
+}
+
+.fixed_headers tr {
+    display: block;
+    position: relative;
+}
+
+.fixed_headers tbody {
+    display: block;
+/ / overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    max-height: 400px;
+}
+
+.fixed_headers tr:nth-child(even) {
+/ / background-color: #ddd;
+}
+.block_center{
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.title-table{
+    font-size: 15px;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+}
+.box-action{
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+.box-action-item{
+    border: 1px solid #ccc;
+    width: 25%;
+    text-align: center;
+    padding: 5px 0;
+    cursor: pointer;
+}
+.active{
+    font-weight: 600;
+}
+.fa-minus, .fa-plus{
+    position: absolute;
+    top: -10px;
+    right: -9px;
+    cursor: pointer;
+    background: #ccc;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    padding-top: 4px;
+    border-radius: 100%;
+    font-size: 13px;
+}
+.add-row{
+    border-top: 1px dotted #ccc;
+    margin-top: 20px;
+    position: relative;
+}
+.watch-detail {
+    color: #6693FE;
+    cursor: pointer;
+}
+.box-action-list{
+    display: flex;
+    justify-content: flex-end;
+}
+.icon-table-config{
+    background: #4680ff;
+    color: #fff;
+    padding: 4px 10px;
+    margin-right: 20px;
+    margin-top: -1px;
+    cursor: pointer;
+}
+.star{
+    color: red;
+}
+.not-show{
+    visibility: hidden;
+}
+.active1{
+    border: 1px solid #ccc;
+    background: #F5F5F5;
+}
+.active2{
+    display: block !important;
+}
+
+.example-box {
+    cursor: move;
+    background: #fff;
+    font-size: 14px;
+    flex-grow: 1;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    position: relative;
+}

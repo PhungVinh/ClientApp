@@ -1,0 +1,104 @@
+<form name="editCustomerForm" role="form" novalidate (ngSubmit)="onSave($event)" #elRefForm #editCustomerForm="ngForm"
+  [class.ng-submitted]="editCustomerForm.submitted" autocomplete="off">
+  <div class="modal-header">
+    <h4 class="modal-title">{{ (recordId ? 'Cập nhật thông tin khách hàng' : 'Thêm mới khách hàng') | translate}}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">
+      &times;
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <ng-container *ngFor="let item of attribute">
+      <div class="row">
+        <ng-container *ngFor="let child of (item.children)">
+          <div class="col-sm-{{child.AttributeCol}}" [class.sr-only]="!child.IsVisible">
+            <div class="form-group">
+              <label class="form-control-label" for="firstname">{{child.AttributeLabel}}<span *ngIf="child.IsRequired"
+                  class="txt-red m-2">*</span></label>
+              <!-- Field with textbox type -->
+              <input *ngIf="child.AttributeType == 'TEXTBOX'" class="form-control input-md" [name]="child.AttributeCode"
+                [(ngModel)]="child.DefaultValueWithTextBox" [ControlTrim]="'deep'" [disabled]="child.IsReuse" [required]="child.IsRequired"
+                type="text">
+              <!-- Field with textarea type -->
+              <textarea *ngIf="child.AttributeType == 'TEXTAREA'" [ControlTrim]="'deep'" class="form-control" [name]="child.AttributeCode"
+                [disabled]="child.IsReuse" [(ngModel)]="child.DefaultValueWithTextBox"></textarea>
+              <!-- Field with checkbox type -->
+              <div *ngIf="child.AttributeType == 'CHECKBOX'" class="border-checkbox-section">
+                <div class="border-checkbox-group border-checkbox-group-primary">
+                  <input class="border-checkbox" type="checkbox" id="checkbox" [disabled]="child.IsReuse">
+                  <label class="border-checkbox-label" for="checkbox">{{child.AttributeLabel}}</label>
+                </div>
+              </div>
+              <!-- Field with list checkbox type -->
+              <div *ngIf="child.AttributeType == 'LISTCHECKBOX'" class="border-checkbox-section">
+                <div *ngFor="let val of child?.ListCategory; let i = index"
+                  class="border-checkbox-group border-checkbox-group-primary">
+                  <input class="border-checkbox" type="checkbox" id="checkbox{{i}}" [disabled]="child.IsReuse"
+                    [value]="val?.CategoryCode" checked
+                    [checked]="isBufferredContain(val.CategoryCode, child.DefaultValue)"
+                    (change)="child.DefaultValue = updateSelectedListCheckbox($event, val.CategoryCode, child.DefaultValue)">
+                  <label class="border-checkbox-label" for="checkbox{{i}}">{{val?.CategoryName}}</label>
+                </div>
+                <input class="form-control input-md" [name]="child.AttributeCode" [(ngModel)]="child.DefaultValue"
+                  [required]="child.IsRequired" type="hidden">
+              </div>
+              <!-- Field with selectbox type -->
+              <select *ngIf="child.AttributeType == 'DROPDOWNLIST'" [name]="child.AttributeCode"
+                [(ngModel)]="child.DefaultValue" [disabled]="child.IsReuse" class="form-control">
+                <option *ngFor="let val of child?.ListCategory" [value]="val?.CategoryCode"
+                  [selected]="val?.CategoryCode === child?.DefaultValue">{{val?.CategoryName}}</option>
+              </select>
+              <!-- Field with radio type -->
+              <div *ngIf="child.AttributeType == 'RADIO'" class="form-radio">
+                <div class="radio radio-inline">
+                  <label>
+                    <input type="radio" [name]="child.AttributeCode" [(ngModel)]="child.DefaultValue">
+                    <i class="helper"></i> {{child.AttributeLabel}}
+                  </label>
+                </div>
+              </div>
+              <!-- Field with list radio type -->
+              <div *ngIf="child.AttributeType == 'LISTRADIO'" class="form-radio">
+                <div class="radio radio-inline" *ngFor="let val of child?.ListCategory; let i = index">
+                  <label>
+                    <input type="radio" [name]="child.AttributeCode" [(ngModel)]="child.DefaultValue"
+                      [value]="val.CategoryCode">
+                    <i class="helper"></i> {{val.CategoryName}}
+                  </label>
+                </div>
+              </div>
+              <div [style.min-height]="'18px'" [style.margin]="'4px 0'">
+                <small [style.margin]="0" class="form-text text-danger"
+                  *ngIf="child.IsRequired && isShowInvalid(child.AttributeCode) && isShowError(child.AttributeCode, 'required')">
+                  {{'Thông tin không được để trống' | translate}}
+                </small>
+                <small [style.margin]="0" class="form-text text-danger"
+                  *ngIf="isShowInvalid(child.AttributeCode) && isShowError(child.AttributeCode, 'notUnique')">
+                  {{'Thông tin đã tồn tại trên hệ thống' | translate}}
+                </small>
+                <!-- <small class="form-text text-danger" [hidden]="!editCustomerForm.controls?[child.AttributeCode]?.errors?.minlength">
+                  Sai định dạng mã đơn vị
+                </small>
+                <small class="form-text text-danger" [hidden]="!editCustomerForm.controls?[child.AttributeCode]?.errors?.pattern">
+                  Sai định dạng mã đơn vị
+                </small> -->
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" id="cancel-save" class="btn btn-default float-right" (click)="clear()">
+      &nbsp;<span>{{'Hủy' | translate}}</span>
+    </button>
+    <button type="button" *ngIf="!recordId" (click)="onSaveAnContinue($event)"
+      class="btn btn-primary float-right m-r-5">
+      &nbsp;<span>{{'Lưu và tiếp tục' | translate}}</span>
+    </button>
+    <button type="submit" id="save-entity" class="btn btn-primary float-right m-r-5">
+      &nbsp;<span>{{'Lưu' | translate}}</span>
+    </button>
+  </div>
+</form>

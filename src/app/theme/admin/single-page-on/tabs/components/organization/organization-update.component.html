@@ -1,0 +1,282 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" class="update-organization" #editForm="ngForm"
+    [class.ng-submitted]="editForm.submitted" autocomplete="off">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="organizations.organizationID ===
+            undefined">Tạo mới đơn vị</h4>
+        <h4 class="modal-title" *ngIf="organizations.organizationID !==
+            undefined">{{'Sửa đơn vị' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            (click)="openClose()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+        <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}">
+            <h5 class="mt-2 info-normal">{{'Thông tin cơ bản' | translate}}</h5>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Mã đơn vị' | translate}} <span class="txt-red">*</span></label>
+                    <input type="text" class="form-control ng-invalid" name="organizationCode" #code
+                        [disabled]="organizations.organizationID !== undefined"
+                        [(ngModel)]="organizations.organizationCode" required minlength="5" maxlength="255"
+                        PatternOnly="^[a-zA-Z0-9]{0,}$" />
+                    <div [hidden]="!((editForm.controls?.organizationCode?.touched ||  editForm.submitted || editForm.controls?.organizationCode?.dirty ) &&
+                    editForm.controls?.organizationCode?.invalid)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationCode?.errors?.required">
+                            {{'Thông tin không được để trống' | translate}}
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationCode?.errors?.minlength">
+                            Sai định dạng mã đơn vị
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationCode?.errors?.pattern">
+                            Sai định dạng mã đơn vị
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationCode?.errors?.notUnique">
+                            Thông tin đã tồn tại trên hệ thống
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-control-label">{{'Tên đơn vị' | translate}} <span
+                            class="txt-red">*</span></label>
+                    <input type="text" class="form-control ng-invalid" name="organizationName"
+                        [(ngModel)]="organizations.organizationName" [ControlTrim]="'deep'" required maxlength="100" />
+                    <div
+                        [hidden]="!((editForm.controls?.organizationName?.touched || editForm.submitted ||  editForm.controls?.organizationName?.dirty) && editForm.controls?.organizationName?.invalid)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationName?.errors?.required">
+                            {{'Thông tin không được để trống' | translate}}
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationName?.errors?.maxlength">
+                            This field cannot be longer than 100 characters.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Email' | translate}} <span class="txt-red">*</span></label>
+                    <input type="text" class="form-control ng-invalid" name="organizationEmail" #email
+                        [textMask]="{mask: emailMask}" [(ngModel)]="organizations.organizationEmail"
+                        PatternOnly="^[\d\w._@\s]*$" required [pattern]="patternEmail" maxlength="255" />
+                    <div [hidden]="!((editForm.controls?.organizationEmail?.touched || editForm.submitted || editForm.controls?.organizationEmail?.dirty) &&
+                    editForm.controls?.organizationEmail?.invalid)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationEmail?.errors?.required">
+                            {{'Thông tin không được để trống' | translate}}
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationEmail?.errors?.pattern">
+                            {{'Sai định dạng email' | translate}}
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationEmail?.errors?.maxlength">
+                            This field cannot be longer than 255 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationEmail?.errors?.notUnique">
+                            Thông tin đã tồn tại trên hệ thống
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Số điện thoại' | translate}} <span
+                            class="txt-red">*</span></label>
+                    <input type="text" class="form-control ng-invalid" name="organizationPhone"
+                        [(ngModel)]="organizations.organizationPhone" required [maxlength]="12" minlength="10"
+                        [pattern]="maskUsMobile" PatternOnly="^\+?\d{0,12}$" />
+                    <div [hidden]="!((editForm.controls?.organizationPhone?.touched || editForm.submitted || editForm.controls?.organizationPhone?.dirty)  && editForm.controls?.organizationPhone?.invalid)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationPhone?.errors?.required">
+                            {{'Thông tin không được để trống' | translate}}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Mã số thuế' | translate}} <span
+                            class="txt-red">*</span></label>
+                    <input type="text" class="form-control ng-invalid" name="organizationTaxCode" #taxCode
+                        PatternOnly="^\d{0,15}$" [(ngModel)]="organizations.organizationTaxCode" required
+                        maxlength="15" />
+                    <div [hidden]="!((editForm.controls?.organizationTaxCode?.touched || editForm.submitted || editForm.controls?.organizationTaxCode?.dirty)&&
+                    editForm.controls?.organizationTaxCode?.invalid)">
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationTaxCode?.errors?.required">
+                            {{'Thông tin không được để trống' | translate}}
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationTaxCode?.errors?.maxlength">
+                            This field cannot be longer than 15 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls?.organizationTaxCode?.errors?.notUnique">
+                            Thông tin đã tồn tại trên hệ thống
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label">{{'Địa chỉ' | translate}}</label>
+                <input type="text" class="form-control ng-invalid" name="organizationAddress" id=""
+                    [ControlTrim]="'deep'" [(ngModel)]="organizations.organizationAddress" maxlength="255" />
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Logo đơn vị' | translate}}</label>
+                    <div class="cover-logo">
+                        <input type="file" class="form-control" id="img_logo" name="organizationLogo"
+                            (ngModel)="organizations.organizationLogo" (change)="handleFileSelectOrg($event)" />
+                        <img src="{{organizations.organizationLogo}}" alt="">
+                        <label for="img_logo"><i class="fa fa-camera" aria-hidden="true"></i>
+                            {{'Cập nhật' | translate}}</label>
+                    </div>
+                    <div *ngIf="checkTypeFile" class="txt-red">
+                        <small class="form-text text-danger">
+                            {{'Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB' | translate}}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            <label class="form-control-label">{{'Lĩnh vực hoạt động' | translate}}
+                            </label>
+                            <select name="organizationRemark" [(ngModel)]="organizations.organizationRemark"
+                                class="form-control" *ngIf="categories">
+                                <option [ngValue]="null">-- Chọn lĩnh vực --</option>
+                                <option *ngFor="let data of categories.data" [ngValue]="data.categoryCode">
+                                    {{data.categoryName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-control-label">{{'Website' | translate}}</label>
+                            <input type="text" class="form-control" name="organizationHomePage" [ControlTrim]="'deep'"
+                                [(ngModel)]="organizations.organizationHomePage" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h5>Thông tin dịch vụ sử dụng</h5>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Gói dịch vụ sử dụng' | translate}} <span
+                            class="txt-red">*</span></label>
+                    <div class="list-service form-control" *ngIf="servicePacks"
+                        [class.ng-invalid]="isCheckValidateService() && editForm.submitted">
+                        <div class="list-option mb-2" *ngFor="let item of servicePacks; let i = index">
+                            <div class="border-checkbox-section">
+                                <div class="border-checkbox-group border-checkbox-group-default">
+                                    <input class="border-checkbox" type="checkbox" id="checkbox{{i}}"
+                                        name="checkPack{{i}}" [(ngModel)]="item.CheckPack"
+                                        (ngModelChange)="changeService($event, i)">
+                                    <label class="border-checkbox-label"
+                                        for="checkbox{{i}}">{{item.NameServicePack}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div [hidden]="!(isCheckValidateService() && editForm.submitted)">
+                        <small class="form-text text-danger">
+                            {{'Thông tin không được để trống' | translate}}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4" style="z-index: 9">
+                    <label class="form-control-label">{{'Thời hạn' | translate}} <span class="txt-red">*</span></label>
+                    <div class="col-select">
+                        <div class="form-control-org form-control"
+                            [class.ng-invalid]="(isValidateDate ||  editForm.submitted) && editForm.controls?.organizationTo?.invalid">
+                            <input type="text" class="input-datepicker" required style="pointer-events: none"
+                                name="organizationFrom" [(ngModel)]="organizations.organizationFrom"> -
+                            <input type="text" name="organizationTo" required style="pointer-events: none"
+                                [(ngModel)]="organizations.organizationTo" class="input-datepicker">
+                            <span type="button" style="padding-right: 5px; width: 18px; cursor: pointer"
+                                (click)="clearTimeRange()">
+                                <i *ngIf="organizations.organizationFrom" class="fa fa-times" aria-hidden="true"></i>
+                            </span>
+                            <span type="button" class="" (click)="isCollapsed=
+                            !isCollapsed" style="cursor: pointer" [attr.aria-expanded]="!isCollapsed"
+                                aria-controls="collapseExample">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        <div
+                            [hidden]="!((isValidateDate ||  editForm.submitted) && editForm.controls?.organizationTo?.invalid)">
+                            <small class="form-text text-danger"
+                                [hidden]="!editForm.controls?.organizationTo?.errors?.required">
+                                {{'Thông tin không được để trống' | translate}}
+                            </small>
+                        </div>
+
+                        <div id="collapseExample" [ngbCollapse]="!isCollapsed"
+                            class="datepicker_org datepicker-org-update">
+                            <ngb-datepicker #dp ngModel name="dateF" (select)="onDateChange($event)"
+                                [minDate]="organizations.organizationID === undefined ? today : minDates"
+                                [displayMonths]="2" [dayTemplate]="d">
+                            </ngb-datepicker>
+
+                            <ng-template #d let-date="date" let-focused="focused">
+                                <span class="custom-range" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) ||
+                            isInside(date) || isHovered(date)" [class.faded]="isHovered(date) || isInside(date)"
+                                    (mouseenter)="hoveredDate= date" (mouseleave)="hoveredDate= null">
+                                    <div class="custom-day" [class.focused]="focused" [class.bg-primary]="selected"
+                                        [class.text-blur]="date.month !== currentMonth" [class.text-muted]="disabled"
+                                        [class.today]="isToday(date)">
+                                        {{ date.day }}
+                                    </div>
+                                </span>
+                            </ng-template>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <label class="form-control-label">{{'Trạng thái' | translate}} </label>
+                    <select name="isActive" [(ngModel)]="organizations.isActive" class="form-control">
+                        <option value="true">Hoạt động</option>
+                        <option value="false">Khóa</option>
+                    </select>
+                </div>
+            </div>
+            <h5 class="txt-note">{{'Ghi chú' | translate}}</h5>
+            <div class="form-group">
+                <textarea rows="4" class="form-control ng-invalid" name="organizationNote" [ControlTrim]="'deep'"
+                    [(ngModel)]="organizations.organizationNote" maxlength="255">
+                </textarea>
+            </div>
+        </perfect-scrollbar>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" id="cancel-save" class="btn btn-default
+            float-right" (click)="openClose()">&nbsp;<span>Hủy</span>
+        </button>
+        <button type="submit" id="save-entity"
+            class="btn btn-primary float-right m-r-5">&nbsp;<span>{{'Lưu' | translate}}</span>
+        </button>
+    </div>
+</form>
+
+<app-modal-confirm #modalDefault [identity]="'confirmCancelOrganization'" [dialogClass]="'modal-sm'" (onAccepted)="agreeComfirm($event)" [confirmType]="'None'" [confirmMessage]="'Hủy thông tin đã nhập và thoát'" [outsizeClose]="false"></app-modal-confirm>
+
+<!-- <app-modal-basic #modalDefault class="confirm-common" [dialogClass]="'modal-sm'" [outsizeClose]="false">
+    <div class="app-modal-body">
+        <p>Hủy thông tin đã nhập và thoát </p>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" class="btn btn-primary btn-sm float-right  m-b-20 ripple light" style="display: block;"
+            (click)="agreeComfirm()">Có
+        </button>
+        <button type="button" class="btn btn-default btn-sm  float-left  m-b-20 ripple light" style="display: block;"
+            (click)="modalDefault.hide()">Không
+        </button>
+    </div>
+</app-modal-basic> -->

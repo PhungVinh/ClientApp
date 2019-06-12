@@ -1,0 +1,88 @@
+::ng-deep .config_authority_header__padding th {
+  padding: 0.6rem;
+  font-weight: 600;
+}
+
+::ng-deep .config_authority_header__padding th select {
+  font-weight: 600;
+  color: #212529;
+}
+
+::ng-deep .config_authority_header__padding th thead {
+  border-bottom: 2px solid #ccc;
+}
+
+::ng-deep .config_authority_header__padding {
+  border-bottom: 2px solid #ccc;
+}
+
+.fixed_headers {
+  table-layout: fixed;
+}
+
+.fixed_headers th, .fixed_headers td {
+  padding: 0.5rem 5px;
+  text-align: left;
+}
+
+.fixed_headers td:nth-child(1), .fixed_headers th:nth-child(1) {
+  min-width: 166px;
+}
+
+.fixed_headers td:nth-child(2), .fixed_headers th:nth-child(2) {
+  min-width: 54px;
+}
+
+.fixed_headers td:nth-child(3), .fixed_headers th:nth-child(3) {
+  min-width: 64px;
+}
+
+.fixed_headers td:nth-child(4), .fixed_headers th:nth-child(4) {
+  min-width: 87px;
+}
+
+.fixed_headers td:nth-child(5), .fixed_headers th:nth-child(5) {
+  min-width: 83px;
+}
+
+.fixed_headers td:nth-child(6), .fixed_headers th:nth-child(6) {
+  min-width: 82px;
+}
+
+.fixed_headers td:nth-child(7), .fixed_headers th:nth-child(7) {
+  min-width: 43px;
+}
+
+.fixed_headers td:nth-child(8), .fixed_headers th:nth-child(8) {
+  min-width: 84px;
+}
+
+.fixed_headers td:nth-child(9), .fixed_headers th:nth-child(9) {
+  min-width: 38px;
+}
+
+.fixed_headers td:nth-child(10), .fixed_headers th:nth-child(10) {
+  min-width: 38px;
+}
+
+.fixed_headers thead tr {
+  display: block;
+  position: relative;
+}
+
+.fixed_headers tbody {
+  display: block;
+  max-height: 300px;
+}
+
+.table_config {
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+
+.border-checkbox-section {
+  height: 20px;
+}
+/*# sourceMappingURL=authority-form.component.css.map */

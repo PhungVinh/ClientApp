@@ -1,0 +1,29 @@
+:host > .page-body {
+  padding-top: 20px;
+}
+
+:host ::ng-deep .tab-content {
+  padding: 1rem;
+  min-height: 500px;
+  overflow-y: auto;
+  max-height: calc(100vh - 110px);
+}
+
+:host ::ng-deep .tab-content .tab-pane .page-body > app-card > .card {
+  margin-bottom: 0;
+}
+
+:host ::ng-deep .tab-content .tab-wrapper {
+  padding: 0;
+  min-height: calc(100vh - 10rem);
+}
+
+:host ::ng-deep span.close {
+  margin-left: .5rem;
+  font-size: 18px;
+}
+
+:host ::ng-deep span.close.reload {
+  width: 1rem;
+}
+/*# sourceMappingURL=single-page-on.component.css.map */

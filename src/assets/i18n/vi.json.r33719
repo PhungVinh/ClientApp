@@ -1,0 +1,109 @@
+{
+    "Hành động": "Hành động",
+    "Có": "Có",
+    "Không": "Không",
+    "Lưu": "Lưu",
+    "Đóng": "Đóng",
+    "Hủy" : "Hủy",
+    "Xem": "Xem",
+    "Sửa": "Sửa",
+    "Xóa": "Xóa",
+    "Xem tất cả": "Xem tất cả",
+    "Sửa tất cả": "Sửa tất cả",
+    "Xóa tất cả": "Xóa tất cả",
+    "Khóa" : "Khóa",
+    "Kích hoạt" : "Kích hoạt",
+    "Thêm mới": "Thêm mới",
+    "Cập nhật": "Cập nhật",
+    "Tìm kiếm" : "Tìm kiếm"
+,
+  "common": {
+    "searchno": "Không có kết quả thõa mãn điều kiện nhập"
+  },
+  "Nam": "Nam",
+  "Nữ": "Nữ",
+  "Tất cả": "Tất cả",
+  "Hoạt động": "Hoạt động",
+  "Trạng thái": "Trạng thái",
+  "Giới tính": "Giới tính",
+  "Họ tên": "Họ tên",
+  "Tên đăng nhập": "Tên đăng nhập",
+  "Email": "Email",
+  "Số điện thoại": "Số điện thoại",
+  "STT": "STT",
+  "Ảnh": "Ảnh",
+  "Chức vụ": "Chức vụ",
+  "Địa chỉ": "Địa chỉ",
+  "Ngày sinh": "Ngày sinh",
+  "Từ ngày": "Từ ngày",
+  "Đến ngày": "Đến ngày",
+  "Đơn vị" : "Đơn vị"
+,
+    "login": {
+        "title": "Đăng nhập hệ thống",
+        "form": {
+            "password": "Mật khẩu",
+            "password.placeholder": "Nhập mật khầu của bạn",
+            "rememberme": "Nhớ tài khoản",
+            "button": "Đăng nhập"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Đăng nhập thất bại!</strong> Bạn vui lòng kiểm tra thông tin đăng nhập và thử lại."
+            }
+        },
+        "password": {
+            "forgot": "Bạn quên mật khẩu?"
+        }
+    }
+,
+    "Bạn chắc chắn muốn xóa tài khoản" : "Bạn chắc chắn muốn xóa tài khoản",
+    "Xóa thông tin đã chọn": "Xóa thông tin đã chọn",
+    "Thông tin không được để trống": "Thông tin không được để trống"
+,
+    "Thêm thành công!": "Lưu thông tin thành công",
+    "Sửa thành công!": "Cập nhật thông tin thành công",
+    "Xóa thành công!": "Xóa thông tin thành công"
+,
+    "Thời hạn": "Thời hạn",
+    "Mã đơn vị": "Mã đơn vị",
+    "Tên đơn vị": "Tên đơn vị",
+    "Gói dịch vụ": "Gói dịch vụ",
+    "Số tài khoản": "Số tài khoản",
+    "Thêm đơn vị": "Thêm đơn vị",
+    "Sửa đơn vị": "Sửa đơn vị",
+    "Thông tin dịch vụ sử dụng": "Thông tin dịch vụ sử dụng",
+    "Mã số thuế" : "Mã số thuế",
+    "Logo đơn vị" : "Logo đơn vị",
+    "Dung lượng file tối đa 5MB": "Dung lượng file tối đa 5MB",
+    "Chỉ cho phép chọn file có định dạng JPG, PNG": "Chỉ cho phép chọn file có định dạng JPG, PNG",
+    "Lĩnh vực hoạt động": "Lĩnh vực hoạt động",
+    "Công nghệ thông tin": "Công nghệ thông tin",
+    "Website": "Website",
+    "Gói dịch vụ sử dụng": "Gói dịch vụ sử dụng",
+    "Số điện thoại không đúng định dạng": "Số điện thoại không đúng định dạng",
+    "Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB": "Chỉ chọn File có định dạng JPG, PNG, GIF và dung lượng tối đa 5MB",
+    "Thông tin cơ bản": "Thông tin cơ bản",
+    "Ghi chú": "Ghi chú",
+    "Username or password is incorrect!": "Thông tin đăng nhập không chính xác",
+    "active" : {
+        "true" : "Hoạt động",
+        "false": "Khóa"
+    }
+,
+  "Thông tin chung": "Thông tin chung",
+  "Thông tin phân quyền": "Thông tin phân quyền",
+  "Module": "Module",
+  "Tất cả chức năng": "Tất cả chức năng"
+,
+    "Thêm tài khoản": "Thêm tài khoản",
+    "Sửa tài khoản": "Sửa tài khoản",
+    "Tài khoản đăng nhập" :"Tài khoản đăng nhập",
+    "Phòng ban": "Phòng ban",
+    "Nhóm quyền" : "Nhóm quyền",
+    "Nhập họ tên/Email/số điện thoại" : "Nhập họ tên, email, số điện thoại",
+    "Đặt lại mật khẩu" : "Đặt lại mật khẩu",
+    "Thông tin phải dài ít nhất 4 ký tự": "Thông tin phải chứa ít nhất 4 ký tự",
+    "Thông tin không thể dài hơn 100 ký tự": "Thông tin không thể dài hơn 100 ký tự",
+    "Sai định dạng email" : "Sai định dạng email"
+ }

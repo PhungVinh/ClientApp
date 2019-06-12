@@ -1,0 +1,278 @@
+<div class="form-authority">
+  <div class="modal-header">
+    <h4 class="modal-title modal__title_20">{{ title }}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}">
+      <form [formGroup]="authorityForm" role="form" novalidate autocomplete="off" class='row'>
+        <div class='col-12'>
+          <div class="row">
+            <div class='col-12 col-sm-8'>
+              <div class="form-group">
+                <label class="form-control-label label__black_14" for="authorityName">Tên nhóm quyền <span
+                    class="txt-red">*</span></label>
+                <input
+                  [ngClass]="{'form-control': true, 'is-invalid': authorityName.invalid && (authorityName.dirty || authorityName.touched)}"
+                  formControlName="authorityName" type="text" required maxlength="100">
+                <small class="invalid-feedback"
+                  *ngIf="authorityName.invalid && (authorityName.dirty || authorityName.touched)">{{ errorMsgs.authorityName | translate }}</small>
+              </div>
+            </div>
+            <div class='col-12 col-sm-4'>
+              <div class="form-group">
+                <label class="form-control-label label__black_14" for="isLock">Trạng thái</label>
+                <select class="form-control" formControlName="isLock">
+                  <option value="false">Kích hoạt</option>
+                  <option value="true">Khóa</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label label__black_14" for="authorityDescription">Mô tả</label>
+            <textarea class="form-control" rows="3" formControlName="authorityDescription" maxlength="250"></textarea>
+          </div>
+        </div>
+      </form>
+      <h4 class="title__blue_20">Phân quyền</h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class='col-12 col-sm-8'>
+              <div class="form-group">
+                <label class="form-control-label label__black_14">Copy nhóm quyền</label>
+                <select class="form-control" (change)="copyAuthority($event.target.value)" [(ngModel)]="selectedAutho">
+                  <option value="default"> --- Chọn nhóm quyền --- </option>
+                  <option *ngFor="let authority of allAuthority" [value]="authority.authorityId"
+                    [selected]="authority.authorityId === selectedAutho">
+                    {{ authority.authorityName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12">
+              <div class="form-group">
+                <div class="table-responsive limit">
+                  <table class="fixed_headers table_config">
+                    <thead>
+                      <tr class="config_authority_header__padding">
+                        <th style="margin-left: 0.4rem">
+                          <select class="border-0" [formControl]="selectModule">
+                            <option value="">Tất cả chức năng</option>
+                            <option [value]="module.data.MenuCode" *ngFor="let module of listModule$ | async">
+                              {{ module.data.MenuName }}</option>
+                          </select>
+                        </th>
+                        <th>Tất cả</th>
+                        <th>Mã hóa</th>
+                        <th>Xem tất cả</th>
+                        <th>Sửa tất cả</th>
+                        <th>Xóa tất cả</th>
+                        <th>Xem</th>
+                        <th>Thêm mới</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <perfect-scrollbar>
+                        <tr class="my-2">
+                          <th scope="row">Tất cả</th>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="checkAll"
+                                  [(ngModel)]="selectedAllCheckbox" (change)="onCheckAllCheckbox()">
+                                <label class="border-checkbox-label m-0 p-0" for="checkAll"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isEncypt"
+                                  [(ngModel)]="selectedEncypt" (change)="onCheckEncypt()">
+                                <label class="border-checkbox-label m-0 p-0" for="isEncypt"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isShowAll" [(ngModel)]="selectedShowAll"
+                                  (change)="onCheckShowAll()">
+                                <label class="border-checkbox-label m-0 p-0" for="isShowAll"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isEditAll"
+                                  [(ngModel)]="selectedEditAll" (change)="onCheckEditAll()">
+                                <label class="border-checkbox-label m-0 p-0" for="isEditAll"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isDeleteAll"
+                                  [(ngModel)]="selectedDeleteAll" (change)="onCheckDeleteAll()">
+                                <label class="border-checkbox-label m-0 p-0" for="isDeleteAll"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isShow" [(ngModel)]="selectedShow"
+                                  (ngModelChange)="onCheckShow()">
+                                <label class="border-checkbox-label m-0 p-0" for="isShow"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isAdd" [(ngModel)]="selectedAdd"
+                                  (change)="onCheckAdd()">
+                                <label class="border-checkbox-label m-0 p-0" for="isAdd"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isEdit" [(ngModel)]="selectedEdit"
+                                  (change)="onCheckEdit()">
+                                <label class="border-checkbox-label m-0 p-0" for="isEdit"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="isDelete"
+                                  [(ngModel)]="selectedDelete" (change)="onCheckDelete()">
+                                <label class="border-checkbox-label m-0 p-0" for="isDelete"></label>
+                              </div>
+                            </div>
+                          </td>
+                       
+                        </tr>
+                        <tr *ngFor="let role of listRole(selectModule.value)">
+                          <th scope="row">{{ role.menuName }}</th>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_8"
+                                  [(ngModel)]="role.selected" (ngModelChange)="onCheckAllFunction($event, role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_8"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_0"
+                                  [(ngModel)]="role.isEncypt" (ngModelChange)="checkIfAllFunctionSelected(role.index)" [disabled]="role.isEncypt === null">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_0"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_1"
+                                  [(ngModel)]="role.isShowAll" (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_1"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_2"
+                                  [(ngModel)]="role.isEditAll" (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_2"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_3"
+                                  [(ngModel)]="role.isDeleteAll"
+                                  (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_3"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_4"
+                                  [(ngModel)]="role.isShow" (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_4"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_5"
+                                  [(ngModel)]="role.isAdd" (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_5"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_6"
+                                  [(ngModel)]="role.isEdit" (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_6"></label>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="border-checkbox-section">
+                              <div class="border-checkbox-group border-checkbox-group-default">
+                                <input class="border-checkbox" type="checkbox" id="{{role.index}}_7"
+                                  [(ngModel)]="role.isDelete" (ngModelChange)="checkIfAllFunctionSelected(role.index)">
+                                <label class="border-checkbox-label m-0 p-0" for="{{role.index}}_7"></label>
+                              </div>
+                            </div>
+                          </td>
+                      
+                        </tr>
+                      </perfect-scrollbar>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default float-right" title="Hủy"
+      (click)="openClose()">&nbsp;<span>{{'Hủy' | translate}}</span>
+    </button>
+    <button type="button" *ngIf="!authority" class="btn btn-primary float-right m-r-5" (click)="saveAndContinute()">
+      &nbsp;<span>Lưu và tiếp tục</span>
+    </button>
+    <button type="button" class="btn btn-primary float-right m-r-5" (click)="submit()">Lưu</button>
+  </div>
+</div>
+<app-modal-confirm #modalDefault [identity]="'confirmCancelAuthority'" [dialogClass]="'modal-sm'" [confirmType]="'None'"
+  (onAccepted)="agreeComfirm($event)" [confirmMessage]="'Thông tin sẽ không được lưu?'" [outsizeClose]="false">
+</app-modal-confirm>

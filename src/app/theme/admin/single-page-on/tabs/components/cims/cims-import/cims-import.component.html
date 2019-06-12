@@ -1,0 +1,103 @@
+<!-- <form name="editForm" role="form" novalidate (ngSubmit)="onSubmit()" #editForm="ngForm" autocomplete="off" class="modal-cims-import"> -->
+<div class="modal-header">
+  <h5 class="modal-title">{{'Import file danh sách khách hàng' | translate}}</h5>
+  <button type="button" class="close" (click)="clear()">
+    &times;
+  </button>
+</div>
+<div class="modal-body">
+  <h5 class="mb-4 mt-2"><i class="fa fa-download mr-2"></i>{{'Download file mẫu' | translate}}</h5>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <h6>{{'Kiểu import dữ liệu' | translate}}</h6>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6">
+      <div class="list-option mb-2">
+        <div class="border-checkbox-section">
+          <div class="border-checkbox-group border-checkbox-group-default">
+            <input class="border-checkbox" type="checkbox" id="checkbox0">
+            <label class="border-checkbox-label" for="checkbox0">{{'Thêm mói khách hàng' | translate}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="list-option">
+        <div class="border-checkbox-section">
+          <div class="border-checkbox-group border-checkbox-group-default">
+            <input class="border-checkbox" type="checkbox" id="checkbox1">
+            <label class="border-checkbox-label" for="checkbox1">{{'Cập nhật thông tin khách hàng' | translate}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12 import-control">
+          <label class="btn-sm btn btn-primary">
+            <span>{{'Chọn file' | translate}}</span>
+            <input type="file" (change)="onFileSelected($event)" class="custom-file-input" style="display: none">
+          </label>
+        </div>
+        <div class="col-md-12">
+          <div class="import-queue-progress mb-2" *ngIf="(progress$ | async) as progress">
+            <span class="justify-content-end mr-2 text-right">{{progress.status}}</span>
+            <span>
+              <ngb-progressbar type="primary" [value]="progress.percentage" [striped]="true" [animated]="true">
+                <i>{{progress.percentage}}%</i></ngb-progressbar>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <span *ngIf="showMessage">{{ message }}</span>
+        </div>
+        <!-- <div class="col-md-12">
+            <button type="button" class="btn btn-success ripple light m-b-5" (click)="uploader.uploadAll()"
+              [disabled]="!uploader.getNotUploadedItems().length">
+              <span class="fa fa-upload"></span> Upload all
+            </button>
+            <button type="button" class="btn btn-warning ripple light m-b-5" (click)="uploader.cancelAll()"
+              [disabled]="!uploader.isUploading">
+              <span class="fa fa-ban"></span> Cancel all
+            </button>
+            <button type="button" class="btn btn-danger ripple light m-b-5" (click)="uploader.clearQueue()"
+              [disabled]="!uploader.queue.length">
+              <span class="fa fa-trash"></span> Remove all
+            </button>
+          </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <h6 class="text-underline">{{'Lưu ý' | translate}}:</h6>
+    </div>
+    <div class="col-md-12">
+      <ul class="import-note">
+        <li>Thêm mới khách hàng: thực hiện thêm mới các bản ghi có đầy đủ dữ liệu của các trường thông tin bắt buộc và
+          trường thông tin check trùng không tồn tại trên hệ thống</li>
+        <li>Cập nhật thông tin khách hàng: chỉ thực hiện cập nhật lại thông tin của các bản ghi có đầy đủ dữ liệu của
+          các trường thông tin bắt buộc và trường check trùng tồn tại trên hệ thống. </li>
+        <li>Thêm mới và cập nhật thông tin khách hàng: thực hiện thêm mới các bản ghi có đầy đủ thông tin bắt buộc và
+          trường thông tin check trùng không tồn tại trên hệ thống, đồng thời cập nhật lại các bản ghi có trường check
+          trùng tồn tại trên hệ thống</li>
+        <li>Trường thông tin không được trùng nhau: <span class="text-danger">[Tên trường 1], [Tên trường 2]</span>
+        </li>
+        <li>Trường thông tin bắt buộc: <span class="text-danger">[Tên trường 1], [Tên trường 2]</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" id="save-entity" class="btn btn-primary float-right m-r-5" (click)="onUpload()">
+    <span>{{'Import' | translate}}</span>
+  </button>
+  <button type="button" id="cancel-save" class="btn  btn-default float-right" (click)="clear()">
+    <span>{{'Hủy' | translate}}</span>
+  </button>
+</div>
+<div class="note">
+
+</div>
+<!-- </form> -->

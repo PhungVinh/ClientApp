@@ -1,0 +1,23 @@
+{
+  "common": {
+    "searchno": "Không có kết quả thõa mãn điều kiện nhập"
+  },
+  "Nam": "Nam",
+  "Nữ": "Nữ",
+  "Tất cả": "Tất cả",
+  "Hoạt động": "Hoạt động",
+  "Trạng thái": "Trạng thái",
+  "Giới tính": "Giới tính",
+  "Họ tên": "Họ tên",
+  "Tên đăng nhập": "Tên đăng nhập",
+  "Email": "Email",
+  "Số điện thoại": "Số điện thoại",
+  "STT": "STT",
+  "Ảnh": "Ảnh",
+  "Chức vụ": "Chức vụ",
+  "Địa chỉ": "Địa chỉ",
+  "Ngày sinh": "Ngày sinh",
+  "Từ ngày": "Từ ngày",
+  "Đến ngày": "Đến ngày",
+  "Đơn vị" : "Đơn vị"
+}

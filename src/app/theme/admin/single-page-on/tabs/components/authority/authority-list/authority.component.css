@@ -1,0 +1,41 @@
+.common-action {
+  padding: 0 10px;
+}
+
+.form-search-org {
+  width: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-search-org input {
+  border: none;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.form-search-org .input-datepicker {
+  width: 100px;
+}
+
+.form-search-org .input-group-append {
+  width: 25px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border: navajowhite;
+  background: transparent;
+}
+
+.form-search-org .input-group-append span {
+  display: block;
+  font-size: 15px;
+  margin-top: 0px;
+}
+
+.action {
+  cursor: pointer;
+}
+/*# sourceMappingURL=authority.component.css.map */

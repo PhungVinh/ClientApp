@@ -1,0 +1,158 @@
+<div class="page-body box-infor-field tab-wrapper tab-user">
+  <app-card [title]="'Danh sách tài khoản'" [classHeader]="true"
+    [blockClass]="'table-border-style'" [cardOptionBlock]="true">
+    <!-- phần search nút thêm mới -->
+    <div class="card-header card-search row">
+      <div class="col-md-12 col-lg-10">
+        <form name="searchForm" novalidate
+          (ngSubmit)="onSearch()" #searchForm="ngForm" autocomplete="off">
+          <div class="row">
+            <div class="col-sm-12 col-lg-4">
+              <div class="form-control form-search-org">
+                <button class="input-group-append" type="submit">
+                  <span><i class="feather icon-search"></i></span>
+                </button>
+                <input type="text" name="TextSearch" [(ngModel)]="TextSearch"
+                  class="" placeholder="{{'Tên đăng nhập/Họ tên/Email/Số điện thoại' | translate}}">
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-4 Status">
+              <div class="form-group row">
+                <label class="col-md-12 col-lg-3 col-form-label StatusLb
+                  StatusLb1024">{{'Trạng thái' | translate}}</label>
+                <div class="col-md-12 col-lg-6 col-select">
+                  <select name="IsActive" class="form-control"
+                    [(ngModel)]="IsActive" (ngModelChange)="onSearch()">
+                    <option value="">{{'Tất cả' | translate}}</option>
+                    <option value=0>{{'Kích hoạt' | translate}}</option>
+                    <option value=1>{{'Khóa' | translate}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-4" hasAuthority="SuperAdmin"
+              *ngIf="(categoryOrganization$ | async) as
+              categoryOrganization">
+              <div class="form-group row">
+                <label class="col-md-12 col-lg-3 col-form-label StatusLb">{{'Đơn
+                  vị' | translate}}</label>
+                <div class="col-md-12 col-lg-6 col-select">
+                  <select name="orgCode" class="form-control" [(ngModel)]="orgCode"
+                (ngModelChange)="onSearch()">
+                <option value="">{{'Tất cả' | translate}}</option>
+                <option *ngFor="let item of categoryOrganization"
+                  value="{{item.organizationCode}}" class="OrgWidth">{{item.organizationName.slice(0,30)}}</option>
+                </select>
+                  <!-- <app-custom-select [(ngModel)]="orgCode" name="orgCode" 
+                  (ngModelChange)="onSearch($event)"  #CustomSelectComponent
+                    [datasource]="categoryOrganization" [selectedObject]="true"
+                    [sourceKey]="'organizationName'"
+                    [sourceValue]="'organizationName'">
+                  </app-custom-select> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-12 col-lg-2" hasAuthority="Admin,Member"
+        menuCode="ADMIN_USER" feature="add">
+        <a class="btn btn-primary float-right UserAdd"
+          (click)="doAddNew($event)"
+          title="Thêm mới user" style="color: #ffffff;">
+          <i class="fa far fa-user-plus" aria-hidden="true"></i>
+          {{'Thêm mới' | translate}}
+        </a>
+      </div>
+    </div>
+    <!-- end phần trên-->
+    <!-- phần table -->
+    <div class="table-responsive" *ngIf="(users$ | async) as users">
+      <table class="table table-sm table-common">
+        <thead>
+          <tr>
+            <th>{{'STT' | translate}}</th>
+            <th class="text-center">{{'Ảnh' | translate}}</th>
+            <th>{{'Họ tên' | translate }}</th>
+            <th>{{'Tên đăng nhập' | translate }}</th>
+            <th>{{'Email' | translate}}</th>
+            <th>{{'Số điện thoại' | translate}}</th>
+            <th id="thDonvi" hasAuthority="SuperAdmin">{{'Đơn vị' | translate}}</th>
+            <th class="text-center">{{'Trạng thái' | translate}}</th>
+            <th class="text-center">{{'Hành động' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="users.data !== null">
+          <tr *ngFor="let employee of users.data ; let i= index"
+            [ngStyle]="{'color': employee.isLock === true ? '#888888' :
+            '#373a3c'}">
+            <td class="LH">{{(page-1) * itemsPerPage + i + 1}}</td>
+            <td class="text-center">
+              <img class="rounded-circle logo-user LH" *ngIf="employee.avatar
+                !== null" [src]="resourceApi + employee.avatar" alt="avatar" />
+            </td>
+            <!-- <td class="LH">{{employee.fullName}}</td> -->
+            <td class="LH ellipsis"><span>{{employee.fullName}}</span></td>
+            <td class="LH">{{employee.userName}}</td>
+            <td class="LH">{{employee.email}}</td>
+            <td class="LH">{{employee.phoneNumber}}</td>
+            <td class="LH" id="tdDonvi" hasAuthority="SuperAdmin">{{employee.organizationName}}</td>
+            <td class="text-center LH">
+              <ui-switch disabled style="margin-top: 5px; display: block;"switchColor="#fff"
+                size="small" [checked]="employee.isLock ===false">
+              </ui-switch>
+            </td>
+            <td class="LH">
+              <p class="text-center LH" style="font-size: 16px;line-height:
+                2.4em;">
+                <i class="fa fas fa-cog" style="cursor: pointer;"
+                  (click)="onResetPassword(employee)"
+                  title="{{'Đặt lại mật khẩu' | translate}}"></i>
+                <i class="fa fas fa-pencil p-r-15 p-l-5" style="cursor:
+                  pointer;" title="{{'Sửa' | translate}}"
+                  (click)="doEditUser(employee)" hasAuthority="Admin,Member"
+                  menuCode="ADMIN_USER" feature="edit"
+                  [createBy]="employee.createBy"></i>
+                <i class="fa fal fa-trash" title="{{'Xóa' | translate}}"
+                  style="cursor: pointer;"
+                  (click)="doDeleteUser(employee.id)"
+                  hasAuthority="Admin,Member" menuCode="ADMIN_USER"
+                  feature="delete" [createBy]="employee.createBy"></i>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+      <div *ngIf="(users.data | json) == '[]'" class="text-center m-t-25">
+        <b>Không có kết quả thỏa mãn điều kiện nhập</b>
+      </div>
+    </div>
+    <!-- end Table -->
+    <!-- phân trang -->
+    <div class="" *ngIf="(users$ | async) as users">
+      <div class="col-12 d-flex justify-content-end"
+        *ngIf="users.paging[0].totalPage> 10" style="padding: 0; margin: 8px 0 0
+        0;">
+        <ngb-pagination [collectionSize]="users.paging[0].totalPage"
+          [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
+          [rotate]="true" [ellipses]="false" [boundaryLinks]="true"
+          (pageChange)="loadPage(page)"></ngb-pagination>
+      </div>
+    </div>
+  </app-card>
+</div>
+
+<app-modal-confirm #notifyMaxUser [identity]="'notifyMaxUser'"
+  [dialogClass]="'modal-sm'" [isNotify]="true" [confirmType]="'None'"
+  [confirmMessage]="'Không được xóa đơn vị này'"></app-modal-confirm>
+<app-modal-confirm #modalDefault [identity]="'modalDefault'"
+  [dialogClass]="'modal-sm'"
+  (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin đã
+  chọn'" [outsizeClose]="false">
+</app-modal-confirm>
+<app-modal-confirm #modalConfirmReset [identity]="'confirmReset'"
+  [dialogClass]="'modal-sm'" [confirmType]="'None'"
+  (onAccepted)="reset($event)" [confirmMessage]="'Reset lại mật khẩu?'"
+  [outsizeClose]="false">
+</app-modal-confirm>

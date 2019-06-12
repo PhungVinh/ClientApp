@@ -1,0 +1,13 @@
+.category_form {
+    &_action {
+        margin-top: 0.7rem;
+        display: flex;
+        justify-content: space-between;
+        width: 50px;
+        margin-left: 20px;
+    }
+    &_icon-search {
+        right: 15px;
+        position: absolute;
+    }
+}

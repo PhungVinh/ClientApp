@@ -1,0 +1,138 @@
+<div class="modal-header">
+  <h4 class="modal-title modal__title_20">Thêm tài khoản vào nhóm quyền</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+</div>
+<div class="modal-body">
+  <h4 class="text-center form-header">{{ authority.authorityName }}</h4>
+  <div class="row">
+    <div class="col-md-12">
+      <div style="display: flex">
+        <div style="flex: 1">
+          <div class="list-user_lable">
+            <span>Danh sách tài khoản</span>
+            <span class="add-btn" (click)="addUser()">
+              <i class="feather icon-user-plus mr-2"></i>
+              <span>Thêm</span>
+            </span></div>
+          <table class="fixed_headers">
+            <thead>
+              <tr class="d-flex">
+                <th class="p-2">#</th>
+                <th class="p-2">
+                  <form class="edit-authority-user_header" (ngSubmit)="search()">
+                    <div *ngIf="!isSearchUserNotAutho">
+                      <span class="mr-2">Tài khoản</span><span (click)="openSearch()"><i
+                          class="feather icon-search"></i></span></div>
+                    <div *ngIf="isSearchUserNotAutho">
+                      <input class="form-control input-md" [formControl]="userNotAuthorized"
+                        placeholder="Tìm kiếm tài khoản" type="text">
+                    </div>
+                  </form>
+                </th>
+                <th class="ml-auto py-2 px-4">
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-default">
+                      <input class="border-checkbox" type="checkbox" id="checkAll"
+                        [(ngModel)]="selectedListNotAuthorized" (ngModelChange)="selectAll();" />
+                      <label class="border-checkbox-label m-0" for="checkAll"></label>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="py-1">
+              <perfect-scrollbar>
+                <tr *ngFor="let u of listUserNotAutho(); let i = index" class="d-flex">
+                  <td class="p-2">{{ i + 1 }}</td>
+                  <td class="p-2">{{ u.userName }}</td>
+                  <td class="ml-auto py-2 px-4">
+                    <div class="border-checkbox-section">
+                      <div class="border-checkbox-group border-checkbox-group-default">
+                        <input class="border-checkbox" type="checkbox" [id]="u.userId" [(ngModel)]="u.selected"
+                          (ngModelChange)="checkIfAllSelected($event, u.userId);">
+                        <label class="border-checkbox-label m-0" [for]="u.userId"></label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </perfect-scrollbar>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="block_center">
+          <div style="text-align: center">
+            <button type="button" class="btn btn-primary mb-2 py-0" (click)="moveUserToAuthorized()">
+              <span>
+                <i class="fa fa-angle-right fa-3x"></i>
+                <!-- <i class="feather icon-chevron-right f-40"></i> -->
+              </span>
+            </button>
+            <button type="button" class="btn btn-light py-0" (click)="moveUserToNotAuthorized()"><span><i
+                  class="fa fa-angle-left fa-3x"></i></span></button>
+          </div>
+        </div>
+        <div style="flex: 1">
+          <div class="list-user_lable">Danh sách tài khoản được phân quyền</div>
+          <table class="fixed_headers">
+            <thead>
+              <tr class="d-flex">
+                <th class="p-2">#</th>
+                <th class="p-2">
+                  <form class="edit-authority-user_header" (ngSubmit)="searchUserAutho()">
+                    <div *ngIf="!isSearchUserAutho">
+                      <span class="mr-2">Tài khoản</span><span (click)="openSearchUserAutho()"><i
+                          class="feather icon-search"></i></span></div>
+                    <div *ngIf="isSearchUserAutho">
+                      <input class="form-control input-md" [formControl]="userAuthorized"
+                        placeholder="Tìm kiếm tài khoản" type="text">
+                    </div>
+
+                  </form>
+
+                </th>
+                <th class="ml-auto py-2 px-4">
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-default">
+                      <input class="border-checkbox" type="checkbox" id="checkAll2" [(ngModel)]="selectedListAuthorized"
+                        (ngModelChange)="selectAll2();">
+                      <label class="border-checkbox-label m-0" for="checkAll2"></label>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="py-1">
+              <perfect-scrollbar>
+                <tr *ngFor="let u of listUserAutho();let i = index;" style="flex: 1" class="d-flex">
+                  <td class="p-2">{{ i+1 }}</td>
+                  <td class="p-2">{{ u.userName }}</td>
+                  <td class="ml-auto py-2 px-4">
+                    <div class="border-checkbox-section">
+                      <div class="border-checkbox-group border-checkbox-group-default">
+                        <input class="border-checkbox" type="checkbox" [id]="u.userId" [(ngModel)]="u.selected"
+                          (ngModelChange)="checkIfAllSelected2();">
+                        <label class="border-checkbox-label m-0" [for]="u.userId"></label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </perfect-scrollbar>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default float-right" title="Hủy"
+    (click)="clear()">&nbsp;<span>{{'Hủy' | translate}}</span>
+  </button>
+  <button type="button" class="btn btn-primary float-right m-r-5" (click)="save()">Lưu</button>
+</div>
+<app-modal-confirm #modalIgnore [identity]="'notifyDeleteOrganization'" [dialogClass]="'modal-sm'" [isNotify]="true"
+  [confirmType]="'None'" [confirmMessage]="'Chưa có tài khoản được chọn'"></app-modal-confirm>
+<app-modal-confirm #modalNotChooseUser [identity]="'notifyDeleteOrganization'" [dialogClass]="'modal-sm'"
+  [isNotify]="true" [confirmType]="'None'" [confirmMessage]="'Chưa chọn tài khoản'"></app-modal-confirm>

@@ -1,0 +1,93 @@
+<div class="page-body box-infor-field content-cims tab-wrapper tab-cims">
+
+  <app-card [title]="'Danh sách khách hàng'" [classHeader]="true">
+
+    <div class="card-header card-search row">
+      <form class="col-md-7" name="searchForm" novalidate (ngSubmit)="onSearch()" #searchForm="ngForm"
+        autocomplete="off">
+        <!-- <div> -->
+        <div class="row" *ngFor="let row of (customerSearch$ | async)">
+          <div class="col-4" *ngFor="let searchItem of row.searchItems">
+            <div class="form-group form-time-org row">
+              <label class=" col-form-label">{{searchItem.AttributeLabel}}</label>
+              <div class="col-select">
+                <div class="form-control-org form-control">
+                  <input type="text" [name]="searchItem.AttributeCode" [placeholder]="searchItem.AttributeLabel">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--
+          <div class="col-4 p-l-30">
+            <div class="form-group row">
+              <label class=" col-form-label">Thành phố</label>
+              <div class="col-select mr-4">
+                <select name="IsActive" class="form-control" (ngModelChange)="onSearch()">
+                  <option value=2>Chọn tất cả</option>
+                  <option value=0>HN</option>
+                  <option value=1>HCM</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          -->
+        <!-- </div> -->
+      </form>
+      <div class="col-md-1">
+        <button class="btn btn-primary  btn-sm"><i class="feather icon-search"></i></button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-primary  btn-sm float-right" (click)="onCreate($event)"><i _ngcontent-c11=""
+            class="fa far fa-user-plus"></i>Thêm mới</button>
+        <button class="btn btn-primary btn-sm btn-outline-primary ripple light float-right mr-3"
+          (click)="onImport($event)"><i class="fa fa-file-excel-o" aria-hidden="true"></i>Import</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-common">
+        <thead>
+          <tr>
+            <th class="text-center">STT</th>
+            <th *ngFor="let columnItem of (customerColumn$ | async)">{{columnItem.AttributeLabel}}</th>
+            <th class="text-center">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of (customerData$ | async); let i = index">
+            <td class="text-center" scope="row">{{item.Index}}</td>
+            <td *ngFor="let columnItem of (customerColumn$ | async)">{{item[columnItem.AttributeCode]}}</td>
+            <td class="text-center">
+              <span class="common-action" (click)="onUpdateItem(item)"><i class="feather icon-edit-2"></i></span>
+              <span class="common-action" (click)="onViewDetail(item)"><i class="feather icon-plus-circle"></i></span>
+              <span class="common-action" (click)="onDeleteItem(item)"><i class="feather icon-trash-2"></i></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- <div>
+      <div *ngIf="(cims$ | async) as ci">{{ci |json}}</div>
+      <ng-container *ngFor="let item of (cims$ | async)">
+        <ul>
+          <li *ngFor="let key of Object.keys(item)">{{item[key]}}</li>
+        </ul>
+      </ng-container>
+
+    </div> -->
+
+    <div *ngIf="(customerPagination$ | async) as pagination">
+      <div *ngIf="(customerData$ | async) as data" class="col-md-12 d-flex justify-content-end" style="padding: 0; margin: 0 0 50px;">
+        <ngb-pagination *ngIf="data.length > 0" [collectionSize]="pagination.TotalRecord" [page]="pagination.CurrPage"
+          [pageSize]="pagination.PageSize" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+          (pageChange)="loadPage($event)"></ngb-pagination>
+      </div>
+    </div>
+  </app-card>
+
+</div>
+<app-modal-confirm #modalConfirm [identity]="'confirmDeleteCustomer'" [dialogClass]="'modal-sm'"
+  (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
+</app-modal-confirm>

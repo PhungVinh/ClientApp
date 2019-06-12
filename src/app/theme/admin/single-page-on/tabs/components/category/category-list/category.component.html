@@ -1,0 +1,66 @@
+<div class="page-body box-infor-field tab-wrapper tab-category">
+  <app-card [title]="'Danh sách danh mục'">
+    <div class="m-b-20 d-flex justify-content-between">
+      <div class="d-flex align-items-center">
+        <label class="search_label m-0">Danh mục</label>
+        <input type="text" class="form-control mr-4" [formControl]="searchInput">
+        <button class="btn btn-primary py-2" (click)="search()">
+          <i class="feather icon-search"></i>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-primary float-right py-2" (click)="addCategory()">
+          <i class="feather icon-plus-circle" aria-hidden="true"></i>Thêm mới
+        </button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-framed">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Danh mục</th>
+            <th>Danh mục liên kết</th>
+            <th>Ngày tạo</th>
+            <th>Người tạo</th>
+            <th style="width: 100px">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of categories$ | async">
+            <th scope="row">{{ category.index }}</th>
+            <td>{{ category.categoryName }}</td>
+            <td>{{ category.categoryTypeName }}</td>
+            <td>{{ category.createDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ category.createBy }}</td>
+            <td>
+              <span class="common-action" (click)="editCategory(category.categoryCode)"><i
+                  class="feather icon-settings"></i></span>
+              <span class="common-action" (click)="deleteCategory(category.categoryCode)"><i
+                  class="feather icon-trash-2"></i></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="m-b-20" *ngIf="(paging$ | async) as paging">
+      <div *ngIf="paging.pageSize>1">
+        <ngb-pagination class="float-right" [collectionSize]="paging.totalPage" [pageSize]="perPage" [(page)]="page"
+          [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage(page)">
+        </ngb-pagination>
+      </div>
+      <div *ngIf="searchInput.value && (categories$ | async) && (categories$ | async).length < 1"
+        style="text-align: center;    margin-top: 10px; font-weight: bold;">
+        Không có kết quả thỏa mãn điều kiện nhập
+      </div>
+    </div>
+
+  </app-card>
+</div>
+
+<app-modal-confirm #modalConfirm [identity]="'confirmDeleteCategory'" [dialogClass]="'modal-sm'"
+  (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
+</app-modal-confirm>
+<app-modal-confirm #modalIgnore [identity]="'notifyDeleteCategory'" [dialogClass]="'modal-sm'" [isNotify]="true"
+  [confirmType]="'None'" [confirmMessage]="'Danh mục này đang được sử dụng'"></app-modal-confirm>

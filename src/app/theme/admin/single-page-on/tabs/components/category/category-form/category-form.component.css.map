@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACK,AAAD,qBAAQ,CAAC;EACL,UAAU,EAAE,MAAM;EAClB,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,YAAY;CAChC;;AACA,AAAD,0BAAa,CAAC;EACV,KAAK,EAAE,IAAI;EACX,QAAQ,EAAE,QAAQ;CACrB",
+    "sources": [
+        "category-form.component.scss"
+    ],
+    "names": [],
+    "file": "category-form.component.css"
+}

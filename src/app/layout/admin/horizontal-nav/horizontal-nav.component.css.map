@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,sBAAsB,CAAC;EACnB,eAAe,EAAE,KAAK;EACtB,QAAQ,EAAE,QAAQ;EAClB,aAAa,EAAE,CAAC;CACnB",
+    "sources": [
+        "horizontal-nav.component.scss"
+    ],
+    "names": [],
+    "file": "horizontal-nav.component.css"
+}

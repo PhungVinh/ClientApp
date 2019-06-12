@@ -1,0 +1,146 @@
+<div class="page-body  tab-wrapper tab-organization">
+    <app-card [title]="'Danh sách đơn vị'">
+
+        <div class="card-header card-search row">
+            <form class="col-org-11" name="searchForm" novalidate (ngSubmit)="onSearch()" #searchForm="ngForm"
+                autocomplete="off">
+                <div class="row ml-0">
+                    <div class="col-org-4 col-4 ">
+                        <div class="form-group form-time-org row">
+                            <label class=" col-form-label label-date">{{'Thời hạn' | translate}}</label>
+                            <div class="col-select">
+                                <div class="form-control-org form-control">
+                                    <input type="text" class="input-datepicker" name="DateFrom" [(ngModel)]="DateFrom"
+                                        disabled placeholder="dd/mm/yyyy"> - <input type="text" name="DateTo"
+                                        placeholder="dd/mm/yyyy" disabled [(ngModel)]="DateTo" class="input-datepicker">
+                                    <span type="button" style="padding-right: 5px; width: 18px; cursor: pointer"
+                                        (click)="clear()">
+                                        <i *ngIf="DateFrom" class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                    <span type="button" class="" (click)="onShowDatePicker()" style="cursor: pointer"
+                                        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="collapseExample" [ngbCollapse]="!isCollapsed" class="datepicker_org">
+                                <ngb-datepicker #dp ngModel name="dateF" (select)="onDateChange($event)"
+                                    [displayMonths]="2" [dayTemplate]="d">
+                                </ngb-datepicker>
+
+                                <ng-template #d let-date="date" let-focused="focused">
+                                    <span class="custom-range" [class.focused]="focused"
+                                        [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+                                        [class.faded]="isHovered(date) || isInside(date)"
+                                        (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                        <div class="custom-day" [class.focused]="focused" [class.bg-primary]="selected"
+                                            [class.text-blur]="date.month !== currentMonth"
+                                            [class.text-muted]="disabled" [class.today]="isToday(date)">
+                                            {{ date.day }}
+                                        </div>
+                                    </span>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-org-3 col-3 pl-4 ">
+                        <div class="form-group row">
+                            <label class=" col-form-label">{{'Trạng thái' | translate}}</label>
+                            <div class="col-select col-select-status">
+                                <select name="IsActive" class="form-control" [(ngModel)]="IsActive"
+                                    (ngModelChange)="onSearch()">
+                                    <option value=2>Tất cả</option>
+                                    <option value=1>Hoạt động</option>
+                                    <option value=0>Khóa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-org-4 col-search col-4 ">
+                        <div class="form-control form-search-org">
+                            <button class="input-group-append" type="submit">
+                                <span><i class="feather icon-search"></i></span>
+                            </button>
+                            <input type="text" name="TextSearch" [(ngModel)]="TextSearch" class="" maxlength="200"
+                                placeholder="Nhập mã đơn vị, Tên đơn vị">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="col-org-1">
+                <button class="btn btn-primary btn-sm float-right" (click)="onAdd()"><i class="fa fa-plus"
+                        aria-hidden="true"></i>{{'Thêm mới' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-common" *ngIf="organizations">
+                <thead>
+                    <tr>
+                        <th class="text-center">{{'STT' | translate}}</th>
+                        <th class="text-center">{{'Logo đơn vị' | translate}}</th>
+                        <th>{{'Mã đơn vị' | translate}}</th>
+                        <th>{{'Tên đơn vị' | translate}}</th>
+                        <th>{{'Email' | translate}}</th>
+                        <th>{{'Từ ngày' | translate}}</th>
+                        <th>{{'Đến ngày' | translate}}</th>
+                        <th class="">{{'Gói dịch vụ' | translate}}</th>
+                        <th class="text-center">Tài khoản hoạt động</th>
+                        <th class="text-center">{{'Trạng thái' | translate}}</th>
+                        <th class="text-center">{{'Hành động' |translate}}</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="organizations.data.length > 0">
+                    <tr *ngFor="let item of organizations.data; let i = index">
+                        <td class="text-center" scope="row">{{(page-1) * itemsPerPage + i + 1}}</td>
+                        <td class="text-center"><img class="logo-organization"
+                                [src]="resourceAPI + item.organizationLogo" alt=""></td>
+                        <td>{{item.organizationCode}}</td>
+                        <td>{{item.organizationName}}</td>
+                        <td>{{item.organizationEmail}}</td>
+                        <td>{{item.organizationFrom | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{item.organizationTo | date: 'dd/MM/yyyy'}}</td>
+                        <td class="td-service-org">
+                            <span>{{item.serviceList}}</span>
+                        </td>
+                        <td class="text-center">{{item.numberUser}}</td>
+                        <td class="text-center">
+                            <ui-switch disabled class="js-small" color="#3498DB" switchColor="#fff" size="small"
+                                [checked]="item.isActive"></ui-switch>
+                        </td>
+                        <td class="text-center">
+                            <span class="common-action" (click)="onOpenTab(item.organizationCode)"><i class="fa fa-key"
+                                    aria-hidden="true"></i></span>
+                            <span class="common-action" (click)="onOpenTabUser(item.organizationCode)"><i
+                                    _ngcontent-c2="" class="feather icon-users"></i><b _ngcontent-c2=""
+                                    class="ng-tns-c2-0"></b></span>
+                            <span class="common-action" (click)="updateOrganization(item)"><i
+                                    class="fa fa-pencil"></i></span>
+                            <span class="common-action"
+                                (click)="deleteOrganization(item.organizationID, item.chkDelete)"><i
+                                    class="fa fa-trash"></i></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="organizations && organizations.data.length < 1"
+                style="text-align: center;    margin-top: 10px; font-weight: bold;">
+                Không có kết quả thỏa mãn điều kiện nhập
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-end" style="padding: 0;"
+            *ngIf="organizations && organizations.paging[0].totalPage > 10">
+            <ngb-pagination [collectionSize]="organizations.paging[0].totalPage" [(page)]="page" [ellipses]="false"
+                [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+                (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </app-card>
+
+</div>
+
+
+<app-modal-confirm #modalIgnore [identity]="'notifyDeleteOrganization'" [dialogClass]="'modal-sm'" [isNotify]="true"
+    [confirmType]="'None'" [confirmMessage]="'Không được xóa đơn vị này'"></app-modal-confirm>
+<app-modal-confirm #modalConfirm [identity]="'confirmDeleteOrganization'" [dialogClass]="'modal-sm'"
+    (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
+</app-modal-confirm>

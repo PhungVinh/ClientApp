@@ -1,0 +1,29 @@
+<div (click)="onContainerClicked($event)" class="basic modal fade" tabindex="-1"
+  [ngClass]="{'in': visibleAnimate, 'static-center': staticCenter}"
+  [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
+  <div class="modal-dialog" [ngClass]="dialogClass">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="app-modal-body">
+          <p *ngIf="confirmType !== 'None'" class="confirm-icon" [class.confirm-delete]="confirmType === 'Delete'"
+            [class.confirm-lost-connection]="confirmType === 'LostConnection'"
+            [class.confirm-warning]="confirmType === 'Warning'">
+            <i class="fa" [class.fa-trash-o]="confirmType === 'Delete'"
+            [class.fa-wifi]="confirmType === 'LostConnection'"
+            [class.fa-exclamation]="confirmType === 'Warning'"></i>
+          </p>
+          <p>{{ confirmMessage | translate }}</p>
+        </div>
+      </div>
+      <div *ngIf="!hideFooter" class="modal-footer">
+        <div class="app-modal-footer">
+          <button type="button" *ngIf="!isNotify" (click)="onAccept()"
+            class="btn btn-primary btn-sm float-right  m-b-20 ripple light">{{okAction | translate}}</button>
+          <button type="button" class="btn btn-default btn-sm  float-left  m-b-20 ripple light" (click)="hide()">
+            {{(isNotify ? notifyAction : closeAction) | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

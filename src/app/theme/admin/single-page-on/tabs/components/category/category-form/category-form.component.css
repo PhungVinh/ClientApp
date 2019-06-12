@@ -1,0 +1,14 @@
+.category_form_action {
+  margin-top: 0.7rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.category_form_icon-search {
+  right: 27px;
+  position: absolute;
+}
+/*# sourceMappingURL=category-form.component.css.map */

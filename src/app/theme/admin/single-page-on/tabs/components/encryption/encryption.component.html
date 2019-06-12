@@ -1,0 +1,116 @@
+<form name="encryptionForm" role="form" novalidate (ngSubmit)="save()" class="update-encryption" #encryptionForm="ngForm"
+  [class.ng-submitted]="encryptionForm.submitted" autocomplete="off">
+  <div class="modal-header">
+    <h5 class="modal-title">{{'Thông tin mã hóa' | translate}}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="close()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <!-- <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}"> -->
+    <div class="row encryption-wrapper">
+      <div class="col-lg-3 col-md-4 encryption-inner-left">
+        <!-- Encryption apply time -->
+        <div class="module-header mb-2">
+          <h6>{{'Tên module' | translate}}</h6>
+        </div>
+        <select name="encryptionModule" (ngModelChange)="onModuleChange($event)" [(ngModel)]="encryptionModule" class="form-control encryption-module-select">
+          <option [value]="null">-- Chọn Module --</option>
+          <option *ngFor="let item of menu" [value]="item.menuCode">{{item.menuName}}</option>
+        </select>
+        <div class="module-encryption-header">
+          <span>{{'Danh sách trường dữ liệu' | translate}}</span>
+        </div>
+        <div class="table-responsive table-module-encryption">
+          <table class="table table-sm table-common">
+            <thead>
+              <tr>
+                <th>{{'Mã' | translate}}</th>
+                <th>{{'Tên trường dữ liệu' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of field; let i = index ">
+                <td style="border: none" scope="row">{{item.attributeCode}}</td>
+                <td style="border: none">
+                  <div class="table-module-field">
+                    <span>{{item.attributeLabel}}</span>
+                    <span style="margin-left: 15px">
+                      <!--<input type="checkbox" name="item.code" [(ngModel)]="item.selected" (ngModelChange)="onFieldEncryptionChange($event)" />-->
+                       <div class="border-checkbox-section">
+                                <div class="border-checkbox-group border-checkbox-group-default">
+                                   <input class="border-checkbox" type="checkbox" id="checkbox{{i}}"
+                                          name="item.code" [(ngModel)]="item.selected"
+                                          (ngModelChange)="onFieldEncryptionChange($event, item)">
+                                    <label class="border-checkbox-label m-0" for="checkbox{{i}}" style="padding-left: 20px;"></label>
+                                </div>
+                            </div>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-2">
+          <button type="submit" [disabled]="listField.length < 1" id="save-entity" class="btn btn-primary">&nbsp;<span>{{'Lưu' | translate}}</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-8 encryption-inner-right">
+        <!-- Encryption apply time -->
+        <div class="encryption-header mb-2">
+          <h6>{{'Danh sách thông tin mã hóa' | translate}}</h6>
+          <span>
+            <!--{{'Thực hiện mã hóa và giai mã lúc' | translate}}: {{ showEncryptTime() | async }}-->
+             {{'Thực hiện mã hóa và giải mã lúc' | translate}}: 01 giờ 00 phút 00 giây
+          </span>
+        </div>
+        <!-- Table data -->
+        <div class="table-responsive table-encryption">
+          <table class="table table-sm table-common">
+            <thead>
+              <th class="text-center">STT</th>
+              <th class="text-center">Mã</th>
+              <th>Trường dữ liệu</th>
+              <th>Module</th>
+              <th class="text-center">Ngày xử lý</th>
+              <th class="text-center">Trạng thái áp dụng</th>
+              <th class="text-center">Trạng thái</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of rows; let i = index">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center td-ellipsis">{{ row.attributeCode }}</td>
+                <td class="td-ellipsis">{{ row.attributeLabel }}</td>
+                <td class="td-ellipsis">{{ row.moduleName }}</td>
+                <td class="text-center">{{ row.updateDate | date: 'dd/MM/yyyy'}}</td>
+                <td class="text-center" *ngIf="row.executeTime">{{ showEncryptRemaining() | async }}</td>
+                <td  class="text-center" *ngIf="!row.executeTime">Đã áp dụng</td>
+                <!--<td class="text-center">{{ row.executeTime }}</td>-->
+                <td  class="text-center" (click)="openConfirm(row)" style=" cursor: pointer">
+                  <ui-switch class="js-small switch-encryption" color="#2aba67" switchColor="#fff" size="small"  style="pointer-events: none;"
+                                [checked]="row.encryptionStatus"></ui-switch>
+                </td>
+                <!--<td>-->
+                  <!--<app-modal-confirm #modalDefault [identity]="'confirmCancelOrganization'" [dialogClass]="'modal-sm'" (onAccepted)="agreeComfirm(row)" [confirmType]="'None'" [confirmMessage]="contentEncryption" [outsizeClose]="false"></app-modal-confirm>-->
+                <!--</td>-->
+                <!--<td>{{ row.encryptionStatus }}</td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Action cancel -->
+        <div class="mt-2">
+          <button type="button" id="cancel-save" class="btn btn-default"
+            (click)="close()">&nbsp;<span>{{'Hủy' | translate}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- </perfect-scrollbar> -->
+  </div>
+</form>
+
+<!--<app-modal-confirm #modalDefault [identity]="'confirmCancelOrganization'" [dialogClass]="'modal-sm'" (onAccepted)="agreeComfirmEncryp($event)" [confirmType]="'None'" [confirmMessage]="contentEncryption" [outsizeClose]="false"></app-modal-confirm>-->
+<app-modal-confirm #modalConfirm [identity]="'confirmStatusEncryption'" [dialogClass]="'modal-sm'"  [confirmType]="'None'"
+                   (onAccepted)="agreeComfirmEncryp($event)" [confirmMessage]="contentEncryption" [outsizeClose]="false">
+</app-modal-confirm>
