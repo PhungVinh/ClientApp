@@ -5,16 +5,19 @@ import {
 } from '../actions/category.actions';
 import { of } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
-import { exhaustMap, mergeMap, switchMap } from 'rxjs/operators';
+import { exhaustMap, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { CategoryService } from '../services/category/category.service';
 import { CategoryActionTypes } from '../actions/category.actions';
+import { Store } from "@ngrx/store";
+import {State} from "../../../admin.state";
 
 @Injectable()
 
 export class CategoryEffects {
     constructor(
         private actions$: Actions,
-        private service$: CategoryService
+        private service$: CategoryService,
+        public store: Store<State>
     ) {}
 
     @Effect()
@@ -67,10 +70,16 @@ export class CategoryEffects {
         ofType(CategoryActionTypes.AddCategory),
         exhaustMap((action: AddCategory) => {
             return this.service$.addCategory(action.payload.body).pipe(
-                mergeMap(data => [
-                    new AddCategorySuccess(),
-                    new LoadCategories({ TextSearch: '', currPage: 1, recodperpage: 10 })
-                ]),
+                withLatestFrom(this.store.select(state => {
+                    return state.admin.category.reqOption;
+                } )),
+                mergeMap(([data, res]) => {
+                    console.log('res', res);
+                    return [
+                        new AddCategorySuccess(),
+                        new LoadCategories({ TextSearch: res.query.textSearch, currPage: 1, recodperpage: 10 })
+                    ]
+                }),
                 catchError(({ error }) => {
                     return of(new AddCategoryFail({ err: error }));
                 })
@@ -100,9 +109,12 @@ export class CategoryEffects {
             ofType(CategoryActionTypes.DeleteCategory),
             exhaustMap((action: DeleteCategory) => {
                 return this.service$.deleteCategory(action.payload).pipe(
-                    mergeMap(data => [
+                    withLatestFrom(this.store.select(state => {
+                        return state.admin.category.reqOption;
+                    } )),
+                    mergeMap(([data, res]) => [
                         new DeleteCategorySuccess(data),
-                        new LoadCategories({ TextSearch: '', currPage: 1, recodperpage: 10 })
+                        new LoadCategories({ TextSearch: res.query.textSearch, currPage: 1, recodperpage: 10 })
                     ]),
                     catchError(({ error }) => {
                         return of(new DeleteCategoryFail({error: error}));
@@ -117,9 +129,12 @@ export class CategoryEffects {
                 ofType(CategoryActionTypes.UpdateCategory),
                 exhaustMap((action: UpdateCategory) => {
                     return this.service$.updateCategory(action.payload.category).pipe(
-                        mergeMap(data => [
+                        withLatestFrom(this.store.select(state => {
+                            return state.admin.category.reqOption;
+                        } )),
+                        mergeMap(([data, res]) => [
                             new UpdateCategorySuccess(),
-                            new LoadCategories({ TextSearch: '', currPage: 1, recodperpage: 10 })
+                            new LoadCategories({ TextSearch: res.query.textSearch, currPage: 1, recodperpage: 10 })
                         ]),
                         catchError(err => {
                             return of(new UpdateCategoryFail({ err }));

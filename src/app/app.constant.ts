@@ -24,7 +24,7 @@ export const API_CIMS_POST_FORM = 'Cims/AddCimsValue';
 export const API_CIMS_PUT_FORM = 'Cims/EditCimsValue';
 export const API_CIMS_DELETE = 'Cims/DeleteCims';
 export const API_CIMS_GET_FORM_DATA = 'Cims/GetCustomerList_RecordId';
-// export const API_CHANGE_PASSWORD = 'Account/ChangePassword';
+export const API_CHANGE_PASSWORD_FIRST = 'Account/ChangePassword';
 export const API_CHANGE_PASSWORD = 'Account/ChangePasswordReset';
 export const API_CHANGE_PASSWORD_USER = 'Account/ChangePasswordUser';
 

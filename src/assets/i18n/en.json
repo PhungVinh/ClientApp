@@ -3,26 +3,6 @@
     "searchno": "Không có kết quả thõa mãn điều kiện nhập"
   }
 ,
-    "Thời hạn": "Duration"
-,
-    "login": {
-        "title": "Đăng nhập",
-        "form": {
-            "password": "Mật khẩu",
-            "password.placeholder": "Nhập mật khầu của bạn",
-            "rememberme": "Nhớ tài khoản",
-            "button": "Đăng nhập"
-        },
-        "messages": {
-            "error": {
-                "authentication": "<strong>Đăng nhập thất bại!</strong> Bạn vui lòng kiểm tra thông tin đăng nhập và thử lại."
-            }
-        },
-        "password": {
-            "forgot": "Bạn quên mật khẩu?"
-        }
-    }
-,
     "global": {
         "title": "Crm",
         "browsehappy": "Bạn đang sử dụng một trình duyệt <strong>quá cũ</strong>. Vui lòng <a href=\"http://browsehappy.com/?locale=en\">nâng cấp trình duyệt</a> của bạn để có trải nghiệm tốt nhất.",
@@ -161,4 +141,24 @@
         "idnull": "Invalid ID"
     },
     "footer": "Đây là chân trang của bạn"
+,
+    "login": {
+        "title": "Đăng nhập",
+        "form": {
+            "password": "Mật khẩu",
+            "password.placeholder": "Nhập mật khầu của bạn",
+            "rememberme": "Nhớ tài khoản",
+            "button": "Đăng nhập"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Đăng nhập thất bại!</strong> Bạn vui lòng kiểm tra thông tin đăng nhập và thử lại."
+            }
+        },
+        "password": {
+            "forgot": "Bạn quên mật khẩu?"
+        }
+    }
+,
+    "Thời hạn": "Duration"
 }

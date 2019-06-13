@@ -107,7 +107,7 @@ export class AuthEffects {
         this.service.changePassword(action.payload).pipe(
           withLatestFrom(this.store.select(state => state.auth.credentials)),
           map(([data, res]) => {
-            const credentials = { ...res, Password: action.payload.Pass1 };
+            const credentials = { ...res, password: action.payload.Pass1 };
             return new ActionAuthenticate({ credentials: credentials });
           }),
           catchError(err => of(new ActionChangePasswordFaild({ err })))
@@ -148,7 +148,7 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType<ActionResetPasswordFinish>(AuthActionTypes.RESET_PASSWORD_FINISH),
       exhaustMap((action: ActionResetPasswordFinish) =>
-        this.service.changePassword(action.payload).pipe(
+        this.service.changePasswordFinish(action.payload).pipe(
           map((data) => {
             return new ActionNavigateLogin();
           }),

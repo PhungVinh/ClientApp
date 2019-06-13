@@ -61,7 +61,6 @@ export class DeleteAttrRelations implements Action {
 
 export class DeleteAttrRelationsSuccess implements Action {
     readonly type = AttrRelationActionTypes.DeleteAttrRelationsSuccess;
-    constructor(public payload: {Id: number}) {}
 }
 
 export type AttrRelationActions = LoadAttrRelations 

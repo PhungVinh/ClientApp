@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Renderer2 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -40,10 +40,12 @@ export class CategoryFormComponent implements OnInit {
   };
   @Input() formType: String
   @ViewChild('modalDefault') modalDefault: ModalConfirmComponent;
+  @ViewChild('modalIgnore') modalIgnore: ModalConfirmComponent;
   constructor(
     private _formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
-    public store: Store<any>
+    public store: Store<any>,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -89,6 +91,7 @@ export class CategoryFormComponent implements OnInit {
   validateForm() {
     if (this.categoryName.hasError('required')) {
       this.errorMsgs.categoryName = "Thông tin không được để trống";
+      // this.renderer.selectRootElement('#categoryName').focus();
     } else {
       this.errorMsgs.categoryName = "";
     }
@@ -131,7 +134,7 @@ export class CategoryFormComponent implements OnInit {
       CategoryTypeCode: category.categoryTypeCode
     });
     this.categoryForm.setControl('children', this.setExistingChildren(category.children));
-
+    this.oldForm = this.categoryForm.value;
     this.oldChild = this.children.value;
   }
 
@@ -142,7 +145,8 @@ export class CategoryFormComponent implements OnInit {
         CategoryTypeCode: c.categoryTypeCode,
         CategoryName: c.categoryName,
         CategoryCode: c.categoryCode,
-        ExtContent: c.extContent
+        ExtContent: c.extContent,
+        IsCheck: c.isCheck
       }));
     });
     return formArray;
@@ -178,6 +182,10 @@ export class CategoryFormComponent implements OnInit {
   onSubmit() {
     if (this.categoryForm.invalid) {
       this.categoryName.markAsTouched();
+      this.children['controls'].forEach(child => {
+        console.log('child', child);
+        child.markAsTouched();
+      });
       this.validateForm();
     } else {
       if (this.formType !== 'edit') {
@@ -228,29 +236,32 @@ export class CategoryFormComponent implements OnInit {
       children: [ ...children],
       deleteCategory: this.deleteCategory
     };
-    console.log(body);
-    // this.store.dispatch(new UpdateCategory({category: body}))
-    // this.load$.subscribe(load => {
-    //   if (!load) {
-    //     this.clear();
-    //   }
-    // });
+    this.store.dispatch(new UpdateCategory({category: body}))
+    this.load$.subscribe(load => {
+      if (!load) {
+        this.clear();
+      }
+    });
 
   }
 
   addChildrenButtonClick(): void {
     (<FormArray>this.children).push(this.addChildrenFormGroup());
-    console.log('this.children.value', this.children.value);
     this.oldChild = this.children.value;
   }
 
-  removeChildrenButtonClick(childrenGroupIndex: number, categoryCode: String): void {
-    this.deleteCategory = [...this.deleteCategory, { CategoryCode: categoryCode }];
-    const childrenFormArray = <FormArray>this.children;
-    (<FormArray>this.children).removeAt(childrenGroupIndex);
-    childrenFormArray.markAsDirty();
-    childrenFormArray.markAsTouched();
-    this.oldChild = this.children.value;
+  removeChildrenButtonClick(childrenGroupIndex: number, categoryCode: String, isCheck: Boolean): void {
+    console.log('isCheck', isCheck);
+    if (isCheck) {
+      this.modalIgnore.showReference();
+    } else {
+      this.deleteCategory = [...this.deleteCategory, { CategoryCode: categoryCode }];
+      const childrenFormArray = <FormArray>this.children;
+      (<FormArray>this.children).removeAt(childrenGroupIndex);
+      childrenFormArray.markAsDirty();
+      childrenFormArray.markAsTouched();
+      this.oldChild = this.children.value;
+    }
   }
 
   addChildrenFormGroup(): FormGroup {
@@ -266,7 +277,8 @@ export class CategoryFormComponent implements OnInit {
       CategoryTypeCode: [''],
       CategoryName: ['', Validators.required],
       CategoryCode: [''],
-      ExtContent: ['']
+      ExtContent: [''],
+      IsCheck: [false]
     });
   }
 
@@ -281,7 +293,7 @@ export class CategoryFormComponent implements OnInit {
         CategoryTypeCode: c.CategoryTypeCode,
         CategoryName: c.CategoryName,
         CategoryCode: c.CategoryCode,
-        ExtContent: c.ExtContent
+        ExtContent: c.ExtContent,
       }));
     });
     this.categoryForm.setControl('children', formArray);

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { State } from '../../../../admin.state';
@@ -25,6 +25,7 @@ import { LoadOrganizations } from '../../actions/organization.actions';
 import { ConstraintsService } from '../../services/constraints/constraints.service';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { ModalConfirmComponent } from 'src/app/shared/modal-confirm/modal-confirm.component';
+import { Key } from 'selenium-webdriver';
 
 @Component({
     selector: 'app-attr-relation',
@@ -39,6 +40,9 @@ export class AttrRelationComponent implements OnInit {
     @ViewChild('clearForm') clearForm;
     @ViewChild('clearFormEdit') clearFormEdit;
     @ViewChild('modalDefaultAttr') modalDefaultAttr: ModalConfirmComponent;
+    @ViewChild("nameConstraintsADD") nameFieldADD: ElementRef;
+    @ViewChild("nameConstraintsEDIT") nameFielEdit: ElementRef;
+    
 
     public listAttrRelation: { data?: any; paging?: any; };
     public listTypeObject: any[];
@@ -103,6 +107,7 @@ export class AttrRelationComponent implements OnInit {
     getAllAttrRrelation() {
         this.store.pipe(select(selectConstraintsPagi)).subscribe(data => {
             this.listAttrRelation = data;
+            console.log('data', data);
         });
     }
 
@@ -115,6 +120,10 @@ export class AttrRelationComponent implements OnInit {
     }
 
     addAttrRelation() {
+        
+        // this.attrRelationForm.value.name = this.attrRelationForm.value.name.trim();
+        // this.attrRelationForm.get(Key).value.trim()
+        console.log('this.attrRelationForm-vinhs',this.attrRelationForm.value);
         this.constraintsService.addConstraint(this.attrRelationForm.value).subscribe((data) => {
             this.attrRelationForm.setValue({
                 Name: '',
@@ -136,23 +145,43 @@ export class AttrRelationComponent implements OnInit {
             }
             this.isDuplicate = false;
             this.modalLarge.hide();
+            this.nameFieldADD.nativeElement.focus();
         },
             (error) => {
                 this.isDuplicate = true;
+                this.nameFieldADD.nativeElement.focus();
             }
         );
     }
 
-    // Edit Attr Relation 
+    // Edit Attr Relation
     editAttrRelation() {
         this.isSubmitEdit = true;
-        if (this.nameEdit.valid && this.contraintsTypeEdit.valid) {
+        if (this.nameEdit.valid && this.contraintsTypeEdit.valid && this.isDuplicate === false) {
             // this.modalLargeEdit.hide();
             const contraints = this.EditAttrRelationForm.value;
             contraints.Id = this.AttrRelationEditId;
-            this.store.dispatch(new UpdateAttrRelations({ data: contraints }));
-            this.modalLargeEdit.hide();
-            this.isSubmitEdit = false;
+            this.constraintsService.updateConstraint(contraints).subscribe((data) => {
+                this.store.dispatch(new LoadAttrRelations({
+                    pagination: {
+                        TextSearch: this.textSearch,
+                        currPage: this.page,
+                        recodperpage: this.itemsPerPage
+                    }
+                }));
+                this.isSubmitEdit = false;
+                this.isDuplicate = false;
+                this.modalLargeEdit.hide();
+                this.nameFielEdit.nativeElement.focus();
+            },
+                (error) => {
+                    this.isDuplicate = true;
+                    this.nameFielEdit.nativeElement.focus();
+                }
+            );
+            // this.store.dispatch(new UpdateAttrRelations({ data: contraints }));
+            // this.modalLargeEdit.hide();
+            // this.isSubmitEdit = false;
         }
 
     }
@@ -168,11 +197,11 @@ export class AttrRelationComponent implements OnInit {
     }
 
     changeCate(e) {
-         this.store.dispatch(new LoadCategoryChildLink());
+        this.store.dispatch(new LoadCategoryChildLink());
         this.selectCategoryChild$ = this.store.pipe(select(selectCateChildByParent(e.target.value)));
     }
 
-     changeCateEdit(e) {
+    changeCateEdit(e) {
         this.selectCategoryChild$ = this.store.pipe(select(selectCateChildByParent(e.target.value)));
     }
 
@@ -193,8 +222,8 @@ export class AttrRelationComponent implements OnInit {
                 this.EditAttrRelationForm.patchValue({
                     Name: data[0].Name,
                     ContraintsType: data[0].CategoryCode,
-                    LinkContraints: data[0].LinkContraints ? data[0].LinkContraints : '',
-                    ContraintsValue: data[0].ContraintsValue ? data[0].ContraintsValue : '',
+                    LinkContraints: data[0].LinkContraints ? data[0].LinkContraints : '0',
+                    ContraintsValue: data[0].ContraintsValue ? data[0].ContraintsValue : '0',
                 });
             }
 
@@ -224,19 +253,24 @@ export class AttrRelationComponent implements OnInit {
         }));
     }
 
-    // Vinhnp code
     getItemAttrRelationToDelete(id: number) {
-        this.modalDefaultAttr.showReference(id);
+        this.AttrRelationDeleteId = id;
+        console.log(this.AttrRelationDeleteId);
     }
-    onAcceptedDelete(id: number) {
-        this.store.dispatch(new DeleteAttrRelations({ Id: id }));
-    }
-    // End Vinhnp code
 
     deleteAttrRelation() {
         console.log('id', this.AttrRelationDeleteId);
-        this.store.dispatch(new DeleteAttrRelations({ Id: Number(this.AttrRelationDeleteId) }));
-        (document.getElementById('cancelModalDelete') as HTMLElement).click();
+        this.constraintsService.deleteConstraint(this.AttrRelationDeleteId).subscribe(data => {
+            this.store.dispatch(new LoadAttrRelations({
+                pagination: {
+                    TextSearch: this.textSearch,
+                    currPage: this.page,
+                    recodperpage: this.itemsPerPage
+                }
+            }));
+        });
+        // this.store.dispatch(new DeleteAttrRelations({ Id: Number(this.AttrRelationDeleteId) }));
+        // (document.getElementById('cancelModalDelete') as HTMLElement).click();
     }
 
     resetForm() {
@@ -256,10 +290,14 @@ export class AttrRelationComponent implements OnInit {
     }
 
     cancelFormAdd() {
-        this.modalConfig.hide();
-        this.modalLarge.hide();
+
         this.resetForm();
         this.clearForm.resetForm();
+        this.modalConfig.hide();
+        this.modalLarge.hide();
+        this.attrRelationForm.reset();
+        this.isDuplicate = false;
+        this.isSubmitAdd = false;
         this.attrRelationForm.setValue({
             Name: '',
             ContraintsType: '',
@@ -310,23 +348,23 @@ export class AttrRelationComponent implements OnInit {
         });
     }
 
-    /********* vinhnp *********/ 
+    /********* vinhnp *********/
     // Open Modal ADD
-    OpenModalADD(){
+    OpenModalADD() {
         this.store.dispatch(new LoadCategoryLink());
         this.getAllCate();
         this.modalLarge.show();
-        
+
     }
 
     // Open Modal Edit
-    OpenModalEdit(){
+    OpenModalEdit() {
         this.store.dispatch(new LoadCategoryLink());
         this.getAllCate();
         this.store.dispatch(new LoadCategoryChildLink());
         this.modalLargeEdit.show();
     }
-    /*********End*********/ 
+    /*********End*********/
 
     get name() { return this.attrRelationForm.get('Name'); }
     get contraintsType() { return this.attrRelationForm.get('ContraintsType'); }

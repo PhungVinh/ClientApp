@@ -215,7 +215,7 @@
             [(ngModel)]="users.categoryCodeDepartment" #categoryCodeDepartment>
             <option [value]="0">--- Chọn phòng ban ---</option>
             <option *ngFor="let item of categoryDepartment?.data"
-              value="{{item.organizationCode}}">{{item.organizationName}}</option>
+              value="{{item.categoryCode}}">{{item.categoryName}}</option>
           </select>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-4" *ngIf="(categoryPosition$

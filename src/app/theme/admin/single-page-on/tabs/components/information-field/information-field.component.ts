@@ -88,7 +88,7 @@ export class InformationFieldComponent implements OnInit {
     ];
 
     public listAttr: any[];
-    public listAttrRequired: any[];
+    public listAttrRequired: any[] = [];
     public arrIdItemRequiredToSave: any[] = [];
     public arrOfItemEdit: any[];
     public listDataType: any[] = [];
@@ -114,7 +114,7 @@ export class InformationFieldComponent implements OnInit {
     showDefaultValue: any = 2;
     showDefaultValueEdit: any;
     activeTab = 'ngb-tab-4';
-    titleTab = 'Cấu hình form thông tin';
+    titleTab = 'Quản lý khách hàng';
     lengthOfTest: any;
     typeEditAtr: any;
     rowToDelete: any[];
@@ -281,19 +281,31 @@ export class InformationFieldComponent implements OnInit {
                 }
 
                 if (res2 !== null) {
+                    console.log('res22', res2);
                     this.typeAddOrEdit = 2;
-                    this.test = [];
-                    res2.forEach(item => {
-                            this.test.push({arr: item.children, title: (item.RowTitle ? item.RowTitle : '')});
-                            item.children.forEach((item2, index, array) => {
-                                this.listAttr.forEach((item3, index3) => {
-                                    if (item3.AttributeCode === item2.AttributeCode) {
-                                        item3.disabled = true;
-                                    }
-                                });
-                            });
-                        }
-                    );
+                    if (res2.length > 0) {
+                        this.test = [];
+                        res2.forEach(item => {
+                                this.test.push({arr: item.children, title: (item.RowTitle ? item.RowTitle : '')});
+                                if (item.children !== null) {
+                                    item.children.forEach((item2, index, array) => {
+                                        this.listAttr.forEach((item3, index3) => {
+                                            if (item3.AttributeCode === item2.AttributeCode) {
+                                                item3.disabled = true;
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    item.children = [{arr: this.done, title: ''}];
+                                }
+                            }
+                        );
+                    } else {
+                        this.test = [
+                            {arr: this.done, title: ''},
+                        ];
+                        console.log('else');
+                    }
                     this.lengthOfTest = this.test.length;
                 } else {
                     this.typeAddOrEdit = 1;
@@ -415,10 +427,12 @@ export class InformationFieldComponent implements OnInit {
         } else {
             console.log(event.item.data);
             let totalCol = 0;
-            event.container.data.forEach(val => {
-                const newObj: any = val;
-                totalCol += newObj.AttributeColumn;
-            });
+            if (event.container.data !== null) {
+                event.container.data.forEach(val => {
+                    const newObj: any = val;
+                    totalCol += newObj.AttributeColumn;
+                });
+            }
             totalCol += (event.item.data.AttributeColumn ? event.item.data.AttributeColumn : 3);
 
             if (totalCol < 13) {
@@ -426,6 +440,7 @@ export class InformationFieldComponent implements OnInit {
                     event.container.data,
                     event.previousIndex,
                     event.currentIndex);
+                event.item.data.AttributeColumn = 3;
                 this.listAttr = [...this.listAttrWhenFormInfo];
                 this.listAttr.forEach(value => {
                     if (value.AttributeCode === event.item.data.AttributeCode) {
@@ -433,8 +448,10 @@ export class InformationFieldComponent implements OnInit {
                     }
                 });
                 this.test.forEach(item => {
-                    if (item.arr.filter(item2 => item2.active).length > 0) {
-                        item.arr.filter(item2 => item2.active)[0].active = false;
+                    if (item.arr !== null) {
+                        if (item.arr.filter(item2 => item2.active).length > 0) {
+                            item.arr.filter(item2 => item2.active)[0].active = false;
+                        }
                     }
                 });
 
@@ -562,14 +579,31 @@ export class InformationFieldComponent implements OnInit {
     }
 
     getFormConfig() {
-        if (this.test[0].arr.length === 0 || (this.listAttrRequired.length !== this.arrIdItemRequiredToSave.length)) {
+        const allItemInForm = [];
+        this.test.forEach(item => {
+            item.arr.forEach(item2 => {
+                allItemInForm.push(item2);
+            });
+        });
+        if (allItemInForm.length === 0 || (this.listAttrRequired.length !== this.arrIdItemRequiredToSave.length)) {
             this.modalFormNull.show();
         } else {
+
+            this.test.forEach((item, k) => {
+                console.log('test luu', this.test);
+                if (item.arr === null || item.arr.length === 0) {
+                    this.test.splice(k, 1);
+                    this.lengthOfTest = this.lengthOfTest - 1;
+                }
+            });
+
             const totalItem = [];
             const objFormConfig = <any>{};
-            this.test.forEach(item => {
-                item.arr.forEach(item2 => {
+            this.test.forEach((item, k) => {
+                item.arr.forEach((item2, k2) => {
                     item2.RowTitle = item.title;
+                    item2.RowIndex = k + 1 ;
+                    item2.AttrOrder = k2 + 1 ;
                     totalItem.push(item2);
                 });
             });
@@ -614,18 +648,22 @@ export class InformationFieldComponent implements OnInit {
     }
 
     acceptFormConfig() {
+        const totalItem = [];
         this.arrIdItemRequiredToSave = [...[]];
         this.test.forEach(item => {
-            item.arr.forEach(item2 => {
-                if (item2.IsRequired) {
-                    this.arrIdItemRequiredToSave.push(item2);
-                }
-            });
+            if (item.arr !== null) {
+                item.arr.forEach(item2 => {
+                    totalItem.push(item2);
+                    if (item2.IsRequired) {
+                        this.arrIdItemRequiredToSave.push(item2);
+                    }
+                });
+            }
         });
         console.log('11111', this.arrIdItemRequiredToSave);
         console.log('22222222222', this.listAttrRequired);
-        console.log('222222222223333', this.test[0].arr.length);
-        if (this.test[0].arr.length === 0 || (this.listAttrRequired.length !== this.arrIdItemRequiredToSave.length)) {
+        console.log('total', totalItem);
+        if (totalItem.length === 0 || (this.listAttrRequired.length !== this.arrIdItemRequiredToSave.length)) {
             this.modalFormNull.show();
         } else {
             this.modalAcceptForm.show();
@@ -683,7 +721,6 @@ export class InformationFieldComponent implements OnInit {
     checkcheckActiveTabFormList(e) {
         this.activeTab = e;
         this.getFormConfigFromDatabase();
-        this.titleTab = 'Cấu hình form thông tin';
         this.showButtonAddAttr = true;
     }
 
@@ -700,7 +737,6 @@ export class InformationFieldComponent implements OnInit {
         if (this.checkChange === false && e.activeId === 'ngb-tab-4') {
             this.activeTab = e.nextId;
             if (this.activeTab === 'ngb-tab-3') {
-                this.titleTab = 'Cấu hình form danh sách';
                 this.showButtonAddAttr = false;
                 setTimeout(() => {
                     this.listAttr = [...this.listAttrWhenFormList];
@@ -720,7 +756,6 @@ export class InformationFieldComponent implements OnInit {
             this.activeTab = e.nextId;
             if (this.activeTab === 'ngb-tab-4') {
                 this.getFormConfigFromDatabase();
-                this.titleTab = 'Cấu hình form thông tin';
                 this.listAttr = [...this.listAttrWhenFormInfo];
                 this.showButtonAddAttr = true;
             }
@@ -894,9 +929,11 @@ export class InformationFieldComponent implements OnInit {
         });
 
         this.test.forEach(item => {
-            item.arr.forEach(item2 => {
-                item2.active = false;
-            });
+            if (item.arr !== null) {
+                item.arr.forEach(item2 => {
+                    item2.active = false;
+                });
+            }
         });
     }
 

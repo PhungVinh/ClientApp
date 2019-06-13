@@ -8,10 +8,10 @@
                         <div class="row">
                             <div class="col-md-3 col-xl-3 box-left">
                                 <label class="j-label">Danh sách trường thông tin</label>
-                                <div *ngIf="showButtonAddAttr" class="add-attr add-plus" style="position: initial; font-size: 15px" (click)="modalLarge.show()">
-                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                    Thêm
-                                </div>
+                                <!--<div *ngIf="showButtonAddAttr" class="add-attr add-plus" style="position: initial; font-size: 15px" (click)="modalLarge.show()">-->
+                                    <!--<i class="fa fa-plus" aria-hidden="true"></i>-->
+                                    <!--Thêm-->
+                                <!--</div>-->
                                 <div class="card table-module">
                                     <div class="card-block table-border-style" style="padding: 0">
                                         <div class="table-responsive">
@@ -22,7 +22,6 @@
                                                     <th>Tên trường
                                                         <div *ngIf="showButtonAddAttr" class="add-attr add-minus" (click)="modalLarge.show()">
                                                             <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                            Thêm
                                                         </div>
                                                     </th>
                                                 </tr>
@@ -90,15 +89,15 @@
                                                                         <div *ngIf="item.AttributeType == 'CHECKBOX' || item.AttributeType == 'LISTCHECKBOX'">
                                                                             <div class="border-checkbox-section" *ngIf="item?.ListCategory.length > 0">
                                                                             <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item?.ListCategory; let i = index">
-                                                                                <input class="border-checkbox" type="checkbox" id="checkboxb{{i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                                                                <label class="border-checkbox-label" for="checkboxb{{i}}">{{val.CategoryName}}</label>
+                                                                                <input class="border-checkbox" type="checkbox" id="13{{item.AttributeCode + i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
+                                                                                <label class="border-checkbox-label" for="13{{item.AttributeCode + i}}">{{val.CategoryName}}</label>
                                                                             </div>
                                                                             </div>
 
                                                                             <div class="border-checkbox-section" *ngIf="item?.ListCategory.length === 0">
                                                                                 <div class="border-checkbox-group border-checkbox-group-primary">
-                                                                                    <input class="border-checkbox" type="checkbox" id="checkboxa" [disabled]="item.IsReuse">
-                                                                                    <label class="border-checkbox-label" for="checkboxa">{{item.AttributeLabel}}</label>
+                                                                                    <input class="border-checkbox" type="checkbox" id="{{item.AttributeLabel}}" [disabled]="item.IsReuse">
+                                                                                    <label class="border-checkbox-label" for="{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -179,15 +178,15 @@
                                                                     <div *ngIf="item.AttributeType == 'CHECKBOX' || item.AttributeType == 'LISTCHECKBOX'">
                                                                         <div class="border-checkbox-section" *ngIf="item?.ListCategory.length > 0">
                                                                             <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item?.ListCategory; let i = index">
-                                                                                <input class="border-checkbox" type="checkbox" id="checkboxb{{i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                                                                <label class="border-checkbox-label" for="checkboxb{{i}}">{{val.CategoryName}}</label>
+                                                                                <input class="border-checkbox" type="checkbox" id="{{item.AttributeCode + i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
+                                                                                <label class="border-checkbox-label" for="{{item.AttributeCode + i}}">{{val.CategoryName}}</label>
                                                                             </div>
                                                                         </div>
 
                                                                         <div class="border-checkbox-section" *ngIf="item?.ListCategory.length === 0">
                                                                             <div class="border-checkbox-group border-checkbox-group-primary">
-                                                                                <input class="border-checkbox" type="checkbox" id="checkboxa" [disabled]="item.IsReuse">
-                                                                                <label class="border-checkbox-label" for="checkboxa">{{item.AttributeLabel}}</label>
+                                                                                <input class="border-checkbox" type="checkbox" id="123{{item.AttributeLabel}}" [disabled]="item.IsReuse">
+                                                                                <label class="border-checkbox-label" for="123{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>

@@ -91,7 +91,6 @@
               <img class="rounded-circle logo-user LH" *ngIf="employee.avatar
                 !== null" [src]="resourceApi + employee.avatar" alt="avatar" />
             </td>
-            <!-- <td class="LH">{{employee.fullName}}</td> -->
             <td class="LH ellipsis"><span>{{employee.fullName}}</span></td>
             <td class="LH">{{employee.userName}}</td>
             <td class="LH">{{employee.email}}</td>
@@ -102,6 +101,10 @@
                 size="small" [checked]="employee.isLock ===false">
               </ui-switch>
             </td>
+            <!-- <div *ngIf="(users$ | async) as users"  hidden="true">
+                <div>{{users.fieldEncypt.address}}</div>
+                <div>{{users.fieldEncypt.fullName}}</div>
+              </div> -->
             <td class="LH">
               <p class="text-center LH" style="font-size: 16px;line-height:
                 2.4em;">
@@ -142,6 +145,11 @@
     </div>
   </app-card>
 </div>
+
+<!-- <div *ngIf="(users$ | async) as users" >
+  <div>{{users.fieldEncypt.address}}</div>
+  <div>{{users.fieldEncypt.fullName}}</div>
+</div> -->
 
 <app-modal-confirm #notifyMaxUser [identity]="'notifyMaxUser'"
   [dialogClass]="'modal-sm'" [isNotify]="true" [confirmType]="'None'"

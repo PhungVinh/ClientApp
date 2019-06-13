@@ -7,7 +7,7 @@
         top: 125px;
         right: 12px;
       }
-    } 
+    }
   }
   >.pcoded-container {
     >.pcoded-header {
@@ -47,7 +47,7 @@
                             &:first-child {
                               margin-left: 0;
                             }
-                            
+
                             &:last-child {
                               margin-right: 0;
                             }
@@ -80,17 +80,12 @@
                       }
                     }
                     > .tab-content {
-                       .card {
-                         &.full-card {
-                           z-index: 999999;
-                         }
-                       }
                       .modal-backdrop, .modal {
                         position: absolute;
                         width: calc(100% - 30px);
                         overflow-y: hidden;
-                        height: 110%;
-                        //height: calc(100% + 60px);
+                        //height: 140%;
+                        height: calc(100% + 60px);
                         margin-left: 15px;
                         margin-right: 15px;
 
@@ -106,7 +101,7 @@
                           margin-right: 0px;
                           width: 100%;
                           overflow: hidden !important;
-                          
+
                           .modal-dialog {
                             position: fixed;
                             margin: 0 auto;
@@ -126,7 +121,7 @@
                           }
                         }
 
-                      }                      
+                      }
                     }
                   }
                 }
@@ -295,7 +290,7 @@ select.form-control, select.form-control:focus, select.form-control:hover {
 
 
 .input-group.input-group-transparent .form-control:focus ~ .input-group-prepend > .input-group-text {
-  border-color: #448aff !important; 
+  border-color: #448aff !important;
 }
 
 .input-group.input-group-transparent .ng-invalid:not(form):not(.ng-untouched), .input-group.input-group-transparent .form-control {
@@ -326,3 +321,361 @@ select.form-control, select.form-control:focus, select.form-control:hover {
 .modal-dialog {
   margin: 5.75rem auto;
 }
+
+//
+//.pcoded {
+//  +ng2-toasty {
+//    >#toasty {
+//      &.toasty-position-top-right {
+//        top: 125px;
+//        right: 12px;
+//      }
+//    }
+//  }
+//  >.pcoded-container {
+//    >.pcoded-header {
+//      z-index: 999999;
+//    }
+//    >.showChat {
+//      z-index: 999999;
+//    }
+//    >.pcoded-main-container {
+//      >.pcoded-wrapper {
+//        >.pcoded-content {
+//          position: relative;
+//          >.pcoded-coverlay-content {
+//            position: absolute;
+//            height: 58px;
+//            width: 100%;
+//            background-color: #4680ff;
+//            z-index: 0;
+//          }
+//          >.pcoded-inner-content {
+//            padding: 0;
+//            >.main-body {
+//              >.page-wrapper {
+//                padding: 0;
+//                .page-body {
+//                  >ngb-tabset {
+//                    > ul {
+//                      &.nav {
+//                        &.nav-tabs {
+//                          border-bottom-color: transparent;
+//                          flex-wrap: nowrap;
+//                          margin: 0 1rem;
+//
+//                          .nav-item {
+//                            margin: 0 5px;
+//                            z-index: 1;
+//                            &:first-child {
+//                              margin-left: 0;
+//                            }
+//
+//                            &:last-child {
+//                              margin-right: 0;
+//                            }
+//                          }
+//
+//                          .nav-link {
+//                            background-color: #fff;
+//                            display: flex;
+//                            align-content: center;
+//                            align-items: center;
+//                            align-self: center;
+//                            > span {
+//                              white-space: nowrap;
+//                              text-overflow: ellipsis;
+//                              overflow: hidden;
+//                            }
+//
+//                            >.close {
+//                              margin-top: 0px;
+//                              margin-left: 10px;
+//                            }
+//                          }
+//
+//                          .nav-link.active,
+//                          .nav-item.show .nav-link {
+//                            background-color: #ecf0f5;
+//                            border-color: transparent;
+//                          }
+//                        }
+//                      }
+//                    }
+//                    > .tab-content {
+//                       .card {
+//                         &.full-card {
+//                           z-index: 999999;
+//                         }
+//                       }
+//                      .modal-backdrop, .modal {
+//                        position: fixed;
+//                        top: 124px;
+//                        right: 0;
+//                        bottom: 0;
+//                        left: 245px;
+//                        //opacity: 0.5;
+//                        //background-color: #000;
+//
+//                        .modal {
+//                          z-index: 1040;
+//                          &.static-center {
+//                            background: rgba(0, 0, 0, 0.1) !important;
+//                            border-radius: 0.3rem;
+//                          }
+//                        }
+//
+//                        &.static-center {
+//                          margin-left: 0px;
+//                          margin-right: 0px;
+//                          height: 100%;
+//                          overflow: hidden !important;
+//
+//                          .modal-dialog {
+//                            //position: fixed;
+//                            //margin: 0 auto;
+//                            //width: -webkit-fill-available;
+//                            .modal-footer {
+//                              border-top: none;
+//                            }
+//                          }
+//                        }
+//
+//                        &.modal-stretch {
+//                          .modal-dialog {
+//                            &.modal-lg {
+//                              width: 90%;
+//                              max-width: 90%;
+//                            }
+//                          }
+//                        }
+//
+//                      }
+//                    }
+//                  }
+//                }
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
+//  &[vertical-nav-type=collapsed] {
+//    >.pcoded-container {
+//      >.pcoded-main-container {
+//        >.pcoded-wrapper {
+//          >.pcoded-content {
+//            >.pcoded-inner-content {
+//              >.main-body {
+//                >.page-wrapper {
+//                  .page-body {
+//                    >ngb-tabset {
+//                      > .tab-content {
+//                        .modal-backdrop, .modal {
+//                          &.static-center {
+//                            .modal-dialog {
+//                              left: calc((100vw - 260px) / 2);
+//                            }
+//                          }
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+//.box-infor-field .card-block-hid{
+//  overflow: visible !important;
+//}
+//.md-tabs .nav-item {
+//  width: 140px;
+//  flex: inherit;
+//}
+//.box-main{
+//  .card-block{
+//    padding: 0 !important;
+//  }
+//}
+//
+//.md-tabs-custom {
+//  .nav-item {
+//    flex: inherit!important;
+//    width: auto;
+//    .nav-link {
+//      //padding: 20px 100px;
+//    }
+//  }
+//}
+//.basic{
+//  overflow-y: scroll !important;
+//  height: 800px;
+//}
+//.form-material .ng-valid~.float-label {
+//  top: -14px;
+//  font-size: 11px;
+//}
+//.form-material .has-value.form-control ~ .float-label, .form-material .has-value.form-control .ng-dirty:not(form):valid ~ .float-label {
+//  top: -14px;
+//  font-size: 11px;
+//}
+//.disabled {
+//  opacity: 1!important;
+//}
+//
+//// common style
+//select.form-control, select.form-control:focus, select.form-control:hover {
+//  border: 1px solid #cccccc !important;
+//}
+//
+//.txt-red {
+//  color: red;
+//}
+//.title__blue_20 {
+//  font-size: 20px;
+//  color: #6995ff;
+//}
+//.label__black_14 {
+//  font-size: 14px;
+//  color: #4d4f50;
+//  font-weight: 600;
+//}
+//
+//.modal__title_20 {
+//  font-size: 20px;
+//  color: #373a3c;
+//}
+//.btn-sm {
+//  font-weight: 500;
+//  padding: 10px 16px;
+//  font-size: 15px;
+//}
+//.p-l-30{
+//  padding-left: 30px;
+//}
+//.blue_color {
+//  color: #6995ff;
+//}
+//.font_14 {
+//  font-size: 14px;
+//  font-weight: 600;
+//}
+//.login-block .auth-box {
+//  margin: 50px auto 0 auto !important;
+//}
+//.confirm-common{
+//  .modal {
+//    margin: 0!important;
+//    width: 100%!important;
+//    p {
+//      font-size: 16px;
+//      text-align: center;
+//    }
+//    .modal-footer {
+//      border: none;
+//    }
+//    .modal-header {
+//      border: none;
+//    }
+//    button {
+//      width: 100px;
+//    }
+//  }
+//}
+//.md-tabs {
+//  .nav-item {
+//    width: 200px !important;
+//  }
+//}
+//
+//// Define control
+//.form-control:focus {
+//  box-shadow: none !important;
+//}
+//
+//.input-group-transparent .input-group-append .input-group-text, .input-group-transparent .input-group-prepend .input-group-text {
+//  background-color: transparent;
+//  color: inherit;
+//  border-right: none;
+//  padding-right: 0;
+//}
+//
+//
+//.input-group-transparent .input-group-append + input.form-control, .input-group-transparent .input-group-prepend + input.form-control {
+//  border-left: none;
+//}
+//
+//.input-group.input-group-transparent {
+//  display: flex;
+//  flex-direction: row-reverse;
+//  border-color: red !important;
+//}
+//
+//
+//.input-group.input-group-transparent .form-control:focus ~ .input-group-prepend > .input-group-text {
+//  border-color: #448aff !important;
+//}
+//
+//.input-group.input-group-transparent .ng-invalid:not(form):not(.ng-untouched), .input-group.input-group-transparent .form-control {
+//  border-left: none;
+//  outline: none;
+//}
+//
+//.input-group-transparent .ng-invalid:not(form):not(.ng-untouched) ~ .input-group-prepend > .input-group-text {
+//  border-color: red !important;
+//  border-right: none;
+//}
+//
+//.border-checkbox-section .border-checkbox-group .border-checkbox-label:after {
+//  border-color: transparent;
+//}
+//.border-checkbox-section .border-checkbox-group-default .border-checkbox:checked + .border-checkbox-label:after {
+//  border-color: #448aff !important;
+//}
+//.btn {
+//  text-transform: none;
+//}
+//.switch-encryption .switch {
+//  background-color: red!important;
+//}
+//.switch-encryption .switch.checked {
+//  background-color: #2aba67!important;
+//}
+//.modal-dialog {
+//  margin: 5.75rem auto;
+//}
+//
+//
+//ngb-modal-backdrop {
+//  position: fixed;
+//  top: 126px;
+//  right: 0;
+//  bottom: 0;
+//  left: 245px;
+//  z-index: 1040;
+//  opacity: 0.5;
+//  background-color: #000;
+//}
+//ngb-modal-window {
+//  position: fixed;
+//  top: 126px;
+//  right: 0;
+//  bottom: 0;
+//  left: 230px;
+//  z-index: 1040;
+//  overflow-x: hidden;
+//  overflow-y: scroll;
+//  outline: 0;
+//  display: block;
+//}
+//@media only screen and (max-width: 992px){
+//  .pcoded > .pcoded-container > .pcoded-main-container > .pcoded-wrapper > .pcoded-content > .pcoded-inner-content > .main-body > .page-wrapper .page-body > ngb-tabset > .tab-content .modal-backdrop, .pcoded > .pcoded-container > .pcoded-main-container > .pcoded-wrapper > .pcoded-content > .pcoded-inner-content > .main-body > .page-wrapper .page-body > ngb-tabset > .tab-content .modal {
+//    left: 0;
+//  }
+//}

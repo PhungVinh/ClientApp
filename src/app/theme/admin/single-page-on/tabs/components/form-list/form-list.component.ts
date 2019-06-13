@@ -143,24 +143,34 @@ export class FormListComponent implements OnInit, AfterViewInit {
                 }
 
                 if (res2 !== null) {
-                    this.isAddOrEdit = 2;
-                    console.log('update');
-                    this.arrayAttributeDrop = [];
-                    res2.forEach(item => {
-                        this.arrayAttributeDrop.push({arr: item.children});
-                        item.children.forEach((item2, index, array) => {
-                            this.listAttributes.forEach((item3, index3) => {
-                                if (item3.AttributeCode === item2.AttributeCode) {
-                                    item3.disabled = true;
-                                }
-                            });
+                       this.isAddOrEdit = 2;
+                       console.log('update');
+                       if (res2.length > 0) {
+                           this.arrayAttributeDrop = [];
+                           res2.forEach(item => {
+                               this.arrayAttributeDrop.push({arr: item.children});
+                               if (item.children !== null) {
+                                   item.children.forEach((item2, index, array) => {
+                                       this.listAttributes.forEach((item3, index3) => {
+                                           if (item3.AttributeCode === item2.AttributeCode) {
+                                               item3.disabled = true;
+                                           }
+                                       });
 
-                        });
-                    });
+                                   });
+                               }
+                           });
+                       } else {
+                           this.arrayAttributeDrop = [
+                               {arr: []},
+                           ];
+                           console.log('else');
+                       }
+
                 } else {
                     this.isAddOrEdit = 1;
                     this.arrayAttributeDrop = [
-                        {arr: this.arrayAttributeDropItem},
+                        {arr: []},
                     ];
                     console.log('add');
                 }
@@ -197,6 +207,7 @@ export class FormListComponent implements OnInit, AfterViewInit {
         if (row.length > 0) {
             this.modalAcceptDeleteRow.show();
         } else {
+            this.lengthOfarrayAttributeDropItem = this.lengthOfarrayAttributeDropItem - 1;
             this.arrayAttributeDrop.splice(index, 1);
             this.arrayAttributeDrop.forEach((val, key) => {
                 val.arr.forEach(val2 => {
@@ -267,6 +278,7 @@ export class FormListComponent implements OnInit, AfterViewInit {
                     event.container.data,
                     event.previousIndex,
                     event.currentIndex);
+                (event.item.data as any).AttributeColumn = 3;
 
                 this.listAttributes = this.listAttributesFormList.slice();
                 this.listAttributes.forEach(value => {
@@ -508,10 +520,21 @@ export class FormListComponent implements OnInit, AfterViewInit {
         if (this.listTitleTable.length > 0) {
             const totalItem = [];
             const objFormConfig = <any>{};
-            this.arrayAttributeDrop.forEach(item => {
-                item.arr.forEach(item2 => {
-                    totalItem.push(item2);
-                });
+            this.arrayAttributeDrop.forEach((item, k) => {
+                console.log('test luu', this.arrayAttributeDrop);
+                if (item.arr === null || item.arr.length === 0) {
+                    this.arrayAttributeDrop.splice(k, 1);
+                    this.lengthOfarrayAttributeDropItem = this.lengthOfarrayAttributeDropItem - 1;
+                }
+            });
+            console.log('test luu sau xoa', this.arrayAttributeDrop);
+
+            this.arrayAttributeDrop.forEach((item, k) => {
+                if (item.arr !== null) {
+                    item.arr.forEach((item2, k2) => {
+                        totalItem.push(Object.assign(item2, {RowIndex: k + 1, AttrOrder: k2 + 1}));
+                    });
+                }
             });
 
             objFormConfig.tblCimsattributeForm = totalItem;

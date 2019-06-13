@@ -95,7 +95,7 @@ export class AttrRelationEffects {
                         return state.admin.attrRelation.param;
                     } )),
                     mergeMap(([data, res]) => [
-                        new DeleteAttrRelationsSuccess({Id: action.payload.Id}),
+                        new DeleteAttrRelationsSuccess(),
                         new LoadAttrRelations({
                             pagination: res
                         }),

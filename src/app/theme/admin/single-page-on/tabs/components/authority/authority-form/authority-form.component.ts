@@ -407,6 +407,7 @@ export class AuthorityAddComponent implements OnInit {
   }
 
   copyAuthority(id) {
+    console.log('id', id);
     if (id !== 'default') {
       this.store.dispatch(new CopyAuthority({ id: id, parentCode: this.selectModule.value }))
     } else {

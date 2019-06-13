@@ -9,7 +9,7 @@
         <div class="form-group">
           <label class="form-control-label label__black_14" for="authorityName">Tên danh mục <span
               class="txt-red">*</span></label>
-          <input type="text" formControlName="CategoryName"
+          <input type="text" id="categoryName" formControlName="CategoryName" appControlTrimReactiveForm [ControlTrim]="'deep'"
             [ngClass]="{'form-control': true, 'is-invalid': categoryName.invalid && (categoryName.dirty || categoryName.touched)}"
             required maxlength="100">
           <small class="form-text text-danger"
@@ -86,9 +86,10 @@
                   </div>
                   <input type="text" hidden="true" formControlName="CategoryCode">
                   <input type="text" hidden="true" formControlName="CategoryTypeCode">
+                  <input type="text" hidden="true" formControlName="IsCheck">
                   <div class="category_form_action">
                     <i class="fa fa-trash fa-lg" *ngIf="children.length>1"
-                      (click)="removeChildrenButtonClick(i, children.value[i].CategoryCode)"></i>
+                      (click)="removeChildrenButtonClick(i, children.value[i].CategoryCode, children.value[i].IsCheck)"></i>
                     <i class="fa fa-plus-circle fa-lg blue_color" (click)="addChildrenButtonClick()"
                       [style.visibility]="last ? 'visible' : 'hidden'"></i>
                   </div>
@@ -114,3 +115,5 @@
 <app-modal-confirm #modalDefault [identity]="'confirmCancelAuthority'" [dialogClass]="'modal-sm'" [confirmType]="'None'"
   (onAccepted)="agreeComfirm($event)" [confirmMessage]="'Hủy thông tin đã nhập và thoát'" [outsizeClose]="false">
 </app-modal-confirm>
+<app-modal-confirm #modalIgnore [identity]="'notifyDeleteCategory'" [dialogClass]="'modal-sm'" [isNotify]="true"
+  [confirmType]="'None'" [confirmMessage]="'Giá trị đã được sử dụng'"></app-modal-confirm>

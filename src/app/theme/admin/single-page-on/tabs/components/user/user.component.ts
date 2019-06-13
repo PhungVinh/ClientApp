@@ -56,6 +56,7 @@ export class UserComponent implements OnInit, OnDestroy {
   previousPage: any;
   users$: Observable<any>;
   eventSubscriber: Subscription;
+  fieldEncypt : any [];
 
   // 09/04/19
   TextSearch = '';
@@ -188,6 +189,7 @@ export class UserComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(UserNewComponent as Component, { size: "lg", backdrop: 'static', container: '.tab-user' });
     const user = Object.assign({}, item);
     modalRef.componentInstance.users = user;
+    // modalRef.componentInstance.fieldEncypt
     console.log('jksf', item)
   }
 

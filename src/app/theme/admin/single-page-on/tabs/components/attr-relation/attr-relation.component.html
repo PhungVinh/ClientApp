@@ -46,30 +46,29 @@
                     <td>{{item.CategoryName}}</td>
                     <td>
                         <div class="icon-action">
-                            <samp (click)="OpenModalEdit()"><i class="fa
+                            <span (click)="OpenModalEdit()"><i class="fa
                                     fa-pencil m-r-10" aria-hidden="true"
                                     (click)="getAtrrRelationById(item.Id)"
                                     title="Sửa"></i>
-                            </samp>
-                            <samp><i class="fa
+                            </span>
+                            <span (click)="modalDefaultAttr.show()"><i class="fa
                                     fa-trash" aria-hidden="true" feature="delete"
                                     (click)="getItemAttrRelationToDelete(item.Id)"
                                     title="Xóa" ></i>
-                            </samp>
+                            </span>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div *ngIf="(listAttrRelation?.data | json) == '[]'" class="text-center m-t-25">
+        <div *ngIf="((listAttrRelation?.data | json) == '[]' && textSearch.length > 0)" class="text-center m-t-25">
             <b>Không có kết quả thỏa mãn điều kiện nhập</b>
           </div>
     </div>
     <!-- vinhnp -->
     <app-modal-confirm #modalDefaultAttr [identity]="'modalDefaultAttr'"
         [dialogClass]="'modal-sm'"
-        (onAccepted)="onAcceptedDelete($event)" [confirmMessage]="'Xóa thông tin
-        đã chọn'" [outsizeClose]="false">
+        (onAccepted)="deleteAttrRelation()" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
     </app-modal-confirm>
     <!-- end -->
 
@@ -103,14 +102,13 @@
                     <div class="form-group form-default">
                         <label class="float-label">Tên ràng buộc <span
                                 class="star">*</span></label>
-                        <input type="text" name="name" class="form-control ng-invalid"
-                            formControlName="Name" required
+                        <input type="text" name="name" class="form-control"
+                            formControlName="Name"  #nameConstraintsADD appControlTrimReactiveForm [ControlTrim]="'deep'"
                             (change)="cancelValidateName()"
-                            (keyup)="cancelValidateName()" [ControlTrim]="'deep'">
+                            (keyup)="cancelValidateName()" [ControlTrim]="'deep'" [ngClass]="{'box-red':(name.invalid  && isSubmitAdd == true) || (isDuplicate && isSubmitAdd==true)}">
                         <div *ngIf="(name.invalid && (name.dirty || name.touched)) || (name.invalid && isSubmitAdd==true)">
                             <div class="messages m-t-5">
-                                <p *ngIf="name.errors.required" class="text-danger
-                                    error">
+                                <p *ngIf="name.errors.required" class="text-danger error">
                                     Thông tin không được để trống
                                 </p>
                             </div>
@@ -130,7 +128,7 @@
                         <label class="float-label">Kiểu hiển thị <span
                                 class="star">*</span></label>
                         <select class="form-control form-control-inverse ng-invalid"
-                            formControlName="ContraintsType" name="contraintsType">
+                            formControlName="ContraintsType" name="contraintsType" [ngClass]="{'box-red':(contraintsType.invalid  && isSubmitAdd == true)}">
                             <!--<option>Chọn kiểu hiển thị</option>-->
                             <option value="" [selected]="true" >--Chọn kiểu hiển thị--</option>
                             <option *ngFor="let item of listTypeObject"
@@ -217,9 +215,9 @@
                     <div class="form-group form-default">
                         <label class="float-label">Tên ràng buộc <span
                                 class="star">*</span></label>
-                        <input type="text" name="nameEdit" class="form-control ng-invalid"
-                            formControlName="Name" (change)="cancelValidateName()"
-                            (keyup)="cancelValidateName()">
+                        <input type="text" name="nameEdit" class="form-control"
+                            formControlName="Name" (change)="cancelValidateName()" #nameConstraintsEDIT appControlTrimReactiveForm [ControlTrim]="'deep'"
+                            (keyup)="cancelValidateName()" [ngClass]="{'box-red':((nameEdit.invalid  && isSubmitEdit == true) || (isDuplicate && isSubmitEdit==true))}">
                             <div *ngIf="(nameEdit.invalid && (nameEdit.dirty || nameEdit.touched)) || (nameEdit.invalid && isSubmitEdit==true)">
                                 <div class="messages m-t-5">
                                     <p *ngIf="nameEdit.errors.required" class="text-danger
@@ -227,9 +225,10 @@
                                         Thông tin không được để trống
                                     </p>
                                 </div>
+                    
                                 <span class="form-bar"></span>
                             </div>
-                            <div *ngIf="nameEdit?.errors?.notUnique"
+                            <div *ngIf="isDuplicate && isSubmitEdit==true"
                                     class="messages m-t-5">
                                 <p class="text-danger error">
                                     Thông tin đã tồn tại trên hệ thống
@@ -243,7 +242,7 @@
                                 class="star">*</span></label>
                         <select class="form-control form-control-inverse ng-invalid"
                             formControlName="ContraintsType">
-                            <option value="" [selected]="true">--Chọn kiểu hiển thị--</option>
+                            <option value="">--Chọn kiểu hiển thị--</option>
                             <option *ngFor="let item of listTypeObject"
                                 value="{{item?.CategoryCode}}">
                                 {{item.CategoryName}}

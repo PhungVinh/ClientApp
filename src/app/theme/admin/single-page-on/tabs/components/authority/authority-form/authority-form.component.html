@@ -42,10 +42,11 @@
             <div class='col-12 col-sm-8'>
               <div class="form-group">
                 <label class="form-control-label label__black_14">Copy nhóm quyền</label>
-                <select class="form-control" (change)="copyAuthority($event.target.value)" [(ngModel)]="selectedAutho">
+                <select class="form-control" (ngModelChange)="copyAuthority($event)" [(ngModel)]="selectedAutho">
                   <option value="default"> --- Chọn nhóm quyền --- </option>
                   <option *ngFor="let authority of allAuthority" [value]="authority.authorityId"
-                    [selected]="authority.authorityId === selectedAutho">
+                    [selected]="authority.authorityId === selectedAutho"
+                    >
                     {{ authority.authorityName }}
                   </option>
                 </select>

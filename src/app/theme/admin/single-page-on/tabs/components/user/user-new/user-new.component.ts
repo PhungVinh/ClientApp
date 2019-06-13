@@ -121,6 +121,7 @@ export class UserNewComponent implements OnInit {
 
   ngOnInit() {
     console.log('jksdfvoj-2kjs', (<NgForm>this.editForm));
+    console.log('thisfjk.userdfe',this.users);
     this.store.pipe(select(selectServicePackUser)).subscribe(data => {
       console.log('vinh-serd-user', data);
       this.servicePacks = [];

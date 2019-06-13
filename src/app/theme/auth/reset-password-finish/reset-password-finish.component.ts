@@ -39,7 +39,7 @@ export class ResetPasswordFinishComponent implements OnInit {
           this.credentials = Object.assign({}, params);
           this.store.dispatch(new ActionChecktokenReset(params));
           this.store.pipe(select(selectCheckResetPasswordFinish)).subscribe(res => {
-              if (res && res !== null) {
+              if (res) {
                   if (res.token) {
                       // this.localStorageService.setItem(AUTH_TOKEN, res.token);
                       this.keyMissing = true;

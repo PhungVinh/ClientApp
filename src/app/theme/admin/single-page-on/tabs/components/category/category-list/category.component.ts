@@ -28,7 +28,8 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit() {
     this.searchInput = new FormControl('');
-    this.store.dispatch(new LoadCategories({TextSearch: '', currPage: 1, recodperpage: 10}));
+    const searchInput = this.searchInput.value.trim();
+    this.store.dispatch(new LoadCategories({TextSearch: searchInput, currPage: 1, recodperpage: 10}));
     this.categories$ = this.store.pipe(select(state => state.admin.category.categories));
     this.paging$ = this.store.pipe(select(state => state.admin.category.reqOption));
     this.paging$.subscribe(p => {
@@ -52,6 +53,7 @@ export class CategoryComponent implements OnInit {
 
   search() {
     const searchInput = this.searchInput.value.trim();
+    console.log('this.perPage', this.perPage, searchInput);
     this.store.dispatch(new LoadCategories({ TextSearch: searchInput, currPage: 1, recodperpage: this.perPage }));
   }
 

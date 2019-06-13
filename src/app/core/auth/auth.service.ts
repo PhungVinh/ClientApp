@@ -7,7 +7,7 @@ import {
     API_ACCOUNT_GET_USER,
     API_ACCOUNT_GET_MENU_LIST,
     API_CHANGE_PASSWORD, API_ACCOUNT_LOGOUT, API_CHANGE_PASSWORD_USER, API_RESET_PASSWORD_FINISH,
-    API_GET_LIST_PERMISSON
+    API_GET_LIST_PERMISSON, API_CHANGE_PASSWORD_FIRST
 } from 'src/app/app.constant';
 import { MainMenuItems } from 'src/app/shared/menu-items/menu-items';
 import { ICredentials } from 'src/app/shared/model/credentials.model';
@@ -43,7 +43,6 @@ export class AuthService {
       if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
         jwt = bearerToken.slice(7, bearerToken.length);
       }
-      console.log('service auth', resp, credentials);
       if (resp.body.mustChangePassword) {
         this.localStorageService.setItem(AUTH_KEY, { isAuthenticated: false });
       } else {
@@ -79,8 +78,11 @@ export class AuthService {
   }
 
   changePassword(req: any): Observable<any> {
-    return this.httpClient.post<any>(`${environment.serverApi}/${API_CHANGE_PASSWORD}`, req);
+    return this.httpClient.post<any>(`${environment.serverApi}/${API_CHANGE_PASSWORD_FIRST}`, req);
   }
+    changePasswordFinish(req: any): Observable<any> {
+        return this.httpClient.post<any>(`${environment.serverApi}/${API_CHANGE_PASSWORD}`, req);
+    }
   logout(jwt?: string): Observable<any> {
     // return this.httpClient.delete<any>(`${environment.serverApi}/${API_ACCOUNT_LOGOUT}`);
     if (!isDefined(jwt)) {

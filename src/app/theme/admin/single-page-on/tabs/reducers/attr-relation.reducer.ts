@@ -55,6 +55,11 @@ export function attrRelationReducer(state = initialState, action: AttrRelationAc
                 errOrg: action.payload.err
             };
 
+        // case AttrRelationActionTypes.DeleteAttrRelations:
+        //     return {
+        //         ...state,
+        //     };
+
 
         case AttrRelationActionTypes.DeleteAttrRelationsSuccess:
             return {

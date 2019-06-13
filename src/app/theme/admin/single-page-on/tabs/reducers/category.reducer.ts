@@ -12,7 +12,7 @@ export interface CategoryState {
 
 export interface RequestOptions {
     query?: {
-        textSearch?: string;
+        textSearch?: String;
     }
     sort?: string;
     currPage?: number;
@@ -30,7 +30,7 @@ export const initialState: CategoryState = {
             textSearch: ''
         },
         currPage: 1,
-        pageSize: 15
+        pageSize: 10
     },
     loading: false,
     err: false
@@ -38,15 +38,25 @@ export const initialState: CategoryState = {
 export function categoryReducer(state = initialState, action: CategoryActions): CategoryState {
     switch (action.type) {
         case CategoryActionTypes.LoadCategories:
+            console.log('LoadCategories action.payload', action.payload, state.reqOption);
             return {
-                ...state
+                ...state,
+                reqOption: {
+                    ...state.reqOption,
+                    query: {
+                        textSearch: action.payload.TextSearch
+                    },
+                    pageSize: 10
+                }
             }
         case CategoryActionTypes.LoadCategorySuccess:
+            console.log('LoadCategorySuccess action.payload', action.payload);
             return {
                 ...state,
                 categories: action.payload.data,
                 loading: false,
                 reqOption: {
+                    ...state.reqOption,
                     currPage: action.payload.paging[0].currPage,
                     pageSize: action.payload.paging[0].pageSize,
                     totalPage: action.payload.paging[0].totalPage

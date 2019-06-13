@@ -28,6 +28,7 @@ import { MatListModule } from '@angular/material/list';
 import { DateValidator } from 'ng2-validation/dist/date';
 import { CustomSelectComponent } from './custom-select/custom-select.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { ControlTrimReactiveFormDirective } from './directive/control-trim-reactive-form.directive';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -75,7 +76,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatListModule,
     DateValidator,
     CustomSelectComponent,
-    FileUploadModule
+    FileUploadModule,
+    ControlTrimReactiveFormDirective
   ],
   declarations: [
     ToggleFullScreenDirective,
@@ -95,7 +97,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalConfirmComponent,
     ControlValueDirective,
     DateValidator,
-    CustomSelectComponent
+    CustomSelectComponent,
+    ControlTrimReactiveFormDirective
   ],
   providers: [
     {
