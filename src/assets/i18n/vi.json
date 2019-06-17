@@ -17,28 +17,6 @@
     "Cập nhật": "Cập nhật",
     "Tìm kiếm" : "Tìm kiếm"
 ,
-  "common": {
-    "searchno": "Không có kết quả thõa mãn điều kiện nhập"
-  },
-  "Nam": "Nam",
-  "Nữ": "Nữ",
-  "Tất cả": "Tất cả",
-  "Hoạt động": "Hoạt động",
-  "Trạng thái": "Trạng thái",
-  "Giới tính": "Giới tính",
-  "Họ tên": "Họ tên",
-  "Tên đăng nhập": "Tên đăng nhập",
-  "Email": "Email",
-  "Số điện thoại": "Số điện thoại",
-  "STT": "STT",
-  "Ảnh": "Ảnh",
-  "Chức vụ": "Chức vụ",
-  "Địa chỉ": "Địa chỉ",
-  "Ngày sinh": "Ngày sinh",
-  "Từ ngày": "Từ ngày",
-  "Đến ngày": "Đến ngày",
-  "Đơn vị" : "Đơn vị"
-,
     "Thêm thành công!": "Lưu thông tin thành công",
     "Sửa thành công!": "Cập nhật thông tin thành công",
     "Xóa thành công!": "Xóa thông tin thành công"
@@ -61,9 +39,36 @@
         }
     }
 ,
+  "common": {
+    "searchno": "Không có kết quả thõa mãn điều kiện nhập"
+  },
+  "Nam": "Nam",
+  "Nữ": "Nữ",
+  "Tất cả": "Tất cả",
+  "Hoạt động": "Hoạt động",
+  "Trạng thái": "Trạng thái",
+  "Giới tính": "Giới tính",
+  "Họ tên": "Họ tên",
+  "Tên đăng nhập": "Tên đăng nhập",
+  "Email": "Email",
+  "Số điện thoại": "Số điện thoại",
+  "STT": "STT",
+  "Ảnh": "Ảnh",
+  "Chức vụ": "Chức vụ",
+  "Địa chỉ": "Địa chỉ",
+  "Ngày sinh": "Ngày sinh",
+  "Từ ngày": "Từ ngày",
+  "Đến ngày": "Đến ngày",
+  "Đơn vị" : "Đơn vị"
+,
     "Bạn chắc chắn muốn xóa tài khoản" : "Bạn chắc chắn muốn xóa tài khoản",
     "Xóa thông tin đã chọn": "Xóa thông tin đã chọn",
     "Thông tin không được để trống": "Thông tin không được để trống"
+,
+  "Thông tin chung": "Thông tin chung",
+  "Thông tin phân quyền": "Thông tin phân quyền",
+  "Module": "Module",
+  "Tất cả chức năng": "Tất cả chức năng"
 ,
     "Thời hạn": "Thời hạn",
     "Mã đơn vị": "Mã đơn vị",
@@ -90,11 +95,6 @@
         "true" : "Hoạt động",
         "false": "Khóa"
     }
-,
-  "Thông tin chung": "Thông tin chung",
-  "Thông tin phân quyền": "Thông tin phân quyền",
-  "Module": "Module",
-  "Tất cả chức năng": "Tất cả chức năng"
 ,
     "Thêm tài khoản": "Thêm tài khoản",
     "Sửa tài khoản": "Sửa tài khoản",

@@ -37,7 +37,7 @@ export class BasicLoginComponent implements OnInit {
     this.credentials = new Credentials();
     const tempRemember = this.localStorageService.getItem(AUTH_REMEMBER);
     this.credentials = Object.assign({}, tempRemember);
-    console.log(tempRemember, this.credentials);
+    console.log('ngoninit login', tempRemember, this.credentials);
     // this.credentials.password = tempRemember.password;
     this.isAuthenticated$ = this.store.pipe(select(selectIsAuthenticated));
     this.error$ = this.store.pipe(select(selectError));

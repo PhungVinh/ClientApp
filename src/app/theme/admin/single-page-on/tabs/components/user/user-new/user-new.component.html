@@ -10,8 +10,7 @@
       (click)="openClose()" title="Hủy">&times;</button>
   </div>
   <div class="modal-body">
-    <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'"
-      [config]="{scrollXMarginOffset: 10}">
+    <!-- <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}"> -->
       <div class="form-group row">
         <div class="col-sm-12 col-md-12 col-lg-4 Grade">
           <div class="Grade2">
@@ -74,8 +73,15 @@
             [(ngModel)]="users.fullName"
             name="fullName"
             required
-            [maxlength]="100"
-            (keypress)="keyPressFullname($event)"
+            [maxlength]="100" 
+            (keypress)="keyPressFullname($event)" *ngIf="users.id === undefined"
+            />
+          <input type="text" class="form-control ng-invalid" [ControlTrim]="'deep'"
+            [(ngModel)]="users.fullName"
+            name="fullName"
+            required
+            [maxlength]="100" 
+            (keypress)="keyPressFullname($event)" [disabled]="fieldEncypt.fullName === true" *ngIf="users.id !== undefined"
             />
           <div [hidden]="!((editForm.controls?.fullName?.touched ||
             editForm.submitted || editForm.controls?.fullName?.dirty) &&
@@ -173,11 +179,6 @@
             </small>
           </div>
         </div>
-
-
-
-
-
         <div class="col-sm-12 col-md-12 col-lg-4">
           <label class="form-control-label LbDistance">
             {{'Giới tính' | translate}}
@@ -248,7 +249,11 @@
           <input type="text"
             class="form-control" name="address"
             placeholder="{{'Địa chỉ' | translate}}"
-            [(ngModel)]="users.address" [maxlength]="200" />
+            [(ngModel)]="users.address" [maxlength]="200"  *ngIf="users.id === undefined"/>
+          <input type="text"
+            class="form-control" name="address"
+            placeholder="{{'Địa chỉ' | translate}}"
+            [(ngModel)]="users.address" [maxlength]="200" [disabled]="fieldEncypt.address === true" *ngIf="users.id !== undefined"/>
         </div>
         <div class="col-sm-12 col-md-12">
           <label class="form-control-label LbDistance">
@@ -281,7 +286,7 @@
         </div>
       </div>
 
-    </perfect-scrollbar>
+    <!-- </perfect-scrollbar> -->
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default float-right" title="Hủy"

@@ -29,8 +29,9 @@ import {ModalConfirmComponent} from '../../../../../../shared/modal-confirm/moda
 export class EncryptionComponent implements OnInit, OnDestroy {
 
   rows = [];
-  remainTime = moment().add(1, 'days').hours(1).minutes(0).seconds(0);
+  remainTime;
   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
+  timeEncryption: any;
   menu: any;
   field: any;
   encryptionModule?: any;
@@ -53,7 +54,15 @@ export class EncryptionComponent implements OnInit, OnDestroy {
     this.listField = [];
     this.appStore$.dispatch(new LoadFieldEncryptions({orgCode : this.organizationCode}));
     this.appStore$.pipe(select(selectEncryptionFieldsSuccess)).subscribe(data => {
-      this.rows = data;
+        if (data) {
+            this.rows = data.attributesEncryption;
+            this.timeEncryption = data.schedulerTime;
+            const hours = Number(moment(data.schedulerTime).format('HH'));
+            const minutes = Number(moment(data.schedulerTime).format('mm'));
+            const seconds = Number(moment(data.schedulerTime).format('ss'));
+            this.remainTime =  moment().add(1, 'days').hours(hours).minutes(minutes).seconds(seconds);
+            console.log(this.timeEncryption);
+        }
     });
     this.encryptionModule = null;
     this.appStore$.dispatch(new LoadModuledEncryptions());

@@ -22,6 +22,7 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
   public recordId?: string;
   attribute$: Observable<any>;
   attribute: any;
+  originAttribute: any;
   customer: any;
   ChildCode = 'CIMS_ADD';
   isSaving = false;
@@ -137,14 +138,39 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
         case CustomerActionTypes.LoadCimsSuccess:
           if (!this.isContinue) { // close modal after refresh data
             this.clear();
+          } else { // process reset form to initial status
+            this.editCustomerForm.reset();
+            (<any[]>this.originAttribute).forEach(row => { // reset each row to initial status
+              if (isDefined(row.children)) {
+                (<any[]>row.children).forEach(child => { // reset each element on row to initial status
+                  if (isDefined(this.editCustomerForm.controls[child.AttributeCode])) {
+                    switch (child.AttributeType) {
+                      case 'TEXTBOX':
+                      case 'TEXTAREA':
+                        this.editCustomerForm.controls[child.AttributeCode].patchValue(child.DefaultValueWithTextBox);
+                        break;
+                      case 'CHECKBOX':
+                        if (!(isDefined(child.ListCategory) && child.ListCategory.length > 0)) {
+                          this.editCustomerForm.controls[child.AttributeCode].patchValue(child.DefaultValue == true);
+                        } else {
+                          this.editCustomerForm.controls[child.AttributeCode].patchValue(child.DefaultValue);
+                        }
+                        break;
+                      default:
+                        this.editCustomerForm.controls[child.AttributeCode].patchValue(child.DefaultValue);
+                    }
+                    this.editCustomerForm.controls[child.AttributeCode].updateValueAndValidity();
+                  }
+                });
+              }
+            });
+            this.isContinue = false;
           }
           break;
         case CustomerActionTypes.LoadCimsFailed:
         case CustomerActionTypes.LoadDetailCimsFailed:
         case CustomerActionTypes.LoadFormConfigurationFailed:
-          if (!this.isContinue) { // close modal after refresh data
-            this.clear();
-          }
+          this.clear();
           break;
       }
     });
@@ -162,6 +188,7 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
       .subscribe(attribute => {
         if (attribute && (<[]>attribute).length) {
           this.attribute = JSON.parse(JSON.stringify(attribute));
+          this.originAttribute = JSON.parse(JSON.stringify(attribute));
         }
       }, err => { // untrack subscription
         this.destroyInitSubscription();
@@ -259,7 +286,7 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
    */
   isShowInvalid = ctrl => {
     if (isDefined(this.editCustomerForm) && isDefined(this.editCustomerForm.controls) && isDefined(this.editCustomerForm.controls[ctrl])) {
-      return (this.editCustomerForm.submitted || this.editCustomerForm.controls[ctrl].touched || this.editCustomerForm.controls[ctrl].dirty) && this.editCustomerForm.controls[ctrl].invalid;
+      return (this.editCustomerForm.submitted || this.isContinue || this.editCustomerForm.controls[ctrl].touched || this.editCustomerForm.controls[ctrl].dirty) && this.editCustomerForm.controls[ctrl].invalid;
     }
     return false;
   }

@@ -135,6 +135,9 @@
     border: 1px solid red !important;
 }
 
+.hide-paging{
+    display: none !important;
+}
 
 @media all and (max-width: 768px) {
     .AddBtn {

@@ -57,6 +57,7 @@ export class UserNewComponent implements OnInit {
   @ViewChild('editForm') editForm;
   // @ViewChild('fullNameInput') fullNameInput;
   @Input() authorityLoadUser;
+  @Input() fieldEncypt;
 
   users: User;
   authority: Authority;
@@ -120,6 +121,7 @@ export class UserNewComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('fieldEncypt2324', this.fieldEncypt);
     console.log('jksdfvoj-2kjs', (<NgForm>this.editForm));
     console.log('thisfjk.userdfe',this.users);
     this.store.pipe(select(selectServicePackUser)).subscribe(data => {

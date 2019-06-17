@@ -34,7 +34,7 @@
               *ngIf="(categoryOrganization$ | async) as
               categoryOrganization">
               <div class="form-group row">
-                <label class="col-md-12 col-lg-3 col-form-label StatusLb">{{'Đơn
+                <label class="col-md-12 col-lg-3 col-form-label StaatusLb">{{'Đơn
                   vị' | translate}}</label>
                 <div class="col-md-12 col-lg-6 col-select">
                   <select name="orgCode" class="form-control" [(ngModel)]="orgCode"
@@ -43,12 +43,6 @@
                 <option *ngFor="let item of categoryOrganization"
                   value="{{item.organizationCode}}" class="OrgWidth">{{item.organizationName.slice(0,30)}}</option>
                 </select>
-                  <!-- <app-custom-select [(ngModel)]="orgCode" name="orgCode" 
-                  (ngModelChange)="onSearch($event)"  #CustomSelectComponent
-                    [datasource]="categoryOrganization" [selectedObject]="true"
-                    [sourceKey]="'organizationName'"
-                    [sourceValue]="'organizationName'">
-                  </app-custom-select> -->
                 </div>
               </div>
             </div>
@@ -59,8 +53,8 @@
         menuCode="ADMIN_USER" feature="add">
         <a class="btn btn-primary float-right UserAdd"
           (click)="doAddNew($event)"
-          title="Thêm mới user" style="color: #ffffff;">
-          <i class="fa far fa-user-plus" aria-hidden="true"></i>
+          title="Thêm mới user" style="color: #ffffff;" feature="add">
+          <i class="fa far fa-user-plus" aria-hidden="true" ></i>
           {{'Thêm mới' | translate}}
         </a>
       </div>
@@ -101,10 +95,6 @@
                 size="small" [checked]="employee.isLock ===false">
               </ui-switch>
             </td>
-            <!-- <div *ngIf="(users$ | async) as users"  hidden="true">
-                <div>{{users.fieldEncypt.address}}</div>
-                <div>{{users.fieldEncypt.fullName}}</div>
-              </div> -->
             <td class="LH">
               <p class="text-center LH" style="font-size: 16px;line-height:
                 2.4em;">
@@ -113,7 +103,7 @@
                   title="{{'Đặt lại mật khẩu' | translate}}"></i>
                 <i class="fa fas fa-pencil p-r-15 p-l-5" style="cursor:
                   pointer;" title="{{'Sửa' | translate}}"
-                  (click)="doEditUser(employee)" hasAuthority="Admin,Member"
+                  (click)="doEditUser(employee, users.fieldEncypt)" hasAuthority="Admin,Member"
                   menuCode="ADMIN_USER" feature="edit"
                   [createBy]="employee.createBy"></i>
                 <i class="fa fal fa-trash" title="{{'Xóa' | translate}}"
@@ -135,7 +125,7 @@
     <!-- phân trang -->
     <div class="" *ngIf="(users$ | async) as users">
       <div class="col-12 d-flex justify-content-end"
-        *ngIf="users.paging[0].totalPage> 10" style="padding: 0; margin: 8px 0 0
+        *ngIf="users.paging[0].totalPage > 10" style="padding: 0; margin: 8px 0 0
         0;">
         <ngb-pagination [collectionSize]="users.paging[0].totalPage"
           [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5"
@@ -146,10 +136,6 @@
   </app-card>
 </div>
 
-<!-- <div *ngIf="(users$ | async) as users" >
-  <div>{{users.fieldEncypt.address}}</div>
-  <div>{{users.fieldEncypt.fullName}}</div>
-</div> -->
 
 <app-modal-confirm #notifyMaxUser [identity]="'notifyMaxUser'"
   [dialogClass]="'modal-sm'" [isNotify]="true" [confirmType]="'None'"

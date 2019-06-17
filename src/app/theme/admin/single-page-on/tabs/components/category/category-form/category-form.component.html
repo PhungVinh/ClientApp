@@ -9,7 +9,7 @@
         <div class="form-group">
           <label class="form-control-label label__black_14" for="authorityName">Tên danh mục <span
               class="txt-red">*</span></label>
-          <input type="text" id="categoryName" formControlName="CategoryName" appControlTrimReactiveForm [ControlTrim]="'deep'"
+          <input type="text" id="#categoryName" #categoryNameInput formControlName="CategoryName" appControlTrimReactiveForm [ControlTrim]="'deep'"
             [ngClass]="{'form-control': true, 'is-invalid': categoryName.invalid && (categoryName.dirty || categoryName.touched)}"
             required maxlength="100">
           <small class="form-text text-danger"
@@ -54,7 +54,7 @@
             </div>
             <div style="flex: 3;">
               <div class="d-flex align-items-center" style="position: relative">
-                <label class="form-control-label label__black_14 m-0" style="width: 100px">Giá trị (*)</label>
+                <label class="form-control-label label__black_14 m-0" style="width: 100px">Giá trị (<span class="txt-red">*</span>)</label>
                 <input *ngIf="formType === 'edit'" [formControl]="search" (keyup.enter)="onSearch()" class="form-control" type="text" placeholder="Tìm kiếm" required>
                 <i *ngIf="formType === 'edit'" class="feather icon-search category_form_icon-search"></i>
               </div>
@@ -63,7 +63,7 @@
           </div>
           <hr>
           <div formArrayName="children" *ngFor="let child of children['controls']; let i=index; let last = last">
-            <div [formGroupName]="i" style="display: flex">
+            <div [formGroupName]="i" style="display: flex" [hidden]="displayControlArray(i)">
               <div style="flex: 2 0 0; padding-right: 25px">
                 <div class="form-group">
                   <select class="form-control" formControlName="ExtContent">
@@ -81,8 +81,11 @@
                       [ngClass]="{'is-invalid': child.get('CategoryName').invalid && (child.get('CategoryName').dirty || child.get('CategoryName').touched)}"
                       type="text" required maxlength="200" formControlName="CategoryName">
                     <small class="form-text text-danger"
-                      *ngIf="child.get('CategoryName').invalid && (child.get('CategoryName').dirty || child.get('CategoryName').touched)">Thông
+                      *ngIf="child.get('CategoryName').errors?.required && (child.get('CategoryName').dirty || child.get('CategoryName').touched)">Thông
                       tin không được để trống</small>
+                      <small class="form-text text-danger"
+                      *ngIf="child.get('CategoryName').errors?.notUnique && (child.get('CategoryName').dirty || child.get('CategoryName').touched)">
+                      Thông tin đã tồn tại trên hệ thống</small>
                   </div>
                   <input type="text" hidden="true" formControlName="CategoryCode">
                   <input type="text" hidden="true" formControlName="CategoryTypeCode">

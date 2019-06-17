@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="table-responsive m-t-20">
+    <div class="table-responsive m-t-20" *ngIf="(listAttrRelation$ | async) as listAttrRelation">
         <table class="table table-sm table-common">
             <thead>
                 <tr>
@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of listAttrRelation?.data; let i= index">
+                <tr *ngFor="let item of listAttrRelation.data; let i= index">
                     <td>{{(page-1) * itemsPerPage + i + 1}}</td>
                     <td class="ellipsis"><span>{{item.Name}}</span></td>
                     <td>{{item.CategoryName}}</td>
@@ -63,27 +63,29 @@
         </table>
         <div *ngIf="((listAttrRelation?.data | json) == '[]' && textSearch.length > 0)" class="text-center m-t-25">
             <b>Không có kết quả thỏa mãn điều kiện nhập</b>
-          </div>
+        </div>
     </div>
-    <!-- vinhnp -->
-    <app-modal-confirm #modalDefaultAttr [identity]="'modalDefaultAttr'"
-        [dialogClass]="'modal-sm'"
-        (onAccepted)="deleteAttrRelation()" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
-    </app-modal-confirm>
-    <!-- end -->
-
-    <div class="" *ngIf="listAttrRelation?.paging[0].TotalPage > 10">
-        <div class="col-12 d-flex justify-content-end" style="padding: 0;
-            margin: 0 0 50px;">
+  
+    <div class="" *ngIf="(listAttrRelation$ | async) as listAttrRelation">
+        <div class="col-12 d-flex justify-content-end"  style="padding: 0;
+               margin: 30px 0 0 0;"  [ngClass]="{'hide-paging' : (listAttrRelation.paging[0].TotalPage <= 10)}">
             <ngb-pagination
-                [collectionSize]="listAttrRelation?.paging[0].TotalPage"
+                [collectionSize]="listAttrRelation.paging[0].TotalPage"
                 [(page)]="page"
                 [pageSize]="itemsPerPage" [maxSize]="5"
-                [rotate]="true" [boundaryLinks]="true"
-                (pageChange)="loadPage(page)"></ngb-pagination>
+                [rotate]="true" [ellipses]="false" [boundaryLinks]="true"
+                (pageChange)="loadPage(page)">
+            </ngb-pagination>
         </div>
     </div>
 </app-card>
+  <!-- vinhnp -->
+  <app-modal-confirm #modalDefaultAttr [identity]="'modalDefaultAttr'"
+  [dialogClass]="'modal-sm'"
+  (onAccepted)="deleteAttrRelation()" [confirmMessage]="'Xóa thông tin đã chọn'" [outsizeClose]="false">
+</app-modal-confirm>
+<!-- end -->
+
 
 <!-- modal large add-->
 <form class="form" [formGroup]="attrRelationForm" (ngSubmit)="onSubmit()"
@@ -104,7 +106,7 @@
                                 class="star">*</span></label>
                         <input type="text" name="name" class="form-control"
                             formControlName="Name"  #nameConstraintsADD appControlTrimReactiveForm [ControlTrim]="'deep'"
-                            (change)="cancelValidateName()"
+                            (change)="cancelValidateName()" 
                             (keyup)="cancelValidateName()" [ControlTrim]="'deep'" [ngClass]="{'box-red':(name.invalid  && isSubmitAdd == true) || (isDuplicate && isSubmitAdd==true)}">
                         <div *ngIf="(name.invalid && (name.dirty || name.touched)) || (name.invalid && isSubmitAdd==true)">
                             <div class="messages m-t-5">
@@ -241,8 +243,8 @@
                         <label class="float-label">Kiểu hiển thị <span
                                 class="star">*</span></label>
                         <select class="form-control form-control-inverse ng-invalid"
-                            formControlName="ContraintsType">
-                            <option value="">--Chọn kiểu hiển thị--</option>
+                            formControlName="ContraintsType" name="contraintsType" [ngClass]="{'box-red':(contraintsType.invalid  && isSubmitAdd == true)}">
+                            <option value="" [selected]="true">--Chọn kiểu hiển thị--</option>
                             <option *ngFor="let item of listTypeObject"
                                 value="{{item?.CategoryCode}}">
                                 {{item.CategoryName}}

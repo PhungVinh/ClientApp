@@ -4,7 +4,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
   </div>
   <div class="modal-body">
-    <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}">
+    <!-- <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}"> -->
       <form [formGroup]="authorityForm" role="form" novalidate autocomplete="off" class='row'>
         <div class='col-12'>
           <div class="row">
@@ -12,7 +12,7 @@
               <div class="form-group">
                 <label class="form-control-label label__black_14" for="authorityName">Tên nhóm quyền <span
                     class="txt-red">*</span></label>
-                <input
+                <input #authorityNameInput
                   [ngClass]="{'form-control': true, 'is-invalid': authorityName.invalid && (authorityName.dirty || authorityName.touched)}"
                   formControlName="authorityName" type="text" required maxlength="100">
                 <small class="invalid-feedback"
@@ -44,8 +44,7 @@
                 <label class="form-control-label label__black_14">Copy nhóm quyền</label>
                 <select class="form-control" (ngModelChange)="copyAuthority($event)" [(ngModel)]="selectedAutho">
                   <option value="default"> --- Chọn nhóm quyền --- </option>
-                  <option *ngFor="let authority of allAuthority" [value]="authority.authorityId"
-                    [selected]="authority.authorityId === selectedAutho"
+                    <option *ngFor="let authority of allAuthority" [value]="authority.authorityId"
                     >
                     {{ authority.authorityName }}
                   </option>
@@ -261,7 +260,7 @@
           </div>
         </div>
       </div>
-    </perfect-scrollbar>
+    <!-- </perfect-scrollbar> -->
   </div>
 
   <div class="modal-footer">

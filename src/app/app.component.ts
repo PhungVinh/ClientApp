@@ -32,14 +32,17 @@ export class AppComponent implements OnInit {
       if (evt instanceof NavigationStart) {
         if (!this.router.navigated) { // Browser refresh handle
           const jwt = this.localStorageService.getItem(AUTH_TOKEN);
-          if (isDefined(jwt) && parseJwt(jwt).exp * 1000 - Date.now() > 0) {
+          if (isDefined(jwt)) {
+            let exp = parseJwt(jwt).exp * 1000 - Date.now();
+            exp = exp > 0 ? exp : 0;
             setTimeout(() => {
+              this.localStorageService.removeItem(AUTH_TOKEN);
               this.injector.get(Store).dispatch(new ActionAuthLogout());
-            }, parseJwt(jwt).exp * 1000 - Date.now());
+            }, exp);
           }
         }
         if (evt.restoredState) {
-          if(evt.url.startsWith('/auth/login')) {
+          if (evt.url.startsWith('/auth/login')) {
             this.store.dispatch(new ActionAuthExpired());
           }
         }

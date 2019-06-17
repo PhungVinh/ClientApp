@@ -10,7 +10,8 @@
     </div>
 
     <div class="modal-body">
-        <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}">
+        <!-- <perfect-scrollbar [style.max-height]="'calc(100vh - 350px)'" [config]="{scrollXMarginOffset: 10}"> -->
+        <perfect-scrollbar  [config]="{scrollXMarginOffset: 10}">
             <h5 class="mt-2 info-normal">{{'Thông tin cơ bản' | translate}}</h5>
             <div class="form-group row">
                 <div class="col-md-4">
@@ -252,7 +253,7 @@
                     [(ngModel)]="organizations.organizationNote" maxlength="255">
                 </textarea>
             </div>
-        </perfect-scrollbar>
+         </perfect-scrollbar>
     </div>
 
     <div class="modal-footer">

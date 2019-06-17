@@ -66,6 +66,10 @@
           </tr>
         </tbody>
       </table>
+      <div *ngIf="!((customerData$ | async) && (customerData$ | async).length)"
+        style="text-align: center;    margin-top: 10px; font-weight: bold;">
+        Không có kết quả thỏa mãn điều kiện nhập
+      </div>
     </div>
 
     <!-- <div>
@@ -79,9 +83,10 @@
     </div> -->
 
     <div *ngIf="(customerPagination$ | async) as pagination">
-      <div *ngIf="(customerData$ | async) as data" class="col-md-12 d-flex justify-content-end" style="padding: 0; margin: 0 0 50px;">
+      <div *ngIf="(customerData$ | async) as data" class="col-md-12 d-flex justify-content-end"
+        style="padding: 0; margin: 0 0 50px;">
         <ngb-pagination *ngIf="data.length > 0" [collectionSize]="pagination.TotalRecord" [page]="pagination.CurrPage"
-          [pageSize]="pagination.PageSize" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+          [ellipses]="false" [pageSize]="pagination.PageSize" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
           (pageChange)="loadPage($event)"></ngb-pagination>
       </div>
     </div>

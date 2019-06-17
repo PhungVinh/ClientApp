@@ -84,27 +84,41 @@ export class AttrRelationEffects {
         )
     );
 
+    // @Effect()
+    // deleteAttrRelations$ = => this.actions$.pipe(
+    //     ofType<DeleteAttrRelations>(AttrRelationActionTypes.DeleteAttrRelations),
+    //     exhaustMap((action: DeleteAttrRelations) => 
+    //             return this.constraintService$.deleteConstraint(action.payload.Id).pipe(
+    //                 withLatestFrom(this.store.select(state => {
+    //                      state.admin.attrRelation.param;
+    //                 } )),
+    //                 mergeMap(([data, res]) => [
+    //                     new DeleteAttrRelationsSuccess(),
+    //                     new LoadAttrRelations({
+    //                         pagination: res
+    //                     }),
+    //                 ]),
+    //                 // map(data => new UpdateAttrRelationsSuccess({data: data})),
+    //             );
+    //         }
+    //     )
+    // );
+
     @Effect()
-    deleteAttrRelations$ = this.actions$.pipe(
-        ofType(AttrRelationActionTypes.DeleteAttrRelations),
-        exhaustMap((action: DeleteAttrRelations) => {
-            console.log('efect', action.payload.Id);
-                return this.constraintService$.deleteConstraint(action.payload.Id).pipe(
-                    withLatestFrom(this.store.select(state => {
-                        console.log('goi pah trang', state.admin.attrRelation.param);
-                        return state.admin.attrRelation.param;
-                    } )),
-                    mergeMap(([data, res]) => [
-                        new DeleteAttrRelationsSuccess(),
-                        new LoadAttrRelations({
-                            pagination: res
-                        }),
-                    ]),
-                    // map(data => new UpdateAttrRelationsSuccess({data: data})),
-                );
-            }
+    deleteAttrRelations$ = () =>
+      this.actions$.pipe(
+        ofType<DeleteAttrRelations>(AttrRelationActionTypes.DeleteAttrRelations),
+        exhaustMap((action: DeleteAttrRelations) =>
+          this.constraintService$.deleteConstraint(action.payload.Id).pipe(
+            withLatestFrom(this.store.select(state => state.admin.attrRelation.param)),
+            mergeMap(([data, res]) => [
+            new DeleteAttrRelationsSuccess(),
+              new LoadAttrRelations({ pagination: res }),
+            ]),
+            // catchError(err => of(new UserUpdateFaild({ err })))
+          )
         )
-    );
+      );
 
 
     constructor(private actions$: Actions, private constraintService$: ConstraintsService, public store: Store<State>) {

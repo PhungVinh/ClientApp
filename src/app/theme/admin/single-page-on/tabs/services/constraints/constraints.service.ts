@@ -29,6 +29,6 @@ export class ConstraintsService {
 
   deleteConstraint(Id: any): Observable<any> {
     console.log('service', Id);
-    return this.http.delete<any>(`${environment.serverApi}/${API_ATTRIBUTE_PUT_DELETE_CONSTRAINT}`, { params: { Id } });
+    return this.http.delete<any>(`${environment.serverApi}/${API_ATTRIBUTE_PUT_DELETE_CONSTRAINT}`, { params: { Id: Id } });
   }
 }

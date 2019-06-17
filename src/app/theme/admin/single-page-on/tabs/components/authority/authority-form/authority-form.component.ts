@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import {
@@ -60,6 +60,7 @@ export class AuthorityAddComponent implements OnInit {
   public formSubmitAttempt: boolean;
   @Input() authority: Authority;
   @ViewChild('modalDefault') modalDefault: ModalConfirmComponent;
+  @ViewChild('authorityNameInput') authorityNameInput: ElementRef;
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store<any>,
@@ -115,8 +116,12 @@ export class AuthorityAddComponent implements OnInit {
   validateForm() {
     if (this.authorityName.hasError('required')) {
       this.errorMsgs.authorityName = "Thông tin không được để trống";
+      if (this.authorityName.touched) {
+        this.authorityNameInput.nativeElement.focus();
+      }
     } else if (this.authorityName.hasError('notUnique')) {
       this.errorMsgs.authorityName = "Thông tin đã tồn tại trên hệ thống";
+      this.authorityNameInput.nativeElement.focus();
     } else {
       this.errorMsgs.authorityName = "";
     }
@@ -220,6 +225,7 @@ export class AuthorityAddComponent implements OnInit {
           this.authorityName.setErrors({ notUnique: true });
           if (this.authorityName.hasError('notUnique')) {
             this.errorMsgs.authorityName = "Thông tin đã tồn tại trên hệ thống";
+            this.authorityNameInput.nativeElement.focus();
           } else {
             this.errorMsgs.authorityName = "";
           }

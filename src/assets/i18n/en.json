@@ -1,8 +1,4 @@
 {
-  "common": {
-    "searchno": "Không có kết quả thõa mãn điều kiện nhập"
-  }
-,
     "global": {
         "title": "Crm",
         "browsehappy": "Bạn đang sử dụng một trình duyệt <strong>quá cũ</strong>. Vui lòng <a href=\"http://browsehappy.com/?locale=en\">nâng cấp trình duyệt</a> của bạn để có trải nghiệm tốt nhất.",
@@ -141,6 +137,10 @@
         "idnull": "Invalid ID"
     },
     "footer": "Đây là chân trang của bạn"
+,
+  "common": {
+    "searchno": "Không có kết quả thõa mãn điều kiện nhập"
+  }
 ,
     "login": {
         "title": "Đăng nhập",

@@ -185,12 +185,12 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   // poup nút sửa user
-  doEditUser = (item: User) => {
+  doEditUser = (item: User, fieldEncypt: any) => {
     const modalRef = this.modalService.open(UserNewComponent as Component, { size: "lg", backdrop: 'static', container: '.tab-user' });
     const user = Object.assign({}, item);
     modalRef.componentInstance.users = user;
-    // modalRef.componentInstance.fieldEncypt
-    console.log('jksf', item)
+    modalRef.componentInstance.fieldEncypt = fieldEncypt;
+    console.log('fieldEncypt', fieldEncypt)
   }
 
   // poup nút xóa

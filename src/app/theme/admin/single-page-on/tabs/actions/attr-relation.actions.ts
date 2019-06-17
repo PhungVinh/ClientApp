@@ -16,17 +16,17 @@ export enum AttrRelationActionTypes {
 
 export class LoadAttrRelations implements Action {
   readonly type = AttrRelationActionTypes.LoadAttrRelations;
-    constructor(public payload: {pagination: Pagination}) {}
+    constructor(readonly payload: {pagination: Pagination}) {}
 }
 
 export class LoadAttrRelationsSuccess implements Action {
     readonly type = AttrRelationActionTypes.LoadAttrRelationsSuccess;
-    constructor(public payload: {data: any, pagination: Pagination}) {}
+    constructor(readonly payload: {data: any, pagination: Pagination}) {}
 }
 
 export class AddAttrRelations implements Action {
     readonly type = AttrRelationActionTypes.AddAttrRelations;
-    constructor(public payload: {data: any}) {}
+    constructor(readonly payload: {data: any}) {}
 }
 
 export class AddAttrRelationsSuccess implements Action {
@@ -56,7 +56,7 @@ export class UpdateAttrRelationsFailed  implements Action {
 
 export class DeleteAttrRelations implements Action {
     readonly type = AttrRelationActionTypes.DeleteAttrRelations;
-    constructor(public payload: {Id: number}) {}
+    constructor(readonly payload: {Id: number}) {}
 }
 
 export class DeleteAttrRelationsSuccess implements Action {

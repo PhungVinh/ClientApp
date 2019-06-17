@@ -1,5 +1,5 @@
 <form name="editCustomerForm" role="form" novalidate (ngSubmit)="onSave($event)" #elRefForm #editCustomerForm="ngForm"
-  [class.ng-submitted]="editCustomerForm.submitted" autocomplete="off">
+  [class.ng-submitted]="editCustomerForm.submitted || isContinue" autocomplete="off">
   <div class="modal-header">
     <h4 class="modal-title">{{ (recordId ? 'Cập nhật thông tin khách hàng' : 'Thêm mới khách hàng') | translate}}</h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">
@@ -22,22 +22,23 @@
               <!-- Field with textarea type -->
               <textarea *ngIf="child.AttributeType == 'TEXTAREA'" [ControlTrim]="'deep'" class="form-control" [name]="child.AttributeCode"
                 [disabled]="child.IsReuse" [(ngModel)]="child.DefaultValueWithTextBox"></textarea>
+
               <!-- Field with checkbox type -->
-              <div *ngIf="child.AttributeType == 'CHECKBOX'" class="border-checkbox-section">
+              <div *ngIf="child.AttributeType == 'CHECKBOX' && !child?.ListCategory?.length" class="border-checkbox-section">
                 <div class="border-checkbox-group border-checkbox-group-primary">
-                  <input class="border-checkbox" type="checkbox" id="checkbox" [disabled]="child.IsReuse">
-                  <label class="border-checkbox-label" for="checkbox">{{child.AttributeLabel}}</label>
+                  <input class="border-checkbox" type="checkbox" id="checkbox{{child.AttributeCode}}" [name]="child.AttributeCode" [(ngModel)]="child.DefaultValue" [disabled]="child.IsReuse">
+                  <label class="border-checkbox-label" for="checkbox{{child.AttributeCode}}">{{child.AttributeLabel}}</label>
                 </div>
               </div>
               <!-- Field with list checkbox type -->
-              <div *ngIf="child.AttributeType == 'LISTCHECKBOX'" class="border-checkbox-section">
+              <div *ngIf="child.AttributeType == 'CHECKBOX' && child?.ListCategory?.length" class="border-checkbox-section">
                 <div *ngFor="let val of child?.ListCategory; let i = index"
                   class="border-checkbox-group border-checkbox-group-primary">
-                  <input class="border-checkbox" type="checkbox" id="checkbox{{i}}" [disabled]="child.IsReuse"
+                  <input class="border-checkbox" type="checkbox" id="checkbox{{val?.CategoryCode + i}}" [disabled]="child.IsReuse"
                     [value]="val?.CategoryCode" checked
                     [checked]="isBufferredContain(val.CategoryCode, child.DefaultValue)"
                     (change)="child.DefaultValue = updateSelectedListCheckbox($event, val.CategoryCode, child.DefaultValue)">
-                  <label class="border-checkbox-label" for="checkbox{{i}}">{{val?.CategoryName}}</label>
+                  <label class="border-checkbox-label" for="checkbox{{val?.CategoryCode + i}}">{{val?.CategoryName}}</label>
                 </div>
                 <input class="form-control input-md" [name]="child.AttributeCode" [(ngModel)]="child.DefaultValue"
                   [required]="child.IsRequired" type="hidden">

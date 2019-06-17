@@ -15,7 +15,8 @@ import {
     selectCategory,
     selectConstraintsById,
     selectConstraintsPagi,
-    selectError
+    selectError,
+    selectConstraints
 } from '../../selectors/constraints.selector';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TypeObjectService } from '../../services/typeObject/type-object.service';
@@ -26,6 +27,8 @@ import { ConstraintsService } from '../../services/constraints/constraints.servi
 import { ModalDirective } from 'angular-bootstrap-md';
 import { ModalConfirmComponent } from 'src/app/shared/modal-confirm/modal-confirm.component';
 import { Key } from 'selenium-webdriver';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppState } from 'src/app/core/core.state';
 
 @Component({
     selector: 'app-attr-relation',
@@ -44,7 +47,8 @@ export class AttrRelationComponent implements OnInit {
     @ViewChild("nameConstraintsEDIT") nameFielEdit: ElementRef;
     
 
-    public listAttrRelation: { data?: any; paging?: any; };
+    // public listAttrRelation: { data?: any; paging?: any; };
+    listAttrRelation$: Observable<any>;
     public listTypeObject: any[];
     public selectCategory$: Observable<any[]>;
     public selectCategoryChild$: Observable<any[]>;
@@ -58,7 +62,7 @@ export class AttrRelationComponent implements OnInit {
     public isSubmitAdd = false;
     public isSubmitEdit = false;
     public isDuplicate = false;
-    page;
+    page: any;
     itemsPerPage = ITEMS_PER_PAGE;
     previousPage: any;
 
@@ -76,7 +80,14 @@ export class AttrRelationComponent implements OnInit {
         ContraintsValue: new FormControl(''),
     });
 
-    constructor(private store: Store<State>, private typeObjService: TypeObjectService, private constraintsService: ConstraintsService) {
+    constructor(
+        private store: Store<State>, 
+        private typeObjService: TypeObjectService, 
+        private constraintsService: ConstraintsService,
+        public actRoute: ActivatedRoute,
+        public router: Router,
+        public appStore: Store<AppState>,
+        ) {
         this.previousPage = 1;
         this.page = 1;
     }
@@ -94,21 +105,30 @@ export class AttrRelationComponent implements OnInit {
         this.store.dispatch(new LoadCategoryChildLink());
         this.getAllTypeShow();
         this.getAllCate();
-        this.store.dispatch(new LoadAttrRelations({
-            pagination: {
-                TextSearch: this.textSearch,
-                currPage: this.page,
-                recodperpage: this.itemsPerPage
-            }
-        }));
+        // this.store.dispatch(new LoadAttrRelations({
+        //     pagination: {
+        //         TextSearch: this.textSearch,
+        //         currPage: this.page,
+        //         recodperpage: this.itemsPerPage
+        //     }
+        // }));
+        this.listAttrRelation$ = this.store.pipe(select(selectConstraintsPagi));
+        console.log('dsfdsf', this.listAttrRelation$);
         this.getAllAttrRrelation();
     }
 
     getAllAttrRrelation() {
-        this.store.pipe(select(selectConstraintsPagi)).subscribe(data => {
-            this.listAttrRelation = data;
-            console.log('data', data);
-        });
+        // this.store.pipe(select(selectConstraintsPagi)).subscribe(data => {
+        //     this.listAttrRelation = data;
+        //     console.log('data', data);
+        // });
+        this.store.dispatch(new LoadAttrRelations({
+            pagination: {
+              TextSearch: this.textSearch,
+              currPage: this.page,
+              recodperpage: this.itemsPerPage
+            }
+          }));
     }
 
     onSubmit() {
@@ -116,6 +136,9 @@ export class AttrRelationComponent implements OnInit {
         this.page = 1;
         if (this.name.valid && this.contraintsType.valid && this.isDuplicate === false) {
             this.addAttrRelation();
+        }
+        else  if(this.name.invalid){
+            this.nameFieldADD.nativeElement.focus();
         }
     }
 
@@ -132,20 +155,19 @@ export class AttrRelationComponent implements OnInit {
                 ContraintsValue: '0',
             });
             this.getAllAttrRrelation();
-            this.store.dispatch(new LoadAttrRelations({
-                pagination: {
-                    TextSearch: this.textSearch,
-                    currPage: 1,
-                    recodperpage: this.itemsPerPage
-                }
-            }));
+            // this.store.dispatch(new LoadAttrRelations({
+            //     pagination: {
+            //         TextSearch: this.textSearch,
+            //         currPage: 1,
+            //         recodperpage: this.itemsPerPage
+            //     }
+            // }));
             this.isSubmitAdd = false;
             if (!this.isDuplicate) {
                 this.resetForm();
             }
             this.isDuplicate = false;
             this.modalLarge.hide();
-            this.nameFieldADD.nativeElement.focus();
         },
             (error) => {
                 this.isDuplicate = true;
@@ -260,17 +282,8 @@ export class AttrRelationComponent implements OnInit {
 
     deleteAttrRelation() {
         console.log('id', this.AttrRelationDeleteId);
-        this.constraintsService.deleteConstraint(this.AttrRelationDeleteId).subscribe(data => {
-            this.store.dispatch(new LoadAttrRelations({
-                pagination: {
-                    TextSearch: this.textSearch,
-                    currPage: this.page,
-                    recodperpage: this.itemsPerPage
-                }
-            }));
-        });
-        // this.store.dispatch(new DeleteAttrRelations({ Id: Number(this.AttrRelationDeleteId) }));
-        // (document.getElementById('cancelModalDelete') as HTMLElement).click();
+            this.store.dispatch(new DeleteAttrRelations({ Id: Number(this.AttrRelationDeleteId) }));
+        
     }
 
     resetForm() {

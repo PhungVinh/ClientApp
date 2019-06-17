@@ -7,6 +7,7 @@ import { selectCategory, selectErrorCategory } from '../../../selectors/category
 import { PER_PAGE } from 'src/app/shared/constants/authority.constants';
 import { FormControl } from '@angular/forms';
 import { ModalConfirmComponent } from 'src/app/shared/modal-confirm/modal-confirm.component';
+import { moduleDef } from '@angular/core/src/view';
 
 @Component({
   selector: 'app-category',

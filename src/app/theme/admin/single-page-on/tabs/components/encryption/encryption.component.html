@@ -61,7 +61,7 @@
           <h6>{{'Danh sách thông tin mã hóa' | translate}}</h6>
           <span>
             <!--{{'Thực hiện mã hóa và giai mã lúc' | translate}}: {{ showEncryptTime() | async }}-->
-             {{'Thực hiện mã hóa và giải mã lúc' | translate}}: 01 giờ 00 phút 00 giây
+             {{'Thực hiện mã hóa và giải mã lúc' | translate}}: {{timeEncryption | date : 'HH'}} giờ {{timeEncryption | date : 'mm'}} phút {{timeEncryption | date : 'ss'}} giây
           </span>
         </div>
         <!-- Table data -->

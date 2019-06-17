@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -32,7 +32,7 @@ export class CategoryFormComponent implements OnInit {
   readonly errorMsgs = {
     categoryName: ''
   };
-  oldChild: any;
+  private txtSearch: String = '';
   validationMessages = {
     'CategoryName': {
       'required': 'Thông tin không được để trống'
@@ -41,11 +41,11 @@ export class CategoryFormComponent implements OnInit {
   @Input() formType: String
   @ViewChild('modalDefault') modalDefault: ModalConfirmComponent;
   @ViewChild('modalIgnore') modalIgnore: ModalConfirmComponent;
+  @ViewChild('categoryNameInput') categoryNameInput: ElementRef;
   constructor(
     private _formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
-    public store: Store<any>,
-    private renderer: Renderer2
+    public store: Store<any>
   ) { }
 
   ngOnInit() {
@@ -56,7 +56,7 @@ export class CategoryFormComponent implements OnInit {
     this.categoryEdit$ = this.store.pipe(select(state => {
       return state.admin.category.categoryEdit
     }));
-    
+
     this.load$ = this.store.pipe(select(state => state.admin.category.loading));
     this.search = new FormControl('');
     this.categoryForm = this._formBuilder.group({
@@ -68,13 +68,8 @@ export class CategoryFormComponent implements OnInit {
       ])
     });
     this.oldForm = this.categoryForm.value;
-    this.categoryParent.valueChanges.pipe(distinctUntilChanged()).subscribe((CategoryCode) => {
-      console.log('CategoryCode', CategoryCode);
+    this.categoryParent.valueChanges.pipe(distinctUntilChanged()).subscribe((CategoryCode) => {;
       if (CategoryCode) {
-        // this.children['controls'].forEach(control => {
-        //   control.enable();
-        // })
-        console.log('value ExtContent', this.categoryForm.get('children').value)
         this.categoryChildren$ = this.store.pipe(select(state => {
           return state.admin.category.categoryChildren.filter(cate => cate.CategoryTypeCode === CategoryCode);
         }));
@@ -87,11 +82,38 @@ export class CategoryFormComponent implements OnInit {
     });
   }
 
-
+  validateFormArray() {
+    this.children['controls'].forEach((child, index) => {
+      child.get('CategoryName').markAsDirty();
+      child.get('CategoryName').markAsTouched();
+      const formArray = this.children.controls[index] as FormArray;
+      const listChilren = this.children.value.map((value) => {
+        return {
+          ExtContent: value.ExtContent,
+          CategoryName: value.CategoryName
+        };
+      });
+      const currentChild = {
+        ExtContent: this.children.controls[index].value.ExtContent,
+        CategoryName: this.children.controls[index].value.CategoryName
+      };
+      const numberChildDuplicate = listChilren.filter(value => {
+        return _.isEqual(value, currentChild);
+      });
+      if (formArray.controls['CategoryName'].value.trim() && numberChildDuplicate.length >= 2) {
+        formArray.controls['CategoryName'].setErrors({ notUnique: true });
+      } else {
+        formArray.controls['CategoryName'].setErrors({ notUnique: false });
+        formArray.controls['CategoryName'].updateValueAndValidity();
+      }
+    });
+  }
   validateForm() {
     if (this.categoryName.hasError('required')) {
+      
+      // console.log('this.categoryNameInput', this.categoryNameInput);
       this.errorMsgs.categoryName = "Thông tin không được để trống";
-      // this.renderer.selectRootElement('#categoryName').focus();
+      this.categoryNameInput.nativeElement.focus();
     } else {
       this.errorMsgs.categoryName = "";
     }
@@ -104,7 +126,7 @@ export class CategoryFormComponent implements OnInit {
   openClose() {
     const compareForm = _.isEqual(this.oldForm, this.categoryForm.value);
     if (this.categoryForm.pristine || compareForm) {
-       this.clear();
+      this.clear();
     } else {
       this.modalDefault.showReference();
     }
@@ -120,7 +142,6 @@ export class CategoryFormComponent implements OnInit {
   getCategory() {
     this.categoryEdit$.subscribe((cate) => {
       this.categoryEdit = cate;
-      console.log('this.categoryEdit', this.categoryEdit)
       if (this.formType === 'edit' && Object.keys(cate).length !== 0) {
         this.editCategory(cate)
       }
@@ -135,7 +156,6 @@ export class CategoryFormComponent implements OnInit {
     });
     this.categoryForm.setControl('children', this.setExistingChildren(category.children));
     this.oldForm = this.categoryForm.value;
-    this.oldChild = this.children.value;
   }
 
   setExistingChildren(categorySets): FormArray {
@@ -154,16 +174,16 @@ export class CategoryFormComponent implements OnInit {
 
   validateDuplicateName() {
     this.store.select(selectErrorCategory).subscribe((errors) => {
-      console.log('errors', errors);
       if (errors) {
         if (errors.errorKey && errors.errorKey.endsWith('titleexists')) {
           this.categoryName.setErrors({ notUnique: true });
           if (this.categoryName.hasError('notUnique')) {
             this.errorMsgs.categoryName = "Thông tin đã tồn tại trên hệ thống";
+            this.categoryNameInput.nativeElement.focus();
           } else {
             this.errorMsgs.categoryName = "";
           }
-        }   
+        }
       }
     });
   }
@@ -180,14 +200,13 @@ export class CategoryFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.validateFormArray();
     if (this.categoryForm.invalid) {
+      console.log('invalid form', this.categoryForm);
       this.categoryName.markAsTouched();
-      this.children['controls'].forEach(child => {
-        console.log('child', child);
-        child.markAsTouched();
-      });
       this.validateForm();
     } else {
+      console.log('valid form');
       if (this.formType !== 'edit') {
         this.save();
       } else {
@@ -205,13 +224,13 @@ export class CategoryFormComponent implements OnInit {
         CategoryTypeCode: value.ExtContent
       }
     });
-    const body =  {
+    const body = {
       CategoryDescription: CategoryDescription,
       CategoryName: CategoryName,
       CategoryTypeCode: CategoryTypeCode,
-      children: [ ...children]
+      children: [...children]
     };
-    this.store.dispatch(new AddCategory({body: body}));
+    this.store.dispatch(new AddCategory({ body: body }));
     this.load$.subscribe(load => {
       if (!load) {
         this.clear();
@@ -228,15 +247,15 @@ export class CategoryFormComponent implements OnInit {
         CategoryTypeCode: value.ExtContent,
       }
     });
-    const body =  {
+    const body = {
       CategoryCode: this.categoryEdit.categoryCode,
       CategoryDescription: CategoryDescription,
       CategoryName: CategoryName,
       CategoryTypeCode: CategoryTypeCode,
-      children: [ ...children],
+      children: [...children],
       deleteCategory: this.deleteCategory
     };
-    this.store.dispatch(new UpdateCategory({category: body}))
+    this.store.dispatch(new UpdateCategory({ category: body }))
     this.load$.subscribe(load => {
       if (!load) {
         this.clear();
@@ -247,7 +266,6 @@ export class CategoryFormComponent implements OnInit {
 
   addChildrenButtonClick(): void {
     (<FormArray>this.children).push(this.addChildrenFormGroup());
-    this.oldChild = this.children.value;
   }
 
   removeChildrenButtonClick(childrenGroupIndex: number, categoryCode: String, isCheck: Boolean): void {
@@ -255,24 +273,17 @@ export class CategoryFormComponent implements OnInit {
     if (isCheck) {
       this.modalIgnore.showReference();
     } else {
+      console.log(childrenGroupIndex);
       this.deleteCategory = [...this.deleteCategory, { CategoryCode: categoryCode }];
       const childrenFormArray = <FormArray>this.children;
       (<FormArray>this.children).removeAt(childrenGroupIndex);
+      console.log(this.children);
       childrenFormArray.markAsDirty();
       childrenFormArray.markAsTouched();
-      this.oldChild = this.children.value;
     }
   }
 
   addChildrenFormGroup(): FormGroup {
-    // if (this.categoryParent.value) {
-    //   return this._formBuilder.group({
-    //     CategoryTypeCode: [''],
-    //     CategoryName: ['', Validators.required],
-    //     CategoryCode: [''],
-    //     ExtContent: [{ value: '' }]
-    //   });
-    // }
     return this._formBuilder.group({
       CategoryTypeCode: [''],
       CategoryName: ['', Validators.required],
@@ -283,27 +294,20 @@ export class CategoryFormComponent implements OnInit {
   }
 
   onSearch() {
-    const listChild = this.oldChild.filter((child) => {
-      return child.CategoryName.includes((this.search.value));
-    });
-    console.log(this.oldChild);
-    const formArray = new FormArray([]);
-    listChild.forEach(c => {
-      formArray.push(this._formBuilder.group({
-        CategoryTypeCode: c.CategoryTypeCode,
-        CategoryName: c.CategoryName,
-        CategoryCode: c.CategoryCode,
-        ExtContent: c.ExtContent,
-      }));
-    });
-    this.categoryForm.setControl('children', formArray);
+    this.txtSearch = this.search.value;
+  }
+
+  displayControlArray(i) {
+    const formArray = this.children.controls[i] as FormArray;
+    let display = formArray.controls['CategoryName'].value.includes(this.txtSearch);
+    return !display;
   }
   get categoryParent() {
     return this.categoryForm.get('CategoryTypeCode');
   }
 
   get children() {
-    return this.categoryForm.get('children');
+    return this.categoryForm.get('children') as FormArray;
   }
 
   get categoryName() {
