@@ -22,6 +22,7 @@ import {AUTH_TOKEN} from '../../../../../../core/auth/auth.constants';
 import {LocalStorageService} from '../../../../../../core/local-storage/local-storage.service';
 import jwtDecode from 'jwt-decode';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -66,7 +67,7 @@ export class ProfileComponent implements OnInit {
   constructor(
       public store: Store<AppState>,
       public parserFormatter: NgbDateParserFormatter,
-      private localStorage: LocalStorageService
+      private localStorage: LocalStorageService,
   ) {
   }
 
@@ -87,12 +88,12 @@ export class ProfileComponent implements OnInit {
       this.store.dispatch(new ActionFetchAccount());
       this.store.pipe(select(selectAccount)).subscribe(data => {
           this.account =  Object.assign({}, data);
-
           if (this.account && this.account.avatar) {
-              this.avatar = this.resourceAPI + this.account.avatar;
+              this.avatar = this.resourceAPI + this.account.avatar + '?rnd=' + Math.random();
                 console.log('avatar', this.avatar);
+              // location.reload(true);
               // this.store.dispatch(new GetLinkImage({fileName: this.account.avatar}));
-              // this.store.pipe(select(selectGetLinkImage)).subscribe(res => {
+              // this.store.pipe(select(seleccavartGetLinkImage)).subscribe(res => {
               //     console.log('link anh', res);
               //     if (res) {
               //         this.avatar = 'data:image/jpg;base64,' + res.data;

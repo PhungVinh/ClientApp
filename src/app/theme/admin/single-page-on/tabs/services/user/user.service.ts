@@ -13,7 +13,6 @@ export class UserService {
 
   //get list user
   fetch(req): Observable<any> {
-    console.log('vao day');
     return this.http.get<any>(`${environment.serverApi}/${API_ACCOUNT_GET_USER_LIST}`, { params: req });
   }
   //get user

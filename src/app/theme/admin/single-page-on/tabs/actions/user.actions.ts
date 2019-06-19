@@ -1,19 +1,19 @@
 import { Action } from '@ngrx/store';
 import { Pagination } from '../../../../../shared/model/pagination.model';
-import { User } from '../../../../../shared/model/user.model';
-import { AuthActionTypes } from "../../../../../core/auth/auth.actions";
 
 export enum UserActionTypes {
   LoadUsers = '[User] Load Users',
   LoadUserSuccess = '[User] Load User success',
   LoadUserFaild = '[User] Load User Faild',
   UserCreate = '[User] User Create',
-  UserCreateSuccess = '[User] User Create Success',
-  UserCreateFaild = '[User] User Create Faild',
   UserUpdate = '[User] User Update',
   UserDelete = '[User] User Delete',
+  UserCreateSuccess = '[User] User Create Success',
   UserUpdateSuccess = '[User] User Update Success',
+  UserDeleteSuccess = '[User] User Delete Success',
+  UserCreateFaild = '[User] User Create Faild',
   UserUpdateFaild = '[User] User Update Faild',
+  UserDeleteFaild = '[User] User Delete Faild',
   UserPagination = '[user] User pagination',
   ListUserByAuthorityId = '[User] List User by authority Id',
   ListUserByAuthorityIdSuccess = '[User] List User by authority success',
@@ -79,7 +79,7 @@ export class UserCreate implements Action {
 
 export class UserCreateSuccess implements Action {
   readonly type = UserActionTypes.UserCreateSuccess;
-  constructor(readonly payload: { data: boolean }) { }
+  constructor(readonly payload: { res: any; param?: any }) { }
 }
 
 export class UserCreateFaild implements Action {
@@ -92,18 +92,28 @@ export class UserUpdate implements Action {
   constructor(readonly payload: { user: any }) { }
 }
 
+export class UserUpdateSuccess implements Action {
+  readonly type = UserActionTypes.UserUpdateSuccess;
+  constructor(readonly payload: { res: any; param?: any }) { }
+}
+
+export class UserUpdateFaild implements Action {
+  readonly type = UserActionTypes.UserUpdateFaild;
+  constructor(readonly payload: { err: any }) { }
+}
+
 export class UserDelete implements Action {
   readonly type = UserActionTypes.UserDelete;
   constructor(readonly payload: { userId: number }) { }
 }
 
-export class UserUpdateSuccess implements Action {
-  readonly type = UserActionTypes.UserUpdateSuccess;
-  constructor(readonly payload: { data: boolean }) { }
+export class UserDeleteSuccess implements Action {
+  readonly type = UserActionTypes.UserDeleteSuccess;
+  constructor(readonly payload: { res: any; param?: any }) { }
 }
 
-export class UserUpdateFaild implements Action {
-  readonly type = UserActionTypes.UserUpdateFaild;
+export class UserDeleteFaild implements Action {
+  readonly type = UserActionTypes.UserDeleteFaild;
   constructor(readonly payload: { err: any }) { }
 }
 
@@ -174,17 +184,17 @@ export class UserClearError implements Action {
 
 export class UserServicePack implements Action {
   readonly type = UserActionTypes.UserServicePack;
-  constructor(readonly payload: { userId: any }) {}
+  constructor(readonly payload: { userId: any }) { }
 }
 
 export class UserServicePackSuccess implements Action {
   readonly type = UserActionTypes.UserServicePackSuccess;
-  constructor(readonly payload: {data: any}) {}
+  constructor(readonly payload: { data: any }) { }
 }
 
-export class UserServicePackFaild  implements Action {
+export class UserServicePackFaild implements Action {
   readonly type = UserActionTypes.UserServicePackFaild;
-  constructor(readonly payload: {err: any}) {}
+  constructor(readonly payload: { err: any }) { }
 }
 
 
@@ -195,12 +205,14 @@ export type UserActions = LoadUsers
   | LoadUserByIdFaild
   | LoadUserByIdSuccess
   | UserCreate
-  | UserCreateSuccess
-  | UserCreateFaild
   | UserUpdate
   | UserDelete
+  | UserCreateSuccess
   | UserUpdateSuccess
+  | UserDeleteSuccess
+  | UserCreateFaild
   | UserUpdateFaild
+  | UserDeleteFaild
   | UserPagination
   | ListUserByAuthorityId
   | ListUserByAuthorityIdSuccess

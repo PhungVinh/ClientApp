@@ -61,7 +61,7 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
             // do something
           }
           // reload data from list screen
-          this.store.dispatch(new LoadCims({ pagination: { currPage: 1, recodperpage: ITEMS_PER_PAGE } }));
+          // this.store.dispatch(new LoadCims({ pagination: { currPage: 1, recordperpage: ITEMS_PER_PAGE } }));
           break;
         case CustomerActionTypes.CreateCustomerFaild:
         case CustomerActionTypes.UpdateCustomerFaild:
@@ -80,13 +80,13 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
                         // set error to update status of error FormControl
                         this.editCustomerForm.controls[focusError.field].setErrors({ required: true });
                         // set focus to error FormControl
-                        setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[ng-reflect-name=${focusError.field}]`)).focus(), 0)
+                        setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[id=editCustomerForm${focusError.field}]`)).focus(), 0)
                       }
                       break;
                     case 'NotDuplicate': // handle errors with type not unique
                       if (isDefined(this.editCustomerForm) && isDefined(this.editCustomerForm.controls) && isDefined(this.editCustomerForm.controls[focusError.field])) {
                         this.editCustomerForm.controls[focusError.field].setErrors({ notUnique: true });
-                        setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[ng-reflect-name=${focusError.field}]`)).focus(), 0)
+                        setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[id=editCustomerForm${focusError.field}]`)).focus(), 0)
                       }
                       break;
                   }
@@ -243,7 +243,7 @@ export class CimsUpdateComponent implements OnInit, OnDestroy {
     } else {
       // set focus to first error control
       const firstErrorKey = Object.keys(this.editCustomerForm.controls).find(k => isDefined(this.editCustomerForm.controls[k]) && this.editCustomerForm.controls[k].invalid);
-      setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[ng-reflect-name=${firstErrorKey}]`)).focus(), 0);
+      setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[id=editCustomerForm${firstErrorKey}]`)).focus(), 0);
     }
   }
 

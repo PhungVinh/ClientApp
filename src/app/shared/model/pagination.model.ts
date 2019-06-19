@@ -4,9 +4,10 @@ export interface Pagination {
     TextSearch?: string;
     IsActive?: number;
     currPage?: number;
-    recodperpage?: number;
+    CurrPage?: number;
+    recordperpage?: number;
+    recodperpage? : number;
     // searchUser
     orgCode?:string;
-    CurrPage?:number;
-    Record?:number;
+    
 }

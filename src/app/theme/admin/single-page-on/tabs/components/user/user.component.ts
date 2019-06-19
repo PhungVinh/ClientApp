@@ -1,32 +1,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { NgbCalendar, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { select, Store } from '@ngrx/store';
-import * as jwt_decode from 'jwt-decode';
-import { Observable, Subscription } from 'rxjs';
+import { ActionsSubject, select, Store } from '@ngrx/store';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ActionDestroyTabArgs } from 'src/app/core/auth/auth.actions';
-import { AUTH_TOKEN } from 'src/app/core/auth/auth.constants';
 import { selectTabArgs } from 'src/app/core/auth/auth.selectors';
 import { AppState } from 'src/app/core/core.state';
-import { LocalStorageService } from 'src/app/core/local-storage/local-storage.service';
+import { CustomSelectComponent } from 'src/app/shared/custom-select/custom-select.component';
+import { ModalConfirmComponent } from 'src/app/shared/modal-confirm/modal-confirm.component';
+import { Pagination } from 'src/app/shared/model/pagination.model';
+import { isDefinedProp } from 'src/app/shared/util/common.util';
 import { ITEMS_PER_PAGE } from '../../../../../../shared/constants/pagination.constants';
 import { User } from '../../../../../../shared/model/user.model';
 import { State } from '../../../../admin.state';
-import { LoadCategoryDepartments } from '../../actions/category-department.actions';
 import { LoadCategoryOrganizations } from '../../actions/category-organization.actions';
-import { LoadUsers, ResetPasswordUser, UserAuthorityPackById, UserClearError } from '../../actions/user.actions';
+import { LoadUsers, ResetPasswordUser, UserActionTypes, UserClearError, UserDelete } from '../../actions/user.actions';
 import { selectCategoryOrganization } from '../../selectors/category-organization.selectors';
-import { selectUser, selectError, selectResetPassword } from '../../selectors/user.selectors.';
+import { selectError, selectUser } from '../../selectors/user.selectors.';
 import { UserService } from '../../services/user/user.service';
-import { ResetComponent } from "./reset/reset.component";
-import { UserDeleteComponent } from './user-delete/user-delete.component';
 import { UserNewComponent } from './user-new/user-new.component';
-import { ModalConfirmComponent } from 'src/app/shared/modal-confirm/modal-confirm.component';
-import { environment } from '@env/environment';
-import { UserDelete } from '../../actions/user.actions';
-import { CustomSelectComponent } from 'src/app/shared/custom-select/custom-select.component';
-
 
 @Component({
   selector: 'app-user',
@@ -34,39 +29,28 @@ import { CustomSelectComponent } from 'src/app/shared/custom-select/custom-selec
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
-  @ViewChild('modalConfirm') modalConfirm: ModalConfirmComponent;
-  @ViewChild('notifyMaxUser') notifyMaxUser: ModalConfirmComponent;
-  @ViewChild('modalDefault') modalDefault: ModalConfirmComponent;
-  @ViewChild('CustomSelectComponent') CustomSelectComponent: CustomSelectComponent;
-  public selectUser$: any;
+  selectUser$: any;
   employeeData: any = {};
-
-
   Employee: any = [];
   searchText: any;
-  public userDetial: any = [];
-
+  userDetial: any = [];
   categoryDepartment$: Observable<any>;
-
   totalItems: any;
-  page: any;
+  page: any = 1;
   itemsPerPage = ITEMS_PER_PAGE;
-
-  TamPerPage: any;
   previousPage: any;
   users$: Observable<any>;
   eventSubscriber: Subscription;
-  fieldEncypt : any [];
+  fieldEncrypt: any[];
 
   // 09/04/19
   TextSearch = '';
-  IsActive: any;
+  IsActive: any = 0;
 
   TextSearchOrganizations = '';
   IsActiveOrganizations: any;
-  pageorganization: any;
 
-  orgCode: any;
+  orgCode: any = '';
   OurrPage: any;
   Record: any;
 
@@ -76,9 +60,20 @@ export class UserComponent implements OnInit, OnDestroy {
   fromDateTemp: any;
   toDateTemp: any;
   resourceApi = `${environment.serverResource}/Account/`;
+
+  // maintained by daibh
+  subscription: Subject<void> = new Subject();
+  trackAction = [
+    UserActionTypes.UserCreateSuccess,
+    UserActionTypes.UserUpdateSuccess,
+    UserActionTypes.UserDelete
+  ];
+
+  @ViewChild('modalConfirm') modalConfirm: ModalConfirmComponent;
+  @ViewChild('notifyMaxUser') notifyMaxUser: ModalConfirmComponent;
+  @ViewChild('modalDefault') modalDefault: ModalConfirmComponent;
+  @ViewChild('CustomSelectComponent') CustomSelectComponent: CustomSelectComponent;
   @ViewChild('modalConfirmReset') modalConfirmReset: ModalConfirmComponent;
-
-
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
@@ -89,25 +84,44 @@ export class UserComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     public calendar: NgbCalendar,
     public parserFormatter: NgbDateParserFormatter,
-    private localStorage: LocalStorageService
+    private actionsSubject$: ActionsSubject
   ) {
-    // this.getListUser();
-    this.previousPage = 1;
-    this.page = 1;
-    this.IsActive = 0;
-    this.orgCode = '';
-    this.TamPerPage = 10;
-    this.pageorganization = 0;
-    this.fromDateTemp = '';
-    this.toDateTemp = '';
-    this.IsActiveOrganizations = 2;
+    // track for save action status
+    this.actionsSubject$.pipe(
+      takeUntil(this.subscription), // only hold on subscrible when subscription alive
+      filter((action) => this.trackAction.some(a => a === action.type))
+    ).subscribe((action) => {
+      switch (action.type) {
+        case UserActionTypes.UserCreateSuccess:
+        case UserActionTypes.UserUpdateSuccess:
+        case UserActionTypes.UserDelete:
+          let pagination: Pagination = { currPage: 1, recordperpage: ITEMS_PER_PAGE };
+          if (isDefinedProp(action, 'payload')) { // case success action have data in payload
+            // do something
+            if (isDefinedProp((<any>action).payload, 'param')) {
+              pagination = (<any>action).payload['param'];
+            }
+          }
+          // reload data from list screen
+          this.store.dispatch(new LoadUsers({ pagination }));
+          break;
+      }
+    });
+
   }
 
   ngOnInit() {
-    this.users$ = this.store.pipe(select(selectUser));
+    this.users$ = this.store.pipe(
+      takeUntil(this.subscription),
+      select(selectUser)
+    );
     this.categoryOrganization$ = this.store.pipe(select(selectCategoryOrganization));
-    this.loadAllCategoryOrganization();
-    this.store.pipe(select(selectTabArgs)).subscribe(args => {
+    // need to re-check function and usage below line code
+    this.store.dispatch(new LoadCategoryOrganizations({ pagination: {} }));
+    this.store.pipe(
+      takeUntil(this.subscription),
+      select(selectTabArgs)
+    ).subscribe(args => {
       if (args && args.user && args.user.orgCode) {
         this.orgCode = args.user.orgCode;
         this.IsActive = '';
@@ -117,7 +131,10 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.pipe(select(selectError)).subscribe(err => {
+    this.store.pipe(
+      takeUntil(this.subscription),
+      select(selectError)
+    ).subscribe(err => {
       if (err && err.error) {
         if (err.error.value && err.error.value.errorKey === 'error.maxuser') {
           const errorInfo = Object.assign({}, err.error.value);
@@ -131,85 +148,112 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.appStore.dispatch(new ActionDestroyTabArgs({ args: { user: undefined } }));
-  }
-
-  // Hiển thị list đơn vị Organizations
-  loadAllCategoryOrganization() {
-    this.store.dispatch(new LoadCategoryOrganizations({
-      pagination: {
-      }
-    }));
-  }
-
-  // hiển thị list user
+  /**
+   * process fetch all data
+   * @author vinhpv
+   */
   loadUserAll() {
     this.store.dispatch(new LoadUsers({
       pagination: {
         TextSearch: this.TextSearch,
         IsActive: this.IsActive,
         orgCode: this.orgCode,
-        CurrPage: this.page,
-        Record: this.itemsPerPage,
+        currPage: this.page,
+        recordperpage: this.itemsPerPage,
       }
     }));
   }
 
-
+  /**
+   * handle event when searched
+   * @author vinhpv
+   */
   onSearch() {
     this.page = 1;
     this.loadUserAll();
   }
 
-
+  /**
+   * handle event when clicked on pagination
+   * @param page page will be navigate
+   * @author vinhpv
+   */
   loadPage(page) {
     this.store.dispatch(new LoadUsers({
       pagination: {
         TextSearch: this.TextSearch,
         IsActive: this.IsActive,
         orgCode: this.orgCode,
-        CurrPage: this.page,
-        Record: this.itemsPerPage,
+        currPage: this.page,
+        recordperpage: this.itemsPerPage,
       }
     }));
   }
 
-
-  // poup nút thêm mới user
+  /**
+   * handle event when clicked on button create user
+   * @param $event mouse event
+   * @author vinhpv
+   */
   doAddNew($event) {
     const modalRef = this.modalService.open(UserNewComponent as Component, { size: "lg", backdrop: 'static', container: '.tab-user', });
     const user = new User();
-    // user.userName = decoded.orgCode + '_';
     modalRef.componentInstance.users = user;
   }
 
-  // poup nút sửa user
-  doEditUser = (item: User, fieldEncypt: any) => {
+  /**
+   * handle event when click on button edit special user
+   * @param item user want to edit
+   * @param fieldEncrypt field that be determined encrypt
+   * @author vinhpv
+   */
+  doEditUser = (item: User, fieldEncrypt: any) => {
     const modalRef = this.modalService.open(UserNewComponent as Component, { size: "lg", backdrop: 'static', container: '.tab-user' });
     const user = Object.assign({}, item);
     modalRef.componentInstance.users = user;
-    modalRef.componentInstance.fieldEncypt = fieldEncypt;
-    console.log('fieldEncypt', fieldEncypt)
+    modalRef.componentInstance.fieldEncrypt = fieldEncrypt;
   }
 
-  // poup nút xóa
+  /**
+   * handle event when clicked on button delete special user
+   * @param id id of user want to confirm delete
+   * @author vinhpv
+   */
   doDeleteUser(id: number) {
     this.modalDefault.showReference(id);
   }
+
+  /**
+   * handle fired event accept delete special user
+   * @param id id of user want to delete
+   * @author vinhpv
+   */
   onAcceptedDelete(id: number) {
-    console.log('UserDelete', id);
     this.store.dispatch(new UserDelete({ userId: id }));
   }
 
-  onResetPassword(user: any) {
+  /**
+   * handle event when clicked on button reset password for special user
+   * @param user user want to confirm reset password
+   * @author huongpt1
+   */
+  doResetPassword(user: any) {
     this.modalConfirmReset.showReference(user);
   }
 
-  reset(item) {
+  /**
+   * handle fired event accept reset password for user
+   * @param item item want to delete
+   * @author huongpt1
+   */
+  onResetPassword(item) {
     this.store.dispatch(new ResetPasswordUser({ account: item }));
-    this.store.select(selectResetPassword).subscribe(res => {
-      console.log('err', res);
-    });
   }
+
+  ngOnDestroy() {
+    this.subscription.next();
+    this.subscription.complete();
+    this.appStore.dispatch(new ActionDestroyTabArgs({ args: { user: undefined } }));
+  }
+
 }

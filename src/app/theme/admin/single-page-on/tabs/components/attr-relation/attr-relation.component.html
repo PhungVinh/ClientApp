@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of listAttrRelation.data; let i= index">
+                <tr *ngFor="let item of listAttrRelation?.data; let i= index">
                     <td>{{(page-1) * itemsPerPage + i + 1}}</td>
                     <td class="ellipsis"><span>{{item.Name}}</span></td>
                     <td>{{item.CategoryName}}</td>
@@ -61,7 +61,7 @@
                 </tr>
             </tbody>
         </table>
-        <div *ngIf="((listAttrRelation?.data | json) == '[]' && textSearch.length > 0)" class="text-center m-t-25">
+        <div *ngIf="((listAttrRelation.data | json) == '[]' && textSearch.length > 0)" class="text-center m-t-25">
             <b>Không có kết quả thỏa mãn điều kiện nhập</b>
         </div>
     </div>

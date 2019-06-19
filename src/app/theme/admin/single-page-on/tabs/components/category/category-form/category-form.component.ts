@@ -90,12 +90,12 @@ export class CategoryFormComponent implements OnInit {
       const listChilren = this.children.value.map((value) => {
         return {
           ExtContent: value.ExtContent,
-          CategoryName: value.CategoryName
+          CategoryName: value.CategoryName.toLowerCase()
         };
       });
       const currentChild = {
         ExtContent: this.children.controls[index].value.ExtContent,
-        CategoryName: this.children.controls[index].value.CategoryName
+        CategoryName: this.children.controls[index].value.CategoryName.toLowerCase()
       };
       const numberChildDuplicate = listChilren.filter(value => {
         return _.isEqual(value, currentChild);
@@ -110,10 +110,10 @@ export class CategoryFormComponent implements OnInit {
   }
   validateForm() {
     if (this.categoryName.hasError('required')) {
-      
-      // console.log('this.categoryNameInput', this.categoryNameInput);
+      if (this.categoryName.dirty || this.categoryName.touched) {
+        this.categoryNameInput.nativeElement.focus();
+      }
       this.errorMsgs.categoryName = "Thông tin không được để trống";
-      this.categoryNameInput.nativeElement.focus();
     } else {
       this.errorMsgs.categoryName = "";
     }
@@ -299,7 +299,7 @@ export class CategoryFormComponent implements OnInit {
 
   displayControlArray(i) {
     const formArray = this.children.controls[i] as FormArray;
-    let display = formArray.controls['CategoryName'].value.includes(this.txtSearch);
+    let display = formArray.controls['CategoryName'].value.toLowerCase().includes(this.txtSearch.toLowerCase());
     return !display;
   }
   get categoryParent() {

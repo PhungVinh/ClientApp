@@ -38,8 +38,6 @@ import { OganizationDeleteComponent } from './tabs/components/organization/ogani
 import { OrganizationUpdateComponent } from './tabs/components/organization/organization-update.component';
 import { OrganizationComponent } from './tabs/components/organization/organization.component';
 import { ProfileComponent } from './tabs/components/profile/profile.component';
-import { ResetComponent } from './tabs/components/user/reset/reset.component';
-import { UserDeleteComponent } from './tabs/components/user/user-delete/user-delete.component';
 import { UserNewComponent } from './tabs/components/user/user-new/user-new.component';
 import { UserComponent } from './tabs/components/user/user.component';
 import { VocComponent } from './tabs/components/voc/voc.component';
@@ -84,8 +82,6 @@ import { VocComponent } from './tabs/components/voc/voc.component';
     ProfileComponent,
     ModuleComponent,
     AuthorityEditUserComponent,
-    UserDeleteComponent,
-    ResetComponent,
     FormListComponent,
     CategoryComponent,
     CategoryFormComponent,
@@ -104,8 +100,6 @@ import { VocComponent } from './tabs/components/voc/voc.component';
     CimsUpdateComponent,
     KmsNewComponent,
     AuthorityEditUserComponent,
-    UserDeleteComponent,
-    ResetComponent,
     CimsImportComponent,
     CimsDeleteComponent,
     CategoryFormComponent,

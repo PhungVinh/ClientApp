@@ -56,7 +56,7 @@ export class AuthorityComponent implements OnInit {
    */
   updateAuthority(authority) {
     const modalRef = this.modalService.open(AuthorityAddComponent as Component, { size: 'lg', backdrop: 'static', container: '.tab-authority' });
-    this.store.dispatch(new LoadAllAuthority({ textSearch: '', currPage: 0, Record: this.perPage }));
+    this.store.dispatch(new LoadAllAuthority({ textSearch: '', currPage: 0, recordperpage: this.perPage }));
     this.store.dispatch(new CopyAuthority({ id: authority.authorityId, parentCode: ''}))
     this.store.dispatch(new LoadModules());
     modalRef.componentInstance.authority = { ...authority };
@@ -64,7 +64,7 @@ export class AuthorityComponent implements OnInit {
 
   addAuthority() {
     this.store.dispatch(new LoadAllRole({ ParentCode: ''}));
-    this.store.dispatch(new LoadAllAuthority({ textSearch: '', currPage: 0, Record: this.perPage }));
+    this.store.dispatch(new LoadAllAuthority({ textSearch: '', currPage: 0, recordperpage: this.perPage }));
     this.store.dispatch(new LoadModules());
     this.modalService.open(AuthorityAddComponent as Component, { size: 'lg', backdrop: 'static', container: '.tab-authority' });
   }
@@ -83,7 +83,7 @@ export class AuthorityComponent implements OnInit {
     this.store.dispatch(new LoadListAuthorityFilter({ filter: { textSearch: searchInput } }));
   }
   loadPage(page) {
-    this.store.dispatch(new LoadAuthorities({ textSearch: '', currPage: page, Record: this.perPage }));
+    this.store.dispatch(new LoadAuthorities({ textSearch: '', currPage: page, recordperpage: this.perPage }));
   }
   
   /**

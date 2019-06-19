@@ -36,7 +36,7 @@ export enum AuthorityActionTypes {
 
 export class LoadAuthorities implements Action {
   readonly type = AuthorityActionTypes.LoadAuthorities;
-  constructor(readonly payload: { textSearch: String, currPage: Number, Record: Number }) {}
+  constructor(readonly payload: { textSearch: String, currPage: Number, recordperpage: Number }) {}
 }
 
 export class LoadAuthoritySuccess implements Action {
@@ -95,7 +95,7 @@ export class DeleteAuthorityFail implements Action {
 
 export class LoadAllAuthority implements Action {
   readonly type = AuthorityActionTypes.LoadAllAuthority;
-  constructor(readonly payload: { textSearch: String, currPage: Number, Record: Number }) {}
+  constructor(readonly payload: { textSearch: String, currPage: Number, recordperpage: Number }) {}
 }
 
 export class LoadAllAuthoritySuccess implements Action {

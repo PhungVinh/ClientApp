@@ -18,6 +18,7 @@ import {ModalDirective} from 'angular-bootstrap-md';
 import {LoadAttribute} from '../../actions/customer.actions';
 import {FormListComponent} from '../form-list/form-list.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDate, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-information-field',
@@ -120,13 +121,67 @@ export class InformationFieldComponent implements OnInit {
     rowToDelete: any[];
     indexRowTodelete: any;
 
+
+    DateFrom = '';
+    DateTo = '';
+    isCollapsed = false;
+    hoveredDate: NgbDate;
+    fromDate: NgbDate;
+    toDate: NgbDate;
+    fromDateTemp: any;
+    toDateTemp = '';
+
     constructor(private store: Store<State>,
                 private attrservice: AttributeService,
                 private dataTypeService: DataTypeService,
                 private typeObjService: TypeObjectService,
                 private formConfig: FormConfigService,
                 private fb: FormBuilder,
-                private modalService: NgbModal) {
+                private modalService: NgbModal,
+                calendar: NgbCalendar) {
+        this.fromDate = calendar.getToday();
+        this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    }
+
+    onDateSelection(date: NgbDate) {
+        if (!this.fromDate && !this.toDate) {
+            this.fromDate = date;
+        } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
+            this.toDate = date;
+        } else {
+            this.toDate = null;
+            this.fromDate = date;
+        }
+        console.log('1', this.fromDate);
+        console.log('2', this.toDate);
+        this.fromDateTemp = this.fromDate.year + '-' + this.fromDate.month + '-' + this.fromDate.day;
+        this.toDateTemp = this.toDate.year + '-' + this.toDate.month + '-' + this.toDate.day;
+        this.DateFrom = this.fromDateTemp;
+        this.DateTo = this.toDateTemp;
+    }
+
+    isHovered(date: NgbDate) {
+        return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
+    }
+
+    isInside(date: NgbDate) {
+        return date.after(this.fromDate) && date.before(this.toDate);
+    }
+
+    isRange(date: NgbDate) {
+        return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
+    }
+
+    onShowDatePicker() {
+        this.isCollapsed = !this.isCollapsed;
+        // if (this.toDateTemp === '') {
+        //     this.DateFrom = '';
+        //     this.DateTo = '';
+        //     this.toDate = '';
+        //     this.fromDate = '';
+        //     this.fromDateTemp = '';
+        //     this.toDateTemp = '';
+        // }
     }
 
     ngOnInit() {
@@ -259,9 +314,6 @@ export class InformationFieldComponent implements OnInit {
             this.formConfig.getFormConfig(),
         )
             .subscribe(([res1, res2]) => {
-                if (res2 !== null) {
-                    this.test = [...[{arr: [], title: ''}]];
-                }
 
                 if (res1.length > 0) {
                     this.listAttrWhenFormInfo = res1;
@@ -309,14 +361,18 @@ export class InformationFieldComponent implements OnInit {
                     this.lengthOfTest = this.test.length;
                 } else {
                     this.typeAddOrEdit = 1;
+                    this.test = [];
                     this.test = [
-                        {arr: this.done, title: ''},
+                        {arr: [], title: ''},
                     ];
                 }
             });
     }
 
     getAttrForm(item, arr, index, typeEdit) {
+        this.store.dispatch(new LoadCategoryLink());
+        this.store.dispatch(new LoadCategoryChildLink());
+        this.selectCategory$ = this.store.pipe(select(selectCategory));
         if (item.AttributeCode === 'ATTRIBUTE1' || item.AttributeCode === 'ATTRIBUTE2') {
 
         } else {
@@ -748,7 +804,7 @@ export class InformationFieldComponent implements OnInit {
             e.preventDefault();
             this.activeTab = 'ngb-tab-3';
             if (e.activeId === 'ngb-tab-3') {
-                this.formList.CancelFormListTabChange.show();
+                this.formList.openModalCancelWhenTabChange(this.formList.CancelFormListTabChange);
             }
         }
 
@@ -772,6 +828,8 @@ export class InformationFieldComponent implements OnInit {
 
 
     changeCate(e) {
+        this.store.dispatch(new LoadCategoryLink());
+        this.store.dispatch(new LoadCategoryChildLink());
         this.selectCategoryChild$ = this.store.pipe(select(selectCateChildByParent(e.target.value)));
         this.attributeForm.get('DefaultValue').enable();
         this.attributeForm.patchValue({
@@ -781,6 +839,8 @@ export class InformationFieldComponent implements OnInit {
     }
 
     changeCateEdit(e) {
+        this.store.dispatch(new LoadCategoryLink());
+        this.store.dispatch(new LoadCategoryChildLink());
         this.selectCategoryChildEdit$ = this.store.pipe(select(selectCateChildByParent(e.target.value)));
         this.attributeEditForm.get('DefaultValue').enable();
         this.attributeEditForm.patchValue({
@@ -939,6 +999,12 @@ export class InformationFieldComponent implements OnInit {
 
     openVerticallyCentered(content) {
         this.modalService.open(content, { centered: true, size: 'lg' });
+    }
+
+    openModalAdd() {
+        this.store.dispatch(new LoadCategoryLink());
+        this.selectCategory$ = this.store.pipe(select(selectCategory));
+        this.modalLarge.show();
     }
 
     get name() {

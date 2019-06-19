@@ -105,27 +105,16 @@ export class AttrRelationComponent implements OnInit {
         this.store.dispatch(new LoadCategoryChildLink());
         this.getAllTypeShow();
         this.getAllCate();
-        // this.store.dispatch(new LoadAttrRelations({
-        //     pagination: {
-        //         TextSearch: this.textSearch,
-        //         currPage: this.page,
-        //         recodperpage: this.itemsPerPage
-        //     }
-        // }));
         this.listAttrRelation$ = this.store.pipe(select(selectConstraintsPagi));
         console.log('dsfdsf', this.listAttrRelation$);
         this.getAllAttrRrelation();
     }
 
     getAllAttrRrelation() {
-        // this.store.pipe(select(selectConstraintsPagi)).subscribe(data => {
-        //     this.listAttrRelation = data;
-        //     console.log('data', data);
-        // });
         this.store.dispatch(new LoadAttrRelations({
             pagination: {
               TextSearch: this.textSearch,
-              currPage: this.page,
+              CurrPage: this.page,
               recodperpage: this.itemsPerPage
             }
           }));
@@ -143,9 +132,6 @@ export class AttrRelationComponent implements OnInit {
     }
 
     addAttrRelation() {
-        
-        // this.attrRelationForm.value.name = this.attrRelationForm.value.name.trim();
-        // this.attrRelationForm.get(Key).value.trim()
         console.log('this.attrRelationForm-vinhs',this.attrRelationForm.value);
         this.constraintsService.addConstraint(this.attrRelationForm.value).subscribe((data) => {
             this.attrRelationForm.setValue({
@@ -155,13 +141,6 @@ export class AttrRelationComponent implements OnInit {
                 ContraintsValue: '0',
             });
             this.getAllAttrRrelation();
-            // this.store.dispatch(new LoadAttrRelations({
-            //     pagination: {
-            //         TextSearch: this.textSearch,
-            //         currPage: 1,
-            //         recodperpage: this.itemsPerPage
-            //     }
-            // }));
             this.isSubmitAdd = false;
             if (!this.isDuplicate) {
                 this.resetForm();
@@ -187,7 +166,7 @@ export class AttrRelationComponent implements OnInit {
                 this.store.dispatch(new LoadAttrRelations({
                     pagination: {
                         TextSearch: this.textSearch,
-                        currPage: this.page,
+                        CurrPage: this.page,
                         recodperpage: this.itemsPerPage
                     }
                 }));
@@ -201,9 +180,6 @@ export class AttrRelationComponent implements OnInit {
                     this.nameFielEdit.nativeElement.focus();
                 }
             );
-            // this.store.dispatch(new UpdateAttrRelations({ data: contraints }));
-            // this.modalLargeEdit.hide();
-            // this.isSubmitEdit = false;
         }
 
     }
@@ -257,7 +233,7 @@ export class AttrRelationComponent implements OnInit {
         this.store.dispatch(new LoadAttrRelations({
             pagination: {
                 TextSearch: this.textSearch,
-                currPage: page,
+                CurrPage: page,
                 recodperpage: this.itemsPerPage
             }
         }));
@@ -269,7 +245,7 @@ export class AttrRelationComponent implements OnInit {
         this.store.dispatch(new LoadAttrRelations({
             pagination: {
                 TextSearch: this.textSearch,
-                currPage: this.page,
+                CurrPage: this.page,
                 recodperpage: this.itemsPerPage
             }
         }));

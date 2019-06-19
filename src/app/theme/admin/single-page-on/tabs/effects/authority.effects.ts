@@ -65,10 +65,11 @@ export class AuthorityEffects {
         exhaustMap((action: AddAuthority) => {
             console.log('newAuthority');
             return this.service$.addAuthority(action.payload).pipe(
-                mergeMap(data => [
-                    new AddAuthoritySuccess({ authority: data.body.value }),
-                    new LoadAuthorities({textSearch: '', currPage: 1, Record: PER_PAGE })
-                ]),
+                // mergeMap(data => [
+                //     new AddAuthoritySuccess({ authority: data.body.value }),
+                //     new LoadAuthorities({textSearch: '', currPage: 1, Record: PER_PAGE })
+                // ]),
+                map(data => new AddAuthoritySuccess({ authority: data.body.value })),
                 catchError(({ error: err }) => {
                     return of(new AddAuthorityFail({ err }));
                 })
@@ -81,10 +82,11 @@ export class AuthorityEffects {
         ofType(AuthorityActionTypes.UpdateAuthority),
         exhaustMap((action: UpdateAuthority) => {
             return this.service$.updateAuthority(action.payload).pipe(
-                mergeMap(data => [
-                    new UpdateAuthoritySuccess({ authority: data.body.value }),
-                    new LoadAuthorities({textSearch: '', currPage: 1, Record: PER_PAGE })
-                ]),
+                // mergeMap(data => [
+                //     new UpdateAuthoritySuccess({ authority: data.body.value }),
+                //     new LoadAuthorities({textSearch: '', currPage: 1, Record: PER_PAGE })
+                // ]),
+                map(data => new UpdateAuthoritySuccess({ authority: data.body.value })),
                 catchError(({ error: err }) => {
                     return of(new AddAuthorityFail({ err }));
                 })
@@ -100,10 +102,10 @@ export class AuthorityEffects {
                 return this.service$.deleteAuthority(action.payload.authority.authorityId).pipe(
                     mergeMap(data => [
                         new DeleteAuthoritySuccess({ authority: action.payload.authority }),
-                        new LoadAuthorities({textSearch: '', currPage: 1, Record: PER_PAGE })
+                        new LoadAuthorities({ textSearch: '', currPage: 1, recordperpage: PER_PAGE })
                     ]),
                     catchError(err => {
-                        return of(new DeleteAuthorityFail({err: err }));
+                        return of(new DeleteAuthorityFail({ err: err }));
                     })
                 )
             })
@@ -112,22 +114,23 @@ export class AuthorityEffects {
     @Effect()
     changePage$ = this.actions$.pipe(
         ofType(AuthorityActionTypes.LoadListAuthorityFilter),
-        map((action: LoadListAuthorityFilter) => { 
-            return new LoadAuthorities({ textSearch: action.payload.filter.textSearch, currPage: 1, Record: PER_PAGE  })})
+        map((action: LoadListAuthorityFilter) => {
+            return new LoadAuthorities({ textSearch: action.payload.filter.textSearch, currPage: 1, recordperpage: PER_PAGE })
+        })
     );
 
 
     @Effect()
     loadAllAuthority$ = this.actions$.pipe(
         ofType(AuthorityActionTypes.LoadAllAuthority),
-        switchMap((action: LoadAllAuthority) =>  this.service$.getAllAuthority(action.payload).pipe(
-                map(data => {
-                    return new LoadAllAuthoritySuccess(data)
-                }),
-                catchError(err => {
-                    return of(new LoadAllAuthorityFail({ err }));
-                })
-            )
+        switchMap((action: LoadAllAuthority) => this.service$.getAllAuthority(action.payload).pipe(
+            map(data => {
+                return new LoadAllAuthoritySuccess(data)
+            }),
+            catchError(err => {
+                return of(new LoadAllAuthorityFail({ err }));
+            })
+        )
         )
     )
 
@@ -185,7 +188,7 @@ export class AuthorityEffects {
         exhaustMap(() => {
             return this.service$.getAuthorityInfo().pipe(
                 map(data => {
-                    return new AuthorityInfoSuccess({data: data})
+                    return new AuthorityInfoSuccess({ data: data })
                 }),
                 catchError(err => of(new AuthorityInfoFaild({ err })))
             )

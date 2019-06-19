@@ -4,17 +4,17 @@
             <!--<button class="btn btn-outline-primary mb-2 mr-2" (click)="openVerticallyCentered(content)">Modal vertically centered</button>-->
         </div>
         <div class="col-md-6 box-action-list">
-            <div class="icon-table-config" (click)="openModalConfigTable()">
+            <div class="icon-table-config" (click)="openModalConfigTable(modalLarge)">
                 <i class="fa fa-table" aria-hidden="true"></i> Table
             </div>
-            <div class="watch-detail" (click)="showInfoFormList()">
+            <div class="watch-detail" (click)="showInfoFormList(modalShowFormList)">
                 Xem chi tiết <i class="fa fa-external-link"
                                 aria-hidden="true"
                                 style="margin-left: 5px"></i>
             </div>
         </div>
     </div>
-    <div *ngFor="let test1 of arrayAttributeDrop; let i = index" class="container"
+    <div *ngFor="let test1 of arrayAttributeDrop; let i = index" class=""
          style="margin: 0; position: relative">
         <div
                 cdkDropList
@@ -23,8 +23,8 @@
                 [cdkDropListData]="test1.arr"
                 [cdkDropListConnectedTo]="[todoList]"
                 (cdkDropListDropped)="drop2($event)"
-                class="example-list row box-form box-add-drag">
-            <div class="col-md-{{item.AttributeColumn}} col-xl-{{item.AttributeColumn}} m-t-15 example-box" [ngClass]="{'active1': item.active}" (mouseover)="hover()"
+                class="example-list box-form box-add-drag row">
+            <div class="col-sm-{{item.AttributeColumn}} m-t-15 example-box" [ngClass]="{'active1': item.active}" (mouseover)="hover()"
                  id="item{{i}}{{index}}" cdkDrag [cdkDragData]="item"
                  *ngFor="let item of test1.arr; let index = index"
                  >
@@ -49,15 +49,15 @@
                     <div *ngIf="item.AttributeType == 'CHECKBOX' || item.AttributeType == 'LISTCHECKBOX'">
                         <div class="border-checkbox-section" *ngIf="item?.ListCategory.length > 0">
                             <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item?.ListCategory; let i = index">
-                                <input class="border-checkbox" type="checkbox" id="{{item.AttributeCode + i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                <label class="border-checkbox-label" for="{{item.AttributeCode + i}}">{{val.CategoryName}}</label>
+                                <input class="border-checkbox" type="checkbox" id="formlisst{{val.CategoryCode + item.AttributeCode}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
+                                <label class="border-checkbox-label" for="formlisst{{val.CategoryCode + item.AttributeCode}}">{{val.CategoryName}}</label>
                             </div>
                         </div>
 
                         <div class="border-checkbox-section" *ngIf="item?.ListCategory.length === 0">
                             <div class="border-checkbox-group border-checkbox-group-primary">
-                                <input class="border-checkbox" type="checkbox" id="222{{item.AttributeCode}}" [disabled]="item.IsReuse">
-                                <label class="border-checkbox-label" for="222{{item.AttributeCode}}">{{item.AttributeLabel}}</label>
+                                <input class="border-checkbox" type="checkbox" id="222{{item.AttributeLabel}}" [disabled]="item.IsReuse">
+                                <label class="border-checkbox-label" for="222{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
                             </div>
                         </div>
                     </div>
@@ -88,6 +88,26 @@
                             </form>
                         </div>
                     </div>
+                    <div *ngIf="item.AttributeType == 'DATETIME'">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control"
+                                           placeholder="yyyy-mm-dd"
+                                           name="dp4"
+                                           [(ngModel)]="model"
+                                           ngbDatepicker
+                                           #dateFormList="ngbDatepicker"
+                                           [disabled]="item.IsReuse">
+                                    <div class="input-group-append">
+                  <span class="input-group-text calendar" (click)="dateFormList.toggle()">
+                    <i class="fa fal fa-calendar"></i>
+                  </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
@@ -95,7 +115,7 @@
                        (click)="deleteAttrList(item, test1.arr)" [ngClass]="{'active2': item.active}"></i>
                     <span (click)="getInfoConfigSearchToEdit(item)"><i class="fa fa-pencil-square"
                                                                  aria-hidden="true"
-                                                                 (click)="modalConfigFieldSearch.show()" [ngClass]="{'active2': item.active}"></i></span>
+                                                                 (click)="openModalConfigSearch(modalConfigFieldSearch)" [ngClass]="{'active2': item.active}"></i></span>
                     <i class="fa fa-plus-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
                        (click)="addWidthAttr(item, test1.arr, i, index)"></i>
                     <i class="fa fa-minus-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
@@ -104,7 +124,7 @@
             </div>
         </div>
         <i class="fa fa-minus" aria-hidden="true"
-           (click)="deleteRow(test1.arr, i)" *ngIf="lengthOfarrayAttributeDropItem > 1"></i>
+           (click)="deleteRow(test1.arr, i, modalAcceptDeleteRow)" *ngIf="lengthOfarrayAttributeDropItem > 1"></i>
         <div class="clearfix"></div>
     </div>
     <div class="add-row">
@@ -131,181 +151,177 @@
 </div>
 
 <div class="footer-bottom m-t-20 text-center">
-    <button class="btn btn-default" (click)="cancelFormList()">Hủy</button>
-    <button class="btn btn-primary m-l-10" (click)="acceptFormList()">Áp
+    <button class="btn btn-default" (click)="cancelFormList(modalCancelFormList)">Hủy</button>
+    <button class="btn btn-primary m-l-10" (click)="acceptFormList(modalAcceptForm)">Áp
         dụng
     </button>
 </div>
 
 <!-- modal table config large-->
-<form class="form">
-    <app-modal-basic #modalLarge [dialogClass]="'modal-lg'" [outsizeClose]="false">
-        <div class="app-modal-header">
-            <h4 class="modal-title">Cấu hình danh sách</h4>
-            <button type="button" class="close basic-close" (click)="cancelModalConfigLisst()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="app-modal-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div style="display: flex">
-                        <div style="flex: 1">
-                            <div class="list-user_lable title-table">
-                                Thông tin khách hàng {{termTitleToDrag}}
-                            </div>
-                            <table class="fixed_headers">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>
-                                        <form class="edit-authority-user_header">
-                                            <!--<div>-->
-                                            <!--<span class="mr-2">Tài khoản</span><span><i-->
-                                            <!--class="feather icon-search"></i></span></div>-->
-                                            <div>
-                                                <input class="form-control input-md"
-                                                       placeholder="Tìm kiếm trường" name="search" type="text" [(ngModel)]="termTitleToDrag" />
-                                            </div>
-                                        </form>
-                                    </th>
-                                    <th>
-                                        <input class="border-checkbox" type="checkbox"
-                                               (change)="checkAllListDragBox($event)" id="allDrag">
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody style="min-height: 350px; max-height: 350px">
-                                <tr *ngFor="let item of listTitleToDrag | searchFilter:termTitleToDrag; let i = index">
-                                    <td>{{i+1}}</td>
-                                    <td>{{item.AttributeLabel}}</td>
-                                    <td>
-                                        <input class="border-checkbox" type="checkbox"
-                                               (change)="changeToTable($event, item)" [checked]="checkAllListDrag">
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="block_center">
-                            <div style="text-align: center">
-                                <button type="button" class="btn btn-primary py-0 mb-2" (click)="pushToTable()"
-                                ><span><i
-                                        class="fa fa-angle-right fa-3x"></i></span></button>
-                                <button type="button" class="btn btn-secondary py-0" (click)="pushToListDrag()"
-                                ><span><i
-                                        class="fa fa-angle-left fa-3x"></i></span></button>
-                            </div>
-                        </div>
-                        <div style="flex: 1">
-                            <div class="list-user_lable title-table">Bảng danh sách thông tin khách hàng</div>
-                            <table class="fixed_headers">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>
-                                        <form class="edit-authority-user_header">
-                                            <!--<div>-->
-                                            <!--<span class="mr-2">Tài khoản</span><span><i-->
-                                            <!--class="feather icon-search"></i></span></div>-->
-                                            <div>
-                                                <input class="form-control input-md"
-                                                       placeholder="Tìm kiếm trường" type="text"
-                                                       [ngModelOptions]="{standalone: true}"
-                                                       [(ngModel)]="termTitleTable">
-                                            </div>
-
-                                        </form>
-                                    </th>
-                                    <th>
-                                        <input class="border-checkbox" type="checkbox"
-                                               (change)="checkAllListTitleTableCox($event)" id="allTitle">
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody style="min-height: 350px; max-height: 350px">
-                                <tr *ngFor="let item of listTitleTable | searchFilter:termTitleTable ; let i = index">
-                                    <td>{{i+1}}</td>
-                                    <td><span (click)="activeItem(item, i)"
-                                              id="itemActive{{i}}">{{item.AttributeLabel}}</span></td>
-                                    <td>
-                                        <input class="border-checkbox" type="checkbox"
-                                               (change)="changeToListDrag($event, item)"
-                                               [checked]="checkAllListTitleTable">
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="box-action">
-                                <div class="box-action-item" (click)="moveFirst()">
-                                    Đầu <i class="fa fa-angle-double-up" aria-hidden="true"></i>
-                                </div>
-                                <div class="box-action-item" (click)="moveUp()">
-                                    Tiến <i class="fa fa-angle-up" aria-hidden="true"></i>
-                                </div>
-                                <div class="box-action-item" (click)="moveDown()">
-                                    Lùi <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </div>
-                                <div class="box-action-item" (click)="moveLast()">
-                                    Cuối <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="form-group row" style="margin-top: 30px;">
-                <label class="col-sm-3 col-form-label">Tiêu chí sắp xếp</label>
-                <div class="col-sm-4">
-                    <select class="browser-default custom-select" (change)="chooseSort($event)">
-                        <option value="0">--- Chọn tiêu chí sắp xếp ---</option>
-                        <option *ngFor="let item of listTitleTable" [value]="item.AttributesId"
-                                [selected]="item?.IsSort !== null">{{item.AttributeLabel}}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-sm-5">
-                    <div class="form-radio">
-                        <form>
-                            <div class="radio radio-inline">
-                                <label>
-                                    <input type="radio" name="radio" [checked]="sort" [value]="true" [(ngModel)]="sort"
-                                           (click)="radioChange(true)">
-                                    <i class="helper"></i>Tăng dần
-                                </label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <label>
-                                    <input type="radio" name="radio" [value]="false" [(ngModel)]="sort"
-                                           [checked]="sort === false" (click)="radioChange(false)">
-                                    <i class="helper"></i>Giảm dần
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="app-modal-footer">
-            <span><button type="button" class="btn btn-default ripple"
-                                                          (click)="cancelModalConfigLisst()">Hủy
-            </button></span>
-            <button type="button" class="btn btn-primary ripple light m-l-10" (click)="saveConfigTable()">Lưu</button>
-        </div>
-    </app-modal-basic>
-</form>
-
-
-<!--modal xem chi tiết form cấu hình-->
-<app-modal-basic #modalShowFormList [dialogClass]="'modal-lg'" [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Cấu hình form danh sách khách hàng</h5>
-        <button type="button" class="close basic-close" (click)="modalShowFormList.hide()">
+<ng-template #modalLarge let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Cấu hình danh sách</h4>
+        <button type="button" class="close" aria-label="Close" (click)="cancelModalConfigLisst(modalCancelTable)">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body" style="padding: 15px 0">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div style="display: flex">
+                    <div style="flex: 1">
+                        <div class="list-user_lable title-table">
+                            Thông tin khách hàng {{termTitleToDrag}}
+                        </div>
+                        <table class="fixed_headers">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    <form class="edit-authority-user_header">
+                                        <!--<div>-->
+                                        <!--<span class="mr-2">Tài khoản</span><span><i-->
+                                        <!--class="feather icon-search"></i></span></div>-->
+                                        <div>
+                                            <input class="form-control input-md"
+                                                   placeholder="Tìm kiếm trường" name="search" type="text" [(ngModel)]="termTitleToDrag" />
+                                        </div>
+                                    </form>
+                                </th>
+                                <th>
+                                    <input class="border-checkbox" type="checkbox"
+                                           (change)="checkAllListDragBox($event)" id="allDrag">
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody style="min-height: 350px; max-height: 350px">
+                            <tr *ngFor="let item of listTitleToDrag | searchFilter:termTitleToDrag; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{item.AttributeLabel}}</td>
+                                <td>
+                                    <input class="border-checkbox" type="checkbox"
+                                           (change)="changeToTable($event, item)" [checked]="checkAllListDrag">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block_center">
+                        <div style="text-align: center">
+                            <button type="button" class="btn btn-primary py-0 mb-2" (click)="pushToTable(modalNullItemDragDrop)"
+                            ><span><i
+                                    class="fa fa-angle-right fa-3x"></i></span></button>
+                            <button type="button" class="btn btn-secondary py-0" (click)="pushToListDrag(modalNullItemDragDrop)"
+                            ><span><i
+                                    class="fa fa-angle-left fa-3x"></i></span></button>
+                        </div>
+                    </div>
+                    <div style="flex: 1">
+                        <div class="list-user_lable title-table">Bảng danh sách thông tin khách hàng</div>
+                        <table class="fixed_headers">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    <form class="edit-authority-user_header">
+                                        <!--<div>-->
+                                        <!--<span class="mr-2">Tài khoản</span><span><i-->
+                                        <!--class="feather icon-search"></i></span></div>-->
+                                        <div>
+                                            <input class="form-control input-md"
+                                                   placeholder="Tìm kiếm trường" type="text"
+                                                   [ngModelOptions]="{standalone: true}"
+                                                   [(ngModel)]="termTitleTable">
+                                        </div>
+
+                                    </form>
+                                </th>
+                                <th>
+                                    <input class="border-checkbox" type="checkbox"
+                                           (change)="checkAllListTitleTableCox($event)" id="allTitle">
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody style="min-height: 350px; max-height: 350px">
+                            <tr *ngFor="let item of listTitleTable | searchFilter:termTitleTable ; let i = index">
+                                <td>{{i+1}}</td>
+                                <td><span (click)="activeItem(item, i)"
+                                          id="itemActive{{i}}">{{item.AttributeLabel}}</span></td>
+                                <td>
+                                    <input class="border-checkbox" type="checkbox"
+                                           (change)="changeToListDrag($event, item)"
+                                           [checked]="checkAllListTitleTable">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="box-action">
+                            <div class="box-action-item" (click)="moveFirst(modalNullItemDragDrop)">
+                                Đầu <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="box-action-item" (click)="moveUp(modalNullItemDragDrop)">
+                                Tiến <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="box-action-item" (click)="moveDown(modalNullItemDragDrop)">
+                                Lùi <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                            <div class="box-action-item" (click)="moveLast(modalNullItemDragDrop)">
+                                Cuối <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top: 30px;">
+            <label class="col-sm-3 col-form-label">Tiêu chí sắp xếp</label>
+            <div class="col-sm-4">
+                <select class="browser-default custom-select" (change)="chooseSort($event)">
+                    <option value="0">--- Chọn tiêu chí sắp xếp ---</option>
+                    <option *ngFor="let item of listTitleTable" [value]="item.AttributesId"
+                            [selected]="item?.IsSort !== null">{{item.AttributeLabel}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-radio">
+                    <form>
+                        <div class="radio radio-inline">
+                            <label>
+                                <input type="radio" name="radio" [checked]="sort" [value]="true" [(ngModel)]="sort"
+                                       (click)="radioChange(true)">
+                                <i class="helper"></i>Tăng dần
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label>
+                                <input type="radio" name="radio" [value]="false" [(ngModel)]="sort"
+                                       [checked]="sort === false" (click)="radioChange(false)">
+                                <i class="helper"></i>Giảm dần
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="cancelModalConfigLisst(modalCancelTable)">Hủy</button>
+        <button type="button" class="btn btn-primary ripple light m-l-10" (click)="saveConfigTable(titleTableNull)">Lưu</button>
+    </div>
+</ng-template>
+
+
+<!--modal xem chi tiết form cấu hình-->
+<ng-template #modalShowFormList let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Cấu hình form danh sách khách hàng</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click3')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="padding: 15px;">
         <div *ngFor="let item of arrayAttributeDrop">
             <div class="row m-t-20 item-row">
                 <div *ngFor="let item2 of item.arr" class="col-sm-{{item2.AttributeColumn}}">
@@ -319,15 +335,15 @@
                     <div *ngIf="item2.AttributeType == 'CHECKBOX' || item2.AttributeType == 'LISTCHECKBOX'">
                         <div class="border-checkbox-section" *ngIf="item2?.ListCategory.length > 0">
                             <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item2?.ListCategory; let i = index">
-                                <input class="border-checkbox" type="checkbox" id="checkboxbz{{i}}" [disabled]="item2.IsReuse" [checked]="val?.CategoryCode === item2?.DefaultValue">
-                                <label class="border-checkbox-label" for="checkboxbz{{i}}">{{val.CategoryName}}</label>
+                                <input class="border-checkbox" type="checkbox" id="checkboxbz{{val.CategoryCode + item2.AttributeCode}}" [disabled]="item2.IsReuse" [checked]="val?.CategoryCode === item2?.DefaultValue">
+                                <label class="border-checkbox-label" for="checkboxbz{{val.CategoryCode + item2.AttributeCode}}">{{val.CategoryName}}</label>
                             </div>
                         </div>
 
                         <div class="border-checkbox-section" *ngIf="item2?.ListCategory.length === 0">
                             <div class="border-checkbox-group border-checkbox-group-primary">
-                                <input class="border-checkbox" type="checkbox" id="checkboxaq" [disabled]="item2.IsReuse">
-                                <label class="border-checkbox-label" for="checkboxaq">{{item2.AttributeLabel}}</label>
+                                <input class="border-checkbox" type="checkbox" id="checkboxaq{{item2.AttributeLabel}}" [disabled]="item2.IsReuse">
+                                <label class="border-checkbox-label" for="checkboxaq{{item2.AttributeLabel}}">{{item2.AttributeLabel}}</label>
                             </div>
                         </div>
                     </div>
@@ -358,6 +374,26 @@
                             </form>
                         </div>
                     </div>
+                    <div *ngIf="item2.AttributeType == 'DATETIME'">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control"
+                                           placeholder="yyyy-mm-dd"
+                                           name="dp5"
+                                           [(ngModel)]="model"
+                                           ngbDatepicker
+                                           #datePreview="ngbDatepicker"
+                                           [disabled]="item2.IsReuse">
+                                    <div class="input-group-append">
+                  <span class="input-group-text calendar" (click)="datePreview.toggle()">
+                    <i class="fa fal fa-calendar"></i>
+                  </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -378,200 +414,200 @@
             </table>
         </div>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalShowFormList.hide()">Đóng</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click3')">Đóng</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal xac nhan cấu hình form danh sach-->
-<app-modal-basic #modalAcceptForm [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Xác nhận lưu form</h5>
-        <button type="button" class="close basic-close" (click)="modalAcceptForm.hide()">
+<ng-template #modalAcceptForm let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Xác nhận lưu form</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click1')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Xác nhận lưu form</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalAcceptForm.hide()">Không</button>
-        <button type="button" class="btn btn-primary ripple light m-l-10" (click)="submitFormList()">Có</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click1')">Không</button>
+        <button type="button" class="btn btn-primary ripple light m-l-10" (click)="submitFormList(titleTableNull)">Có</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal chua chon truong thong tin cho bang-->
-<app-modal-basic #titleTableNull>
-    <div class="app-modal-header">
-        <h5 class="modal-title">Xác nhận lưu form</h5>
-        <button type="button" class="close basic-close" (click)="closeTitleTableNull()">
+<ng-template #titleTableNull let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Xác nhận lưu form</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click9')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Chưa chọn trường thông tin cho bảng</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="closeTitleTableNull()">Đóng</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.dismiss('Cross click9')">Đóng</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal static hủy cấu hình form danh sách-->
-<app-modal-basic #modalCancelFormList [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Hủy thông tin cấu hình</h5>
-        <button type="button" class="close basic-close" (click)="modalCancelFormList.hide()">
+<ng-template #modalCancelFormList let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Hủy thông tin cấu hình</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click2')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Hủy thông tin cấu hình</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalCancelFormList.hide()">Không</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click2')">Không</button>
         <button type="button" class="btn btn-primary ripple light m-l-10" (click)="cancelConfigFormList()">Có</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal static hủy cấu hình table-->
-<app-modal-basic #modalCancelTable [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Hủy thông tin cấu hình</h5>
-        <button type="button" class="close basic-close" (click)="modalCancelTable.hide()">
+<ng-template #modalCancelTable let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Hủy thông tin cấu hình</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click9')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Hủy thông tin cấu hình</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalCancelTable.hide()">Không</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click9')">Không</button>
         <button type="button" class="btn btn-primary ripple light m-l-10" (click)="cancelConfigTable()">Có</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal cấu hình trường tìm kiếm-->
 <form [formGroup]="configSearch" (ngSubmit)="submitConfigSearch(configSearch.value)">
-    <app-modal-basic #modalConfigFieldSearch [outsizeClose]="false">
-        <div class="app-modal-header">
-            <h4 class="modal-title">Cấu hình tìm kiếm</h4>
-            <button type="button" class="close basic-close" (click)="CancelAttrSearchBtn()">
-                <span aria-hidden="true">&times;</span>
-            </button>
+<ng-template #modalConfigFieldSearch let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Cấu hình tìm kiếm</h4>
+        <button type="button" class="close" aria-label="Close" (click)="CancelAttrSearchBtn(modalCancelAttrSearch)">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group row" hidden>
+            <label class="col-sm-4 col-form-label">ID</label>
+            <div class="col-sm-8">
+                <input type="text" formControlName="AttributeCode"/>
+            </div>
         </div>
-        <div class="app-modal-body">
-            <div class="form-group row" hidden>
-                <label class="col-sm-4 col-form-label">ID</label>
-                <div class="col-sm-8">
-                    <input type="text" formControlName="AttributeCode"/>
-                </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Đối tượng</label>
+            <div class="col-sm-8">
+                <select class="browser-default custom-select" formControlName="AttributeType"
+                        (change)="changeAttributeType($event)">
+                    <option *ngFor="let item of listTypeObject">{{item.CategoryName}}</option>
+                </select>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Đối tượng</label>
-                <div class="col-sm-8">
-                    <select class="browser-default custom-select" formControlName="AttributeType"
-                            (change)="changeAttributeType($event)">
-                        <option *ngFor="let item of listTypeObject">{{item.CategoryName}}</option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Giá trị mặc định</label>
+            <div class="col-sm-8">
+                <select class="browser-default custom-select" formControlName="DefaultValue">
+                    <option value="all">--- Tất cả ---</option>
+                    <option *ngFor="let item of (selectCategoryChild$ | async); let i = index"
+                            [value]="item?.CategoryCode">{{item?.CategoryName}}
+                    </option>
+                </select>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Giá trị mặc định</label>
-                <div class="col-sm-8">
-                    <select class="browser-default custom-select" formControlName="DefaultValue">
-                        <option value="all">--- Tất cả ---</option>
-                        <option *ngFor="let item of (selectCategoryChild$ | async); let i = index"
-                                [value]="item?.CategoryCode">{{item?.CategoryName}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Hiển thị nhãn</label>
-                <div class="col-sm-8">
-                    <div class="border-checkbox-section">
-                        <div class="border-checkbox-group border-checkbox-group-success">
-                            <input class="border-checkbox" type="checkbox" id="checkboxLabel" formControlName="IsShowLabel">
-                            <label class="border-checkbox-label" for="checkboxLabel" style="margin-top: 5px;"><a
-                                    style="display: none">Success</a></label>
-                        </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Hiển thị nhãn</label>
+            <div class="col-sm-8">
+                <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-success">
+                        <input class="border-checkbox" type="checkbox" id="checkboxLabel" formControlName="IsShowLabel">
+                        <label class="border-checkbox-label" for="checkboxLabel" style="margin-top: 5px;"><a
+                                style="display: none">Success</a></label>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="app-modal-footer">
-            <button type="button" class="btn btn-default ripple" (click)="CancelAttrSearchBtn()">Hủy</button>
-            <button type="submit" class="btn btn-primary ripple light m-l-10">Lưu</button>
-        </div>
-    </app-modal-basic>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="CancelAttrSearchBtn(modalCancelAttrSearch)">Hủy</button>
+        <button type="submit" class="btn btn-primary ripple light m-l-10">Lưu</button>
+    </div>
+</ng-template>
 </form>
 
 <!-- modal static hủy cấu hình trường search -->
-<app-modal-basic #modalCancelAttrSearch [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Hủy thông tin cấu hình</h5>
-        <button type="button" class="close basic-close" (click)="modalCancelAttrSearch.hide()">
+<ng-template #modalCancelAttrSearch let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Hủy thông tin cấu hình</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click8')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Hủy thông tin cấu hình</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalCancelAttrSearch.hide()">Không</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click8')">Không</button>
         <button type="button" class="btn btn-primary ripple light m-l-10" (click)="cancelConfigAttrSearch()">Có</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
-<!-- modal static hủy cấu hình trường search -->
-<app-modal-basic #modalNullItemDragDrop>
-    <div class="app-modal-header">
-        <h5 class="modal-title">Thông tin cấu hình</h5>
-        <button type="button" class="close basic-close" (click)="modalNullItemDragDrop.hide()">
+<!-- modal static chưa chọn trường thông tin để thao tác -->
+<ng-template #modalNullItemDragDrop let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Thông tin cấu hình</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click7')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Chưa chọn trường thông tin</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalNullItemDragDrop.hide()">Đóng</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click7')">Đóng</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal static hủy cấu hình form danh sách khi chuyển tab-->
-<app-modal-basic #CancelFormListTabChange [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Hủy thông tin cấu hình</h5>
-        <button type="button" class="close basic-close" (click)="CancelFormListTabChange.hide()">
+<ng-template #CancelFormListTabChange let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Hủy thông tin cấu hình</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click5')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Hủy thông tin cấu hình</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="CancelFormListTabChange.hide()">Không</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click5')">Không</button>
         <button type="button" class="btn btn-primary ripple light m-l-10" (click)="cancelConfigWhenTabListChange()">Có</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 <!-- modal xac nhan xoa hang-->
-<app-modal-basic #modalAcceptDeleteRow [outsizeClose]="false">
-    <div class="app-modal-header">
-        <h5 class="modal-title">Xác nhận lưu form</h5>
-        <button type="button" class="close basic-close" (click)="modalAcceptDeleteRow.hide()">
+<ng-template #modalAcceptDeleteRow let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Xác nhận lưu form</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click4')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="app-modal-body">
+    <div class="modal-body">
         <p>Xác nhận xóa dòng</p>
     </div>
-    <div class="app-modal-footer">
-        <button type="button" class="btn btn-default ripple" (click)="modalAcceptDeleteRow.hide()">Không</button>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default ripple" (click)="modal.close('Close click4')">Không</button>
         <button type="button" class="btn btn-primary ripple light m-l-10" (click)="deleteRowAcceptFormList()">Có</button>
     </div>
-</app-modal-basic>
+</ng-template>
 
 
 

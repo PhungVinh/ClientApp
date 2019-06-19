@@ -50,7 +50,7 @@ export class CimsComponent implements OnInit {
             // do something
           }
           // reload data from list screen
-          this.store.dispatch(new LoadCims({ pagination: { currPage: 1, recodperpage: ITEMS_PER_PAGE } }));
+          this.store.dispatch(new LoadCims({ pagination: { currPage: 1, recordperpage: ITEMS_PER_PAGE } }));
           break;
       }
     });
@@ -61,7 +61,7 @@ export class CimsComponent implements OnInit {
     this.customerColumn$ = this.store.pipe(select(selectCustomerConfigurationColumn));
     this.customerData$ = this.store.pipe(select(selectCustomerConfigurationColumnData));
     this.customerPagination$ = this.store.pipe(select(selectCustomerPagination));
-    this.store.dispatch(new LoadCims({ pagination: { currPage: 1, recodperpage: ITEMS_PER_PAGE } }));
+    this.store.dispatch(new LoadCims({ pagination: { currPage: 1, recordperpage: ITEMS_PER_PAGE } }));
   }
 
   /**
@@ -118,7 +118,7 @@ export class CimsComponent implements OnInit {
    * @author daibh
    * @readonly please safe read code before edit this method
    */
-  loadPage = currPage => this.store.dispatch(new LoadCims({ pagination: { currPage, recodperpage: ITEMS_PER_PAGE } }));
+  loadPage = currPage => this.store.dispatch(new LoadCims({ pagination: { currPage, recordperpage: ITEMS_PER_PAGE } }));
 
   /**
    * handle event when clicked on import button

@@ -30,7 +30,9 @@ import {
   UserAuthorityPackBuIdFaild,
   UserServicePack,
   UserServicePackSuccess,
-  UserServicePackFaild
+  UserServicePackFaild,
+  UserDeleteSuccess,
+  UserDeleteFaild
 } from '../actions/user.actions';
 
 import { of } from 'rxjs';
@@ -89,10 +91,7 @@ export class UserEffects {
           withLatestFrom(this.store.select(state => {
             return state.admin.userState.param;
           })),
-          mergeMap(([data, res]) => [
-            new UserUpdateSuccess({ data: true }),
-            new LoadUsers({ pagination: res }),
-          ]),
+          map(([res, param]) => new UserUpdateSuccess({ res, param })),
           catchError(err => of(new UserUpdateFaild({ err })))
         )
       )
@@ -106,18 +105,13 @@ export class UserEffects {
       exhaustMap((action: UserCreate) =>
         this.service$.addUser(action.payload.user).pipe(
           withLatestFrom(this.store.select(state => {
-            // console.log('goi pah trang', state, state.admin.organization.param);
             return state.admin.userState.param;
           })),
-          mergeMap(([data, res]) => [
-            new UserCreateSuccess({ data: true }),
-            new LoadUsers({ pagination: { ...res, currPage: 1 } }),
-          ]),
+          map(([res, param]) => new UserCreateSuccess({ res, param: { ...param, CurrPage: 1 } })),
           catchError(err => of(new UserCreateFaild({ err })))
         )
       )
     );
-
 
   // Xoa user
   @Effect()
@@ -126,12 +120,11 @@ export class UserEffects {
       ofType<UserDelete>(UserActionTypes.UserDelete),
       exhaustMap((action: UserDelete) =>
         this.service$.deleteUser(action.payload.userId).pipe(
-          withLatestFrom(this.store.select(state => state.admin.userState.param)),
-          mergeMap(([data, res]) => [
-            new UserUpdateSuccess({ data: true }),
-            new LoadUsers({ pagination: res }),
-          ]),
-          catchError(err => of(new UserUpdateFaild({ err })))
+          withLatestFrom(this.store.select(state => {
+            return state.admin.userState.param;
+          })),
+          map(([res, param]) => new UserDeleteSuccess({ res, param })),
+          catchError(err => of(new UserDeleteFaild({ err })))
         )
       )
     );
@@ -193,16 +186,16 @@ export class UserEffects {
   );
 
   @Effect()
-    getServicePack$ = this.actions$.pipe(
-        ofType(UserActionTypes.UserServicePack),
-        exhaustMap((action: UserServicePack) =>
-            this.service$.getUserServicePack(action.payload.userId).pipe(
-                map(data => {
-                    return new UserServicePackSuccess({ data: data});
-                }),
-                catchError(err => of(new UserServicePackFaild({ err })))
-            )
-        )
-    );
+  getServicePack$ = this.actions$.pipe(
+    ofType(UserActionTypes.UserServicePack),
+    exhaustMap((action: UserServicePack) =>
+      this.service$.getUserServicePack(action.payload.userId).pipe(
+        map(data => {
+          return new UserServicePackSuccess({ data: data });
+        }),
+        catchError(err => of(new UserServicePackFaild({ err })))
+      )
+    )
+  );
 
 }

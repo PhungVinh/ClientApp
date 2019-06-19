@@ -23,7 +23,7 @@ export class ModuleComponent implements OnInit {
         icon: null,
         mainState: 'ATTR',
         menuId: 12,
-        name: 'Form thông tin bổ sung',
+        name: 'Cấu hình Form',
         parentCode: 'ATTR',
         shortLabel: 'TK',
         state: null,

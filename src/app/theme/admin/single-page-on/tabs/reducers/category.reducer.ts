@@ -45,8 +45,7 @@ export function categoryReducer(state = initialState, action: CategoryActions): 
                     ...state.reqOption,
                     query: {
                         textSearch: action.payload.TextSearch
-                    },
-                    pageSize: 10
+                    }
                 }
             }
         case CategoryActionTypes.LoadCategorySuccess:
@@ -122,7 +121,8 @@ export function categoryReducer(state = initialState, action: CategoryActions): 
         case CategoryActionTypes.UpdateCategory:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                err: null
             }
         case CategoryActionTypes.UpdateCategorySuccess:
             return {

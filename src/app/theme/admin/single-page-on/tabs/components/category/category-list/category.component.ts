@@ -54,7 +54,6 @@ export class CategoryComponent implements OnInit {
 
   search() {
     const searchInput = this.searchInput.value.trim();
-    console.log('this.perPage', this.perPage, searchInput);
     this.store.dispatch(new LoadCategories({ TextSearch: searchInput, currPage: 1, recodperpage: this.perPage }));
   }
 

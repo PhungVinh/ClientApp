@@ -136,7 +136,7 @@ export class CategoryEffects {
                             new UpdateCategorySuccess(),
                             new LoadCategories({ TextSearch: res.query.textSearch, currPage: 1, recodperpage: 10 })
                         ]),
-                        catchError(err => {
+                        catchError(({ error: err }) => {
                             return of(new UpdateCategoryFail({ err }));
                         })
                     )

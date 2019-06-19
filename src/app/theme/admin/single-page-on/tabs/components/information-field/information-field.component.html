@@ -9,8 +9,8 @@
                             <div class="col-md-3 col-xl-3 box-left">
                                 <label class="j-label">Danh sách trường thông tin</label>
                                 <!--<div *ngIf="showButtonAddAttr" class="add-attr add-plus" style="position: initial; font-size: 15px" (click)="modalLarge.show()">-->
-                                    <!--<i class="fa fa-plus" aria-hidden="true"></i>-->
-                                    <!--Thêm-->
+                                <!--<i class="fa fa-plus" aria-hidden="true"></i>-->
+                                <!--Thêm-->
                                 <!--</div>-->
                                 <div class="card table-module">
                                     <div class="card-block table-border-style" style="padding: 0">
@@ -20,7 +20,8 @@
                                                 <tr style="padding-bottom: 0">
                                                     <th>Mã</th>
                                                     <th>Tên trường
-                                                        <div *ngIf="showButtonAddAttr" class="add-attr add-minus" (click)="modalLarge.show()">
+                                                        <div *ngIf="showButtonAddAttr" class="add-attr add-minus"
+                                                             (click)="openModalAdd()">
                                                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                                                         </div>
                                                     </th>
@@ -32,7 +33,8 @@
                                                        [cdkDropListConnectedTo]="['doneList']"
                                                        (cdkDropListDropped)="drop4($event)">
                                                 <tr class="example-box" [cdkDragData]="item"
-                                                    *ngFor="let item of listAttr; let i = index" cdkDrag [cdkDragDisabled]="item.disabled">
+                                                    *ngFor="let item of listAttr; let i = index" cdkDrag
+                                                    [cdkDragDisabled]="item.disabled">
                                                     <td style="border-top: none">{{item.AttributeCode}}</td>
                                                     <td style="border-top: none">{{item.AttributeLabel}}</td>
                                                 </tr>
@@ -50,17 +52,22 @@
                                                 <div class="m-t-15">
                                                     <div class="example-container box-config-form">
                                                         <div>
-                                                            <div class="pull-right watch-detail" (click)="openVerticallyCentered(modalShowForm)">
+                                                            <div class="pull-right watch-detail"
+                                                                 (click)="openVerticallyCentered(modalShowForm)">
                                                                 Xem chi tiết <i class="fa fa-external-link"
                                                                                 aria-hidden="true"
                                                                                 style="margin-left: 5px"></i></div>
                                                             <div class="clearfix"></div>
                                                         </div>
-                                                        <div *ngFor="let test1 of test; let i = index" class="container"
+                                                        <div *ngFor="let test1 of test; let i = index" class=""
                                                              style="margin: 0; position: relative">
                                                             <form class="form-material">
                                                                 <div class="form-group form-default form-static-label">
-                                                                    <input type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="test1.title" placeholder="Tiêu đề" style="background:#fff; border-bottom: none; font-size: 15px; height: 35px">
+                                                                    <input type="text" class="form-control"
+                                                                           [ngModelOptions]="{standalone: true}"
+                                                                           [(ngModel)]="test1.title"
+                                                                           placeholder="Tiêu đề"
+                                                                           style="background:#fff; border-bottom: none; font-size: 15px; height: 35px">
                                                                 </div>
                                                             </form>
                                                             <div
@@ -70,81 +77,170 @@
                                                                     [cdkDropListData]="test1.arr"
                                                                     [cdkDropListConnectedTo]="[prepairList]"
                                                                     (cdkDropListDropped)="drop2($event)"
-                                                                    class="example-list row box-form box-add-drag">
-                                                                <div class="col-sm-{{item.AttributeColumn}} m-t-15 example-box" (mouseover)="hover()"
+                                                                    class="example-list box-form box-add-drag">
+                                                                <div class="col-sm-{{item.AttributeColumn}} m-t-15 example-box"
+                                                                     (mouseover)="hover()"
                                                                      id="item{{i}}{{index}}" [cdkDragData]="item"
                                                                      *ngFor="let item of test1.arr; let index = index"
                                                                      cdkDrag [ngClass]="{'active': item.active}">
                                                                     <div class="j-unit">
                                                                         <label class="j-label">{{item.AttributeLabel}}</label>
 
-
-
                                                                         <div *ngIf="item.AttributeType == 'TEXTBOX'">
-                                                                            <input class="form-control" [disabled]="item.IsReuse" [value]="item.DefaultValueWithTextBox" />
+                                                                            <input class="form-control"
+                                                                                   [disabled]="item.IsReuse"
+                                                                                   [value]="item.DefaultValueWithTextBox"/>
                                                                         </div>
                                                                         <div *ngIf="item.AttributeType == 'TEXTAREA'">
-                                                                            <textarea class="form-control" [disabled]="item.IsReuse" [value]="item.DefaultValueWithTextBox"></textarea>
+                                                                            <textarea class="form-control"
+                                                                                      [disabled]="item.IsReuse"
+                                                                                      [value]="item.DefaultValueWithTextBox"></textarea>
                                                                         </div>
                                                                         <div *ngIf="item.AttributeType == 'CHECKBOX' || item.AttributeType == 'LISTCHECKBOX'">
-                                                                            <div class="border-checkbox-section" *ngIf="item?.ListCategory.length > 0">
-                                                                            <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item?.ListCategory; let i = index">
-                                                                                <input class="border-checkbox" type="checkbox" id="13{{item.AttributeCode + i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                                                                <label class="border-checkbox-label" for="13{{item.AttributeCode + i}}">{{val.CategoryName}}</label>
-                                                                            </div>
+                                                                            <div class="border-checkbox-section"
+                                                                                 *ngIf="item?.ListCategory.length > 0">
+                                                                                <div class="border-checkbox-group border-checkbox-group-primary"
+                                                                                     *ngFor="let val of item?.ListCategory; let i = index">
+                                                                                    <input class="border-checkbox"
+                                                                                           type="checkbox"
+                                                                                           id="13{{val.CategoryCode + item.AttributeCode}}"
+                                                                                           [disabled]="item.IsReuse"
+                                                                                           [checked]="val?.CategoryCode === item?.DefaultValue">
+                                                                                    <label class="border-checkbox-label"
+                                                                                           for="13{{val.CategoryCode + item.AttributeCode}}">{{val.CategoryName}}</label>
+                                                                                </div>
                                                                             </div>
 
-                                                                            <div class="border-checkbox-section" *ngIf="item?.ListCategory.length === 0">
+                                                                            <div class="border-checkbox-section"
+                                                                                 *ngIf="item?.ListCategory.length === 0">
                                                                                 <div class="border-checkbox-group border-checkbox-group-primary">
-                                                                                    <input class="border-checkbox" type="checkbox" id="{{item.AttributeLabel}}" [disabled]="item.IsReuse">
-                                                                                    <label class="border-checkbox-label" for="{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
+                                                                                    <input class="border-checkbox"
+                                                                                           type="checkbox"
+                                                                                           id="{{item.AttributeLabel}}"
+                                                                                           [disabled]="item.IsReuse">
+                                                                                    <label class="border-checkbox-label"
+                                                                                           for="{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div *ngIf="item.AttributeType == 'DROPDOWNLIST'">
-                                                                            <select [disabled]="item.IsReuse" class="form-control">
-                                                                                <option *ngFor="let val of item?.ListCategory" [value]="val?.CategoryCode" [selected]="val?.CategoryCode === item?.DefaultValue">{{val?.CategoryName}}</option>
+                                                                            <select [disabled]="item.IsReuse"
+                                                                                    class="form-control">
+                                                                                <option *ngFor="let val of item?.ListCategory"
+                                                                                        [value]="val?.CategoryCode"
+                                                                                        [selected]="val?.CategoryCode === item?.DefaultValue">
+                                                                                    {{val?.CategoryName}}
+                                                                                </option>
                                                                             </select>
                                                                         </div>
                                                                         <div *ngIf="item.AttributeType == 'RADIO' || item.AttributeType == 'LISTRADIO'">
-                                                                            <div class="form-radio" *ngIf="item?.ListCategory.length > 0">
+                                                                            <div class="form-radio"
+                                                                                 *ngIf="item?.ListCategory.length > 0">
                                                                                 <form>
-                                                                                    <div class="radio radio-inline" *ngFor="let val of item?.ListCategory; let i = index">
+                                                                                    <div class="radio radio-inline"
+                                                                                         *ngFor="let val of item?.ListCategory; let i = index">
                                                                                         <label>
-                                                                                            <input type="radio" name="radio" [value]="val.CategoryCode" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                                                                            <i class="helper"></i> {{val.CategoryName}}
+                                                                                            <input type="radio"
+                                                                                                   name="radio"
+                                                                                                   [value]="val.CategoryCode"
+                                                                                                   [checked]="val?.CategoryCode === item?.DefaultValue">
+                                                                                            <i class="helper"></i>
+                                                                                            {{val.CategoryName}}
                                                                                         </label>
                                                                                     </div>
                                                                                 </form>
                                                                             </div>
-                                                                            <div class="form-radio" *ngIf="item?.ListCategory.length === 0">
+                                                                            <div class="form-radio"
+                                                                                 *ngIf="item?.ListCategory.length === 0">
                                                                                 <form>
                                                                                     <div class="radio radio-inline">
                                                                                         <label>
-                                                                                            <input type="radio" name="radio" [value]="item.CategoryCode">
-                                                                                            <i class="helper"></i> {{item.AttributeLabel}}
+                                                                                            <input type="radio"
+                                                                                                   name="radio"
+                                                                                                   [value]="item.CategoryCode">
+                                                                                            <i class="helper"></i>
+                                                                                            {{item.AttributeLabel}}
                                                                                         </label>
                                                                                     </div>
                                                                                 </form>
                                                                             </div>
                                                                         </div>
+                                                                        <div *ngIf="item.AttributeType == 'DATETIME'">
+                                                                            <div class="form-inline">
+                                                                                <div class="form-group">
+                                                                                    <div class="input-group">
+                                                                                        <input class="form-control"
+                                                                                               placeholder="yyyy-mm-dd"
+                                                                                               name="dp"
+                                                                                               [(ngModel)]="model"
+                                                                                               ngbDatepicker
+                                                                                               #dateFormInfo="ngbDatepicker"
+                                                                                               [disabled]="item.IsReuse">
+                                                                                        <div class="input-group-append">
+                  <span class="input-group-text calendar" (click)="dateFormInfo.toggle()">
+                    <i class="fa fal fa-calendar"></i>
+                  </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div *ngIf="item.AttributeType == 'DATETODATE'">
+                                                                            <div class="col-select">
+                                                                                <div class="form-control-org form-control">
+                                                                                    <input type="text" class="input-datepicker" name="DateFrom" [(ngModel)]="DateFrom"
+                                                                                           disabled placeholder="dd/mm/yyyy"> - <input type="text" name="DateTo"
+                                                                                                                                       placeholder="dd/mm/yyyy" disabled [(ngModel)]="DateTo" class="input-datepicker">
+                                                                                    <span type="button" class="span-control" (click)="onShowDatePicker()" style="cursor: pointer"
+                                                                                          [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                                        <i class="fa fa-calendar icon-calendar-box"></i>
+                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div id="collapseExample" [ngbCollapse]="!isCollapsed" class="datepicker_org">
+                                                                            <ngb-datepicker #dp
+                                                                                            (select)="onDateSelection($event)"
+                                                                                            [displayMonths]="2"
+                                                                                            [dayTemplate]="t"
+                                                                                            outsideDays="hidden" style="position: absolute; background: #fff; z-index: 1;">
+                                                                            </ngb-datepicker>
 
+                                                                            <ng-template #t let-date let-focused="focused">
+                                                                              <span class="custom-day"
+                                                                                    [class.focused]="focused"
+                                                                                    [class.range]="isRange(date)"
+                                                                                    [class.faded]="isHovered(date) || isInside(date)"
+                                                                                    (mouseenter)="hoveredDate = date"
+                                                                                    (mouseleave)="hoveredDate = null">
+                                                                                {{ date.day }}
+                                                                              </span>
+                                                                            </ng-template>
+                                                                            </div>
+                                                                        </div>
 
-                                                                        <i class="fa fa-times-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
+                                                                        <i class="fa fa-times-circle"
+                                                                           [ngClass]="{'active2': item.active}"
+                                                                           aria-hidden="true"
                                                                            (click)="deleteAttr(item, test1.arr)"></i>
                                                                         <i
                                                                                 class="fa fa-pencil-square"
                                                                                 [ngClass]="{'active2': item.active}"
-                                                                                aria-hidden="true" (click)="getAttrForm(item, test1.arr, i, 1)"></i>
-                                                                        <i class="fa fa-plus-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
+                                                                                aria-hidden="true"
+                                                                                (click)="getAttrForm(item, test1.arr, i, 1)"></i>
+                                                                        <i class="fa fa-plus-circle"
+                                                                           [ngClass]="{'active2': item.active}"
+                                                                           aria-hidden="true"
                                                                            (click)="addWidthAttr(item, test1.arr, i, index, 1)"></i>
-                                                                        <i class="fa fa-minus-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
+                                                                        <i class="fa fa-minus-circle"
+                                                                           [ngClass]="{'active2': item.active}"
+                                                                           aria-hidden="true"
                                                                            (click)="minusWidthAttr(item, test1.arr, i, index, 1)"></i>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <i class="fa fa-minus" aria-hidden="true"
-                                                               (click)="deleteRow(test1.arr, i)" *ngIf="lengthOfTest > 1"></i>
+                                                               (click)="deleteRow(test1.arr, i)"
+                                                               *ngIf="lengthOfTest > 1"></i>
                                                             <div class="clearfix"></div>
                                                         </div>
                                                         <div class="add-row">
@@ -160,75 +256,133 @@
                                                              [cdkDropListData]="prepairDrag"
                                                              [cdkDropListConnectedTo]="['doneList']"
                                                              (cdkDropListDropped)="drop3($event)"
-                                                             class="example-list row box-form box-add-drag prepair-drag" *ngIf="prepairDrag.length > 0">
+                                                             class="example-list row box-form box-add-drag prepair-drag"
+                                                             *ngIf="prepairDrag.length > 0">
 
-                                                            <div class="col-sm-3 m-t-15 example-box" id="itemPre{{index}}" [cdkDragData]="item"
+                                                            <div class="col-sm-3 m-t-15 example-box"
+                                                                 id="itemPre{{index}}" [cdkDragData]="item"
                                                                  *ngFor="let item of prepairDrag; let index = index"
-                                                                 cdkDrag [ngClass]="{'active': item.active}" (mouseover)="hover()">
+                                                                 cdkDrag [ngClass]="{'active': item.active}"
+                                                                 (mouseover)="hover()">
                                                                 <div class="j-unit">
                                                                     <label class="j-label">{{item.AttributeLabel}}</label>
 
 
                                                                     <div *ngIf="item.AttributeType == 'TEXTBOX'">
-                                                                        <input class="form-control" [disabled]="item.IsReuse" [value]="item.DefaultValueWithTextBox" />
+                                                                        <input class="form-control"
+                                                                               [disabled]="item.IsReuse"
+                                                                               [value]="item.DefaultValueWithTextBox"/>
                                                                     </div>
                                                                     <div *ngIf="item.AttributeType == 'TEXTAREA'">
-                                                                        <textarea class="form-control" [disabled]="item.IsReuse" [value]="item.DefaultValueWithTextBox"></textarea>
+                                                                        <textarea class="form-control"
+                                                                                  [disabled]="item.IsReuse"
+                                                                                  [value]="item.DefaultValueWithTextBox"></textarea>
                                                                     </div>
                                                                     <div *ngIf="item.AttributeType == 'CHECKBOX' || item.AttributeType == 'LISTCHECKBOX'">
-                                                                        <div class="border-checkbox-section" *ngIf="item?.ListCategory.length > 0">
-                                                                            <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item?.ListCategory; let i = index">
-                                                                                <input class="border-checkbox" type="checkbox" id="{{item.AttributeCode + i}}" [disabled]="item.IsReuse" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                                                                <label class="border-checkbox-label" for="{{item.AttributeCode + i}}">{{val.CategoryName}}</label>
+                                                                        <div class="border-checkbox-section"
+                                                                             *ngIf="item?.ListCategory.length > 0">
+                                                                            <div class="border-checkbox-group border-checkbox-group-primary"
+                                                                                 *ngFor="let val of item?.ListCategory; let i = index">
+                                                                                <input class="border-checkbox"
+                                                                                       type="checkbox"
+                                                                                       id="99{{val.CategoryCode + item.AttributeCode}}"
+                                                                                       [disabled]="item.IsReuse"
+                                                                                       [checked]="val?.CategoryCode === item?.DefaultValue">
+                                                                                <label class="border-checkbox-label"
+                                                                                       for="99{{val.CategoryCode + item.AttributeCode}}">{{val.CategoryName}}</label>
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="border-checkbox-section" *ngIf="item?.ListCategory.length === 0">
+                                                                        <div class="border-checkbox-section"
+                                                                             *ngIf="item?.ListCategory.length === 0">
                                                                             <div class="border-checkbox-group border-checkbox-group-primary">
-                                                                                <input class="border-checkbox" type="checkbox" id="123{{item.AttributeLabel}}" [disabled]="item.IsReuse">
-                                                                                <label class="border-checkbox-label" for="123{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
+                                                                                <input class="border-checkbox"
+                                                                                       type="checkbox"
+                                                                                       id="123{{item.AttributeLabel}}"
+                                                                                       [disabled]="item.IsReuse">
+                                                                                <label class="border-checkbox-label"
+                                                                                       for="123{{item.AttributeLabel}}">{{item.AttributeLabel}}</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div *ngIf="item.AttributeType == 'DROPDOWNLIST'">
-                                                                        <select [disabled]="item.IsReuse" class="form-control">
-                                                                            <option *ngFor="let val of item?.ListCategory" [value]="val?.CategoryCode" [selected]="val?.CategoryCode === item?.DefaultValue">{{val?.CategoryName}}</option>
+                                                                        <select [disabled]="item.IsReuse"
+                                                                                class="form-control">
+                                                                            <option *ngFor="let val of item?.ListCategory"
+                                                                                    [value]="val?.CategoryCode"
+                                                                                    [selected]="val?.CategoryCode === item?.DefaultValue">
+                                                                                {{val?.CategoryName}}
+                                                                            </option>
                                                                         </select>
                                                                     </div>
                                                                     <div *ngIf="item.AttributeType == 'RADIO' || item.AttributeType == 'LISTRADIO'">
-                                                                        <div class="form-radio" *ngIf="item?.ListCategory.length > 0">
+                                                                        <div class="form-radio"
+                                                                             *ngIf="item?.ListCategory.length > 0">
                                                                             <form>
-                                                                                <div class="radio radio-inline" *ngFor="let val of item?.ListCategory; let i = index">
+                                                                                <div class="radio radio-inline"
+                                                                                     *ngFor="let val of item?.ListCategory; let i = index">
                                                                                     <label>
-                                                                                        <input type="radio" name="radio" [value]="val.CategoryCode" [checked]="val?.CategoryCode === item?.DefaultValue">
-                                                                                        <i class="helper"></i> {{val.CategoryName}}
+                                                                                        <input type="radio" name="radio"
+                                                                                               [value]="val.CategoryCode"
+                                                                                               [checked]="val?.CategoryCode === item?.DefaultValue">
+                                                                                        <i class="helper"></i>
+                                                                                        {{val.CategoryName}}
                                                                                     </label>
                                                                                 </div>
                                                                             </form>
                                                                         </div>
-                                                                        <div class="form-radio" *ngIf="item?.ListCategory.length === 0">
+                                                                        <div class="form-radio"
+                                                                             *ngIf="item?.ListCategory.length === 0">
                                                                             <form>
                                                                                 <div class="radio radio-inline">
                                                                                     <label>
-                                                                                        <input type="radio" name="radio" [value]="item.CategoryCode">
-                                                                                        <i class="helper"></i> {{item.AttributeLabel}}
+                                                                                        <input type="radio" name="radio"
+                                                                                               [value]="item.CategoryCode">
+                                                                                        <i class="helper"></i>
+                                                                                        {{item.AttributeLabel}}
                                                                                     </label>
                                                                                 </div>
                                                                             </form>
                                                                         </div>
                                                                     </div>
+                                                                    <div *ngIf="item.AttributeType == 'DATETIME'">
+                                                                        <div class="form-inline">
+                                                                            <div class="form-group">
+                                                                                <div class="input-group">
+                                                                                    <input class="form-control"
+                                                                                           placeholder="yyyy-mm-dd"
+                                                                                           name="dp1"
+                                                                                           [(ngModel)]="model"
+                                                                                           ngbDatepicker
+                                                                                           #datePrepair="ngbDatepicker"
+                                                                                           [disabled]="item.IsReuse">
+                                                                                    <div class="input-group-append">
+                  <span class="input-group-text calendar" (click)="datePrepair.toggle()">
+                    <i class="fa fal fa-calendar"></i>
+                  </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
 
-                                                                    <i class="fa fa-times-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
+                                                                    <i class="fa fa-times-circle"
+                                                                       [ngClass]="{'active2': item.active}"
+                                                                       aria-hidden="true"
                                                                        (click)="deleteAttrPrepair(item)"></i>
                                                                     <span (click)="getAttrForm(item, prepairDrag, i, 2)"><i
                                                                             class="fa fa-pencil-square"
                                                                             [ngClass]="{'active2': item.active}"
                                                                             aria-hidden="true"
                                                                             (click)="modalEditLarge.show()"></i></span>
-                                                                    <i class="fa fa-plus-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
+                                                                    <i class="fa fa-plus-circle"
+                                                                       [ngClass]="{'active2': item.active}"
+                                                                       aria-hidden="true"
                                                                        (click)="addWidthAttr(item, prepairDrag, i, index, 2)"></i>
-                                                                    <i class="fa fa-minus-circle" [ngClass]="{'active2': item.active}" aria-hidden="true"
+                                                                    <i class="fa fa-minus-circle"
+                                                                       [ngClass]="{'active2': item.active}"
+                                                                       aria-hidden="true"
                                                                        (click)="minusWidthAttr(item, prepairDrag, i, index, 2)"></i>
                                                                 </div>
                                                             </div>
@@ -238,18 +392,21 @@
 
                                                     <div class="footer-bottom m-t-40 text-center">
                                                         <!--<button class="btn btn-primary" (click)="getFormConfig(1)"-->
-                                                                <!--*ngIf="test[0].arr.length == 0">Áp-->
-                                                            <!--dụng-->
+                                                        <!--*ngIf="test[0].arr.length == 0">Áp-->
+                                                        <!--dụng-->
                                                         <!--</button>-->
                                                         <!--<button class="btn btn-primary" (click)="getFormConfig(2)"-->
-                                                                <!--*ngIf="test[0].arr.length > 0">Áp dụng-->
+                                                        <!--*ngIf="test[0].arr.length > 0">Áp dụng-->
                                                         <!--</button>-->
                                                         <!--<button class="btn btn-primary" (click)="modalAcceptForm.show()"-->
-                                                                <!--*ngIf="test[0].arr.length == 0">Áp-->
-                                                            <!--dụng-->
+                                                        <!--*ngIf="test[0].arr.length == 0">Áp-->
+                                                        <!--dụng-->
                                                         <!--</button>-->
-                                                        <button class="btn btn-default" (click)="modalCancelForm.show()">Hủy</button>
-                                                        <button class="btn btn-primary m-l-10" (click)="acceptFormConfig()">Áp dụng
+                                                        <button class="btn btn-default"
+                                                                (click)="modalCancelForm.show()">Hủy
+                                                        </button>
+                                                        <button class="btn btn-primary m-l-10"
+                                                                (click)="acceptFormConfig()">Áp dụng
                                                         </button>
                                                     </div>
                                                 </div>
@@ -316,7 +473,8 @@
                     <div class="form-group form-default">
                         <label class="float-label">Tên trường<span class="star">*</span></label>
                         <input type="text" name="name" class="form-control"
-                               formControlName="AttributeLabel" [ngClass]="{'box-red':(name.invalid  && isSubmitAdd == true)}">
+                               formControlName="AttributeLabel"
+                               [ngClass]="{'box-red':(name.invalid  && isSubmitAdd == true)}">
                         <div *ngIf="((name.invalid  && isSubmitAdd == true) || (name.invalid && (name.dirty || name.touched)))"
                              class="messages m-t-5">
                             <p *ngIf="name.errors.required" class="text-danger error">
@@ -332,7 +490,9 @@
                     <div class="form-group form-default">
                         <label class="float-label">Kiểu dữ liệu <span class="star">*</span></label>
                         <select class="browser-default custom-select" formControlName="DataType">
-                            <option *ngFor="let item of listDataType" value="{{item.CategoryCode}}">{{item.CategoryName}}</option>
+                            <option *ngFor="let item of listDataType" value="{{item.CategoryCode}}">
+                                {{item.CategoryName}}
+                            </option>
                         </select>
                         <div *ngIf="dataType.invalid"
                              class="messages m-t-5">
@@ -426,7 +586,8 @@
                         <select class="browser-default custom-select" formControlName="DefaultValue"
                                 *ngIf="showDefaultValue === 1">
                             <option [value]="0">--Chọn giá trị mặc định--</option>
-                            <option *ngFor="let item of (selectCategoryChild$ | async); let i = index" value="{{item?.CategoryCode}}">
+                            <option *ngFor="let item of (selectCategoryChild$ | async); let i = index"
+                                    value="{{item?.CategoryCode}}">
                                 {{item?.CategoryName}}
                             </option>
                         </select>
@@ -545,7 +706,9 @@
                     <div class="form-group form-default">
                         <label class="float-label">Kiểu dữ liệu <span class="star">*</span></label>
                         <select class="browser-default custom-select" formControlName="DataType">
-                            <option *ngFor="let item of listDataType" value="{{item.CategoryCode}}">{{item.CategoryName}}</option>
+                            <option *ngFor="let item of listDataType" value="{{item.CategoryCode}}">
+                                {{item.CategoryName}}
+                            </option>
                         </select>
                         <div *ngIf="dataTypeEdit.invalid"
                              class="messages m-t-5">
@@ -622,16 +785,19 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="float-label">Giá trị mặc định</label>
-                        <select class="browser-default custom-select" formControlName="DefaultValue" *ngIf="showDefaultValueEdit === 1">
+                        <select class="browser-default custom-select" formControlName="DefaultValue"
+                                *ngIf="showDefaultValueEdit === 1">
                             <option [value]="0">--Chọn giá trị mặc định--</option>
                             <option *ngFor="let item of (selectCategoryChildEdit$ | async); let i = index"
-                                    [selected]="selectAttrEdit?.DefaultValue == item.CategoryName" [value]="item.CategoryCode">
+                                    [selected]="selectAttrEdit?.DefaultValue == item.CategoryName"
+                                    [value]="item.CategoryCode">
                                 {{item?.CategoryName}}
                             </option>
                         </select>
                         <span class="form-bar"></span>
 
-                        <div class="form-group form-default" style="margin-top: 1px;" *ngIf="showDefaultValueEdit === 2">
+                        <div class="form-group form-default" style="margin-top: 1px;"
+                             *ngIf="showDefaultValueEdit === 2">
                             <textarea class="form-control" rows="1"
                                       formControlName="DefaultValueWithTextBox"></textarea>
                             <span class="form-bar"></span>
@@ -691,91 +857,15 @@
 </form>
 
 <!-- modal static hủy cấu hình trường thông tin-->
-<app-modal-confirm #modalDefault [identity]="'modalDefault'" [dialogClass]="'modal-sm'" [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false" (onAccepted)="deleteConfigAttr()"></app-modal-confirm>
+<app-modal-confirm #modalDefault [identity]="'modalDefault'" [dialogClass]="'modal-sm'" [isNotify]="false"
+                   [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false"
+                   (onAccepted)="deleteConfigAttr()"></app-modal-confirm>
 
 
 <!-- modal static hủy cấu hình sửa trường thông tin-->
-<app-modal-confirm #modalDefaultEdit [identity]="'modalDefaultEdit'" [dialogClass]="'modal-sm'" [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false" (onAccepted)="deleteConfigEdit()"></app-modal-confirm>
-
-
-<!--modal xem chi tiết form cấu hình-->
-<!--<app-modal-basic #modalShowForm [dialogClass]="'modal-lg'" [outsizeClose]="false">-->
-    <!--<div class="app-modal-header">-->
-        <!--<h5 class="modal-title">Cấu hình form thông tin khách hàng</h5>-->
-        <!--<button type="button" class="close basic-close" (click)="modalShowForm.hide()">-->
-            <!--<span aria-hidden="true">&times;</span>-->
-        <!--</button>-->
-    <!--</div>-->
-    <!--<div class="app-modal-body">-->
-        <!--<div *ngFor="let item of test">-->
-            <!--<p style="font-size: 16px; font-weight: 600; color: #757575;" *ngIf="item.title !== ''">{{item.title}}</p>-->
-            <!--<div class="row m-t-20 item-row">-->
-                <!--<div *ngFor="let item2 of item.arr" class="col-sm-{{item2.AttributeColumn}}" [style.display]="!item2.IsVisible ? 'none' : 'block'">-->
-                    <!--<label>{{item2.AttributeLabel}}</label>-->
-                    <!--<div *ngIf="item2.AttributeType == 'TEXTBOX'">-->
-                        <!--<input class="form-control" [disabled]="item2.IsReuse" [value]="item2.DefaultValueWithTextBox" />-->
-                    <!--</div>-->
-                    <!--<div *ngIf="item2.AttributeType == 'TEXTAREA'">-->
-                        <!--<textarea class="form-control" [disabled]="item2.IsReuse" [value]="item2.DefaultValueWithTextBox"></textarea>-->
-                    <!--</div>-->
-                    <!--<div *ngIf="item2.AttributeType == 'CHECKBOX' || item2.AttributeType == 'LISTCHECKBOX'">-->
-                        <!--<div class="border-checkbox-section" *ngIf="item2?.ListCategory.length > 0">-->
-                            <!--<div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item2?.ListCategory; let i = index">-->
-                                <!--<input class="border-checkbox" type="checkbox" id="checkboxbb{{i}}" [disabled]="item2.IsReuse" [checked]="val?.CategoryCode === item2?.DefaultValue">-->
-                                <!--<label class="border-checkbox-label" for="checkboxb{{i}}">{{val.CategoryName}}</label>-->
-                            <!--</div>-->
-                        <!--</div>-->
-
-                        <!--<div class="border-checkbox-section" *ngIf="item2?.ListCategory.length === 0">-->
-                            <!--<div class="border-checkbox-group border-checkbox-group-primary">-->
-                                <!--<input class="border-checkbox" type="checkbox" id="checkboxaaa" [disabled]="item2.IsReuse">-->
-                                <!--<label class="border-checkbox-label" for="checkboxaaa">{{item2.AttributeLabel}}</label>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div *ngIf="item2.AttributeType == 'LISTCHECKBOX'">-->
-                        <!--<div class="border-checkbox-section" *ngFor="let val of item2?.ListCategory; let i = index">-->
-                            <!--<div class="border-checkbox-group border-checkbox-group-primary">-->
-                                <!--<input class="border-checkbox" type="checkbox" [checked]="val?.CategoryCode === item2?.DefaultValue" id="checkbox{{i}}" [disabled]="item2.IsReuse" [value]="val?.CategoryCode">-->
-                                <!--<label class="border-checkbox-label" for="checkbox{{i}}">{{val?.CategoryName}}</label>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div *ngIf="item2.AttributeType == 'DROPDOWNLIST'">-->
-                        <!--<select [disabled]="item2.IsReuse" class="form-control">-->
-                            <!--<option *ngFor="let val of item2?.ListCategory" [value]="val?.CategoryCode" [selected]="val?.CategoryCode === item2?.DefaultValue">{{val?.CategoryName}}</option>-->
-                        <!--</select>-->
-                    <!--</div>-->
-                    <!--<div *ngIf="item2.AttributeType == 'RADIO' || item2.AttributeType == 'LISTRADIO'">-->
-                        <!--<div class="form-radio" *ngIf="item2?.ListCategory.length > 0">-->
-                            <!--<form>-->
-                                <!--<div class="radio radio-inline" *ngFor="let val of item2?.ListCategory; let i = index">-->
-                                    <!--<label>-->
-                                        <!--<input type="radio" name="radio" [value]="val.CategoryCode" [checked]="val?.CategoryCode === item2?.DefaultValue">-->
-                                        <!--<i class="helper"></i> {{val.CategoryName}}-->
-                                    <!--</label>-->
-                                <!--</div>-->
-                            <!--</form>-->
-                        <!--</div>-->
-                        <!--<div class="form-radio" *ngIf="item2?.ListCategory.length === 0">-->
-                            <!--<form>-->
-                                <!--<div class="radio radio-inline">-->
-                                    <!--<label>-->
-                                        <!--<input type="radio" name="radio" [value]="item2.CategoryCode">-->
-                                        <!--<i class="helper"></i> {{item2.AttributeLabel}}-->
-                                    <!--</label>-->
-                                <!--</div>-->
-                            <!--</form>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="app-modal-footer">-->
-        <!--<button type="button" class="btn btn-default ripple" (click)="modalShowForm.hide()">Đóng</button>-->
-    <!--</div>-->
-<!--</app-modal-basic>-->
+<app-modal-confirm #modalDefaultEdit [identity]="'modalDefaultEdit'" [dialogClass]="'modal-sm'" [isNotify]="false"
+                   [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false"
+                   (onAccepted)="deleteConfigEdit()"></app-modal-confirm>
 
 <ng-template #modalShowForm let-modal>
     <div class="modal-header">
@@ -788,32 +878,41 @@
         <div *ngFor="let item of test">
             <p style="font-size: 16px; font-weight: 600; color: #757575;" *ngIf="item.title !== ''">{{item.title}}</p>
             <div class="row m-t-20 item-row">
-                <div *ngFor="let item2 of item.arr" class="col-sm-{{item2.AttributeColumn}}" [style.display]="!item2.IsVisible ? 'none' : 'block'">
+                <div *ngFor="let item2 of item.arr; let key = index" class="col-sm-{{item2.AttributeColumn}}"
+                     [style.display]="!item2.IsVisible ? 'none' : 'block'">
                     <label>{{item2.AttributeLabel}}</label>
                     <div *ngIf="item2.AttributeType == 'TEXTBOX'">
-                        <input class="form-control" [disabled]="item2.IsReuse" [value]="item2.DefaultValueWithTextBox" />
+                        <input class="form-control" [disabled]="item2.IsReuse" [value]="item2.DefaultValueWithTextBox"/>
                     </div>
                     <div *ngIf="item2.AttributeType == 'TEXTAREA'">
-                        <textarea class="form-control" [disabled]="item2.IsReuse" [value]="item2.DefaultValueWithTextBox"></textarea>
+                        <textarea class="form-control" [disabled]="item2.IsReuse"
+                                  [value]="item2.DefaultValueWithTextBox"></textarea>
                     </div>
                     <div *ngIf="item2.AttributeType == 'CHECKBOX' || item2.AttributeType == 'LISTCHECKBOX'">
                         <div class="border-checkbox-section" *ngIf="item2?.ListCategory.length > 0">
-                            <div class="border-checkbox-group border-checkbox-group-primary" *ngFor="let val of item2?.ListCategory; let i = index">
-                                <input class="border-checkbox" type="checkbox" id="checkboxbb{{i}}" [disabled]="item2.IsReuse" [checked]="val?.CategoryCode === item2?.DefaultValue">
-                                <label class="border-checkbox-label" for="checkboxb{{i}}">{{val.CategoryName}}</label>
+                            <div class="border-checkbox-group border-checkbox-group-primary"
+                                 *ngFor="let val of item2?.ListCategory; let i = index">
+                                <input class="border-checkbox" type="checkbox"
+                                       id="check{{val.CategoryCode + item2.AttributeCode}}"
+                                       [disabled]="item2.IsReuse" [checked]="val?.CategoryCode === item2?.DefaultValue">
+                                <label class="border-checkbox-label"
+                                       for="check{{val.CategoryCode + item2.AttributeCode}}">{{val.CategoryName}}</label>
                             </div>
                         </div>
 
                         <div class="border-checkbox-section" *ngIf="item2?.ListCategory.length === 0">
                             <div class="border-checkbox-group border-checkbox-group-primary">
-                                <input class="border-checkbox" type="checkbox" id="checkboxaaa" [disabled]="item2.IsReuse">
-                                <label class="border-checkbox-label" for="checkboxaaa">{{item2.AttributeLabel}}</label>
+                                <input class="border-checkbox" type="checkbox" id="checkboxaaa{{item2.AttributeLabel}}"
+                                       [disabled]="item2.IsReuse">
+                                <label class="border-checkbox-label" for="checkboxaaa{{item2.AttributeLabel}}">{{item2.AttributeLabel}}</label>
                             </div>
                         </div>
                     </div>
                     <div *ngIf="item2.AttributeType == 'DROPDOWNLIST'">
                         <select [disabled]="item2.IsReuse" class="form-control">
-                            <option *ngFor="let val of item2?.ListCategory" [value]="val?.CategoryCode" [selected]="val?.CategoryCode === item2?.DefaultValue">{{val?.CategoryName}}</option>
+                            <option *ngFor="let val of item2?.ListCategory" [value]="val?.CategoryCode"
+                                    [selected]="val?.CategoryCode === item2?.DefaultValue">{{val?.CategoryName}}
+                            </option>
                         </select>
                     </div>
                     <div *ngIf="item2.AttributeType == 'RADIO' || item2.AttributeType == 'LISTRADIO'">
@@ -821,7 +920,8 @@
                             <form>
                                 <div class="radio radio-inline" *ngFor="let val of item2?.ListCategory; let i = index">
                                     <label>
-                                        <input type="radio" name="radio" [value]="val.CategoryCode" [checked]="val?.CategoryCode === item2?.DefaultValue">
+                                        <input type="radio" name="radio" [value]="val.CategoryCode"
+                                               [checked]="val?.CategoryCode === item2?.DefaultValue">
                                         <i class="helper"></i> {{val.CategoryName}}
                                     </label>
                                 </div>
@@ -838,6 +938,27 @@
                             </form>
                         </div>
                     </div>
+                    <div *ngIf="item2.AttributeType == 'DATETIME'">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control"
+                                           placeholder="yyyy-mm-dd"
+                                           name="dp2"
+                                           [(ngModel)]="model"
+                                           ngbDatepicker
+                                           #dateShow="ngbDatepicker"
+                                           [disabled]="item2.IsReuse">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary calendar"
+                                                (click)="dateShow.toggle()"
+                                                type="button"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -848,18 +969,28 @@
 </ng-template>
 
 <!-- modal static hủy cấu hình form-->
-<app-modal-confirm #modalCancelForm [identity]="'modalCancelForm'" [dialogClass]="'modal-sm'" [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false" (onAccepted)="cancelConfigForm()"></app-modal-confirm>
+<app-modal-confirm #modalCancelForm [identity]="'modalCancelForm'" [dialogClass]="'modal-sm'" [isNotify]="false"
+                   [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false"
+                   (onAccepted)="cancelConfigForm()"></app-modal-confirm>
 
 <!-- modal xac nhan cấu hình form-->
-<app-modal-confirm #modalAcceptForm [identity]="'modalAcceptForm'" [dialogClass]="'modal-sm'" [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Xác nhận lưu form'" [outsizeClose]="false" (onAccepted)="getFormConfig()"></app-modal-confirm>
+<app-modal-confirm #modalAcceptForm [identity]="'modalAcceptForm'" [dialogClass]="'modal-sm'" [isNotify]="false"
+                   [confirmType]="'None'" [confirmMessage]="'Xác nhận lưu form'" [outsizeClose]="false"
+                   (onAccepted)="getFormConfig()"></app-modal-confirm>
 
 <!--khong lưu form trong hoác ko có trường bắt buộc-->
-<app-modal-confirm #modalFormNull [identity]="'modalFormNull'" [dialogClass]="'modal-sm'" [isNotify]="true" [confirmType]="'None'" [confirmMessage]="'Không thể lưu form trống hoặc không chứa các trường bắt buộc'"></app-modal-confirm>
+<app-modal-confirm #modalFormNull [identity]="'modalFormNull'" [dialogClass]="'modal-sm'" [isNotify]="true"
+                   [confirmType]="'None'"
+                   [confirmMessage]="'Không thể lưu form trống hoặc không chứa các trường bắt buộc'"></app-modal-confirm>
 
 
 <!-- modal static hủy cấu hình form khi chuyển tab-->
-<app-modal-confirm #modalCancelFormTabChange [identity]="'modalCancelFormTabChange'" [dialogClass]="'modal-sm'" [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'" [outsizeClose]="false" (onAccepted)="cancelConfigWhenTabChange()"></app-modal-confirm>
+<app-modal-confirm #modalCancelFormTabChange [identity]="'modalCancelFormTabChange'" [dialogClass]="'modal-sm'"
+                   [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Hủy thông tin cấu hình'"
+                   [outsizeClose]="false" (onAccepted)="cancelConfigWhenTabChange()"></app-modal-confirm>
 
 <!-- modal xac nhan xoa hang-->
-<app-modal-confirm #modalAcceptDeleteRow [identity]="'modalAcceptDeleteRow'" [dialogClass]="'modal-sm'" [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Xác nhận xóa dòng'" [outsizeClose]="false" (onAccepted)="deleteRowAccept()"></app-modal-confirm>
+<app-modal-confirm #modalAcceptDeleteRow [identity]="'modalAcceptDeleteRow'" [dialogClass]="'modal-sm'"
+                   [isNotify]="false" [confirmType]="'None'" [confirmMessage]="'Xác nhận xóa dòng'"
+                   [outsizeClose]="false" (onAccepted)="deleteRowAccept()"></app-modal-confirm>
 

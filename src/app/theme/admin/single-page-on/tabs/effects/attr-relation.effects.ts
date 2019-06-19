@@ -52,7 +52,7 @@ export class AttrRelationEffects {
                             pagination: {
                                 TextSearch: '',
                                 currPage: 1,
-                                recodperpage: ITEMS_PER_PAGE
+                                recordperpage: ITEMS_PER_PAGE
                             }
                         }),
                     ]),

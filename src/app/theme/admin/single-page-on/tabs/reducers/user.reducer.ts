@@ -1,7 +1,6 @@
-import { Action } from '@ngrx/store';
-import { UserActions, UserActionTypes } from '../actions/user.actions';
-import { Pagination } from '../../../../../shared/model/pagination.model';
 import { IUser } from 'src/app/shared/model/user.model';
+import { Pagination } from '../../../../../shared/model/pagination.model';
+import { UserActions, UserActionTypes } from '../actions/user.actions';
 
 export interface UserState {
   users?: IUser[];
@@ -70,7 +69,6 @@ export function userReducer(state = initialState, action: UserActions): UserStat
     case UserActionTypes.UserCreateSuccess:
       return {
         ...state,
-        load: action.payload.data,
         err: null
       };
 
@@ -90,7 +88,6 @@ export function userReducer(state = initialState, action: UserActions): UserStat
     case UserActionTypes.UserUpdateSuccess:
       return {
         ...state,
-        load: action.payload.data,
         err: null
       };
 
@@ -113,7 +110,6 @@ export function userReducer(state = initialState, action: UserActions): UserStat
       }
 
     case UserActionTypes.ResetPasswordUser:
-      console.log('vao dya');
       return {
         ...state,
         reset: null,

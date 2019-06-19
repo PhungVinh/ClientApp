@@ -282,7 +282,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.store.pipe(select(selectAccount)).subscribe(data => {
           this.account =  Object.assign({}, data);
           if (this.account.avatar) {
-            this.avatar = this.resourceAPI + this.account.avatar;
+            this.avatar = this.resourceAPI + this.account.avatar + '?rnd=' + Math.random();
             console.log('cavar', this.avatar);
           }
       });

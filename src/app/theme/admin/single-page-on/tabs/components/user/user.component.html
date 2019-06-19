@@ -99,7 +99,7 @@
               <p class="text-center LH" style="font-size: 16px;line-height:
                 2.4em;">
                 <i class="fa fas fa-cog" style="cursor: pointer;"
-                  (click)="onResetPassword(employee)"
+                  (click)="doResetPassword(employee)"
                   title="{{'Đặt lại mật khẩu' | translate}}"></i>
                 <i class="fa fas fa-pencil p-r-15 p-l-5" style="cursor:
                   pointer;" title="{{'Sửa' | translate}}"
@@ -147,6 +147,6 @@
 </app-modal-confirm>
 <app-modal-confirm #modalConfirmReset [identity]="'confirmReset'"
   [dialogClass]="'modal-sm'" [confirmType]="'None'"
-  (onAccepted)="reset($event)" [confirmMessage]="'Reset lại mật khẩu?'"
+  (onAccepted)="onResetPassword($event)" [confirmMessage]="'Reset lại mật khẩu?'"
   [outsizeClose]="false">
 </app-modal-confirm>

@@ -137,7 +137,7 @@ export class OrganizationComponent implements OnInit, IComponentRender {
                     TextSearch: this.TextSearch,
                     IsActive: this.IsActive,
                     currPage: this.page,
-                    recodperpage: this.itemsPerPage
+                    recordperpage: this.itemsPerPage
                 }
             }));
         } else {
@@ -150,7 +150,7 @@ export class OrganizationComponent implements OnInit, IComponentRender {
                     TextSearch: this.TextSearch,
                     IsActive: this.IsActive,
                     currPage: this.page,
-                    recodperpage: this.itemsPerPage
+                    recordperpage: this.itemsPerPage
                 }
             }));
         }
@@ -269,7 +269,7 @@ export class OrganizationComponent implements OnInit, IComponentRender {
                 TextSearch: this.TextSearch,
                 IsActive: this.IsActive,
                 currPage: page,
-                recodperpage: this.itemsPerPage
+                recordperpage: this.itemsPerPage
             }
         }));
     }

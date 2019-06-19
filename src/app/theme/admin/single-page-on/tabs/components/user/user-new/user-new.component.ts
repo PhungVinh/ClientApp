@@ -1,63 +1,41 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { NgbActiveModal, NgbCalendar, NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { select, Store } from '@ngrx/store';
+import { ActionsSubject, select, Store } from '@ngrx/store';
 import { ModalDirective } from 'angular-bootstrap-md';
 import * as jwt_decode from 'jwt-decode';
 import * as moment from "moment";
 import { ToastyService } from 'ng2-toasty';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { AUTH_TOKEN } from 'src/app/core/auth/auth.constants';
 import { LocalStorageService } from 'src/app/core/local-storage/local-storage.service';
-import { PER_PAGE } from 'src/app/shared/constants/authority.constants';
-import { isDefined } from 'src/app/shared/util/common.util';
+import { isDefined, isDefinedProp } from 'src/app/shared/util/common.util';
 import { emailMask } from 'text-mask-addons/dist/textMaskAddons';
 import { ITEMS_PER_PAGE } from '../../../../../../../shared/constants/pagination.constants';
 import { Authority } from '../../../../../../../shared/model/authority.model';
 import { User } from '../../../../../../../shared/model/user.model';
 import { State } from '../../../../../admin.state';
-import { LoadAuthorities, LoadListAuthorityFilter } from '../../../actions/authority.actions';
 import { LoadCategoryDepartments } from '../../../actions/category-department.actions';
 import { LoadCategoryPositions } from '../../../actions/category-position.actions';
-import {
-  UserCreate,
-  UserUpdate,
-  ListUserByAuthorityId,
-  UserServicePack
-} from '../../../actions/user.actions';
-import { getAuthority } from '../../../selectors/authority.selectors';
-import { selectCatrgoryDepartment } from '../../../selectors/CategoryDepartment.selectors';
-import { selectCatrgoryPosition } from '../../../selectors/categoryPosition.selectors';
-import {
-  selectError,
-  selectUserUpdate,
-  selectAuthorityPack,
-  selectAuthorityPackById,
-  selectUserById,
-  selectServicePackUser
-} from '../../../selectors/user.selectors.';
+import { ListUserByAuthorityId, UserActionTypes, UserCreate, UserServicePack, UserUpdate } from '../../../actions/user.actions';
+import { selectCategoryDepartment } from '../../../selectors/CategoryDepartment.selectors';
+import { selectCategoryPosition } from '../../../selectors/categoryPosition.selectors';
+import { selectAuthorityPackById, selectServicePackUser } from '../../../selectors/user.selectors.';
 import { CategoryDepartmentService } from '../../../services/category-department.service';
 import { CategoryPositionService } from '../../../services/category-position.service';
 import { UserService } from '../../../services/user/user.service';
-import { DOCUMENT } from '@angular/common';
-import * as $ from 'jquery';
-import { containsElement } from '@angular/animations/browser/src/render/shared';
-import { computeStyle } from '@angular/animations/browser/src/util';
-import { UserAuthorityPack, UserAuthorityPackById } from '../../../actions/user.actions';
 
 @Component({
   selector: 'app-user-new',
   templateUrl: './user-new.component.html',
   styleUrls: ['./user-new.component.scss']
 })
-export class UserNewComponent implements OnInit {
-  @ViewChild('modalDefault') modalDefault: ModalDirective;
-
-  @ViewChild('editForm') editForm;
-  // @ViewChild('fullNameInput') fullNameInput;
+export class UserNewComponent implements OnInit, OnDestroy {
+  
   @Input() authorityLoadUser;
-  @Input() fieldEncypt;
+  @Input() fieldEncrypt;
 
   users: User;
   authority: Authority;
@@ -65,9 +43,9 @@ export class UserNewComponent implements OnInit {
   Employee: any = [];
   categoryPosition$: Observable<any>;
   categoryDepartment$: Observable<any>;
-  public authorities$: Observable<any>;
-  public authorityPack$: Observable<any>;
-  public authorityPackById$: Observable<any>;
+  authorities$: Observable<any>;
+  authorityPack$: Observable<any>;
+  authorityPackById$: Observable<any>;
   TextSearch = '';
   IsLock: any;
   IsActive: any;
@@ -75,32 +53,42 @@ export class UserNewComponent implements OnInit {
   DateTo = '';
   page: any;
   itemsPerPage = ITEMS_PER_PAGE;
-  public arrRole: any = [];
-  public Genderchang: Number;
+  arrRole: any = [];
+  Genderchang: Number;
 
-  public maskUsMobile = /^\+?\d{10,12}$/;
-  public maskMobileCountryCode = ['+', /[0-9]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
-  public emailMask = emailMask;
-  public patternEmail = /^[a-zA-Z\d][\w._]*@\w+(\.[a-zA-Z\d]+)(\.[a-zA-Z]+)?$/;
-  public fullname = /^[ \s]+|[ \s]+$/;
+  maskUsMobile = /^\+?\d{10,12}$/;
+  maskMobileCountryCode = ['+', /[0-9]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+  emailMask = emailMask;
+  patternEmail = /^[a-zA-Z\d][\w._]*@\w+(\.[a-zA-Z\d]+)(\.[a-zA-Z]+)?$/;
+  fullname = /^[ \s]+|[ \s]+$/;
 
   BirthDaychang: any;
   isValidate = false;
 
   searchAuthorityForm: FormGroup = null;
-  private txtSearch: string;
-  public perPage = PER_PAGE;
   error?: any;
 
   userTemp: User;
   today: NgbDateStruct;
   maxDates: NgbDateStruct;
   Token: any;
-  // authorityPack: any;
   servicePacks: any;
   listAuthority: any;
 
+  isContinue: boolean = false;
+  subscription: Subject<void> = new Subject();
+  trackAction = [
+    UserActionTypes.UserCreateSuccess,
+    UserActionTypes.UserCreateFaild,
+    UserActionTypes.UserUpdateSuccess,
+    UserActionTypes.UserUpdateFaild,
+    UserActionTypes.LoadUserSuccess,
+    UserActionTypes.LoadUserFaild,
+  ];
 
+  @ViewChild('modalDefault') modalDefault: ModalDirective;
+  @ViewChild('editForm') editForm;
+  @ViewChild('elRefForm') elRefForm: ElementRef;
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
@@ -114,18 +102,77 @@ export class UserNewComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private toastyService: ToastyService,
     private localStorage: LocalStorageService,
-    
+    private actionsSubject$: ActionsSubject
 
   ) {
-
+    // track for save action status
+    this.actionsSubject$.pipe(
+      takeUntil(this.subscription), // only hold on subscrible when subscription alive
+      filter((action) => this.trackAction.some(a => a === action.type))
+    ).subscribe((action) => {
+      switch (action.type) {
+        case UserActionTypes.UserCreateSuccess:
+        case UserActionTypes.UserUpdateSuccess:
+          if (isDefinedProp(action, 'payload')) { // case success action have data in payload
+            // do something
+          }
+          // reload data from list screen
+          // this.store.dispatch(new LoadUsers({ pagination: { currPage: 1, recordperpage: ITEMS_PER_PAGE } }));
+          if (this.authorityLoadUser) {
+            this.store.dispatch(new ListUserByAuthorityId({ authorityId: this.authorityLoadUser.authorityId }));
+          }
+          break;
+        case UserActionTypes.UserCreateFaild:
+        case UserActionTypes.UserUpdateFaild:
+          if (isDefinedProp(action, 'payload')) { // case error action have error data in payload
+            // handle rise error return by service
+            if (isDefined(action['payload'].err) && action['payload'].err instanceof HttpErrorResponse) {
+              // get error header from error response
+              const error = (<HttpErrorResponse>action['payload'].err).error;
+              if (isDefined(error)) {
+                // determine focus errors control occurs
+                const focusError = error.value || null;
+                if (isDefinedProp(focusError, 'errorKey')) {
+                  if (focusError['errorKey'].endsWith('duplicateemail') && this.isDefinedControl('email')) {
+                    this.editForm.controls['email'].setErrors({ required: true });
+                    setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[name=email]`)).focus(), 0);
+                  } else if (focusError['errorKey'].endsWith('duplicateusername') && this.isDefinedControl('userName')) {
+                    this.editForm.controls['userName'].setErrors({ required: true });
+                    setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[name=userName]`)).focus(), 0);
+                  } else if (focusError['errorKey'].endsWith('duplicatephonenumber') && this.isDefinedControl('phoneNumber')) {
+                    this.editForm.controls['phoneNumber'].setErrors({ required: true });
+                    setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[name=phoneNumber]`)).focus(), 0);
+                  } else if (focusError['errorKey'] === 'error.maxuser') {
+                    this.close();
+                  }
+                }
+              }
+            }
+          }
+          // do something
+          break;
+        case UserActionTypes.LoadUserSuccess:
+          if (!this.isContinue) { // close modal after refresh data
+            this.close();
+          } else { // process reset form to initial status
+            this.clean();
+            this.isContinue = false;
+          }
+          break;
+        case UserActionTypes.LoadUserFaild:
+          this.close();
+          break;
+      }
+    });
   }
 
   ngOnInit() {
-    console.log('fieldEncypt2324', this.fieldEncypt);
-    console.log('jksdfvoj-2kjs', (<NgForm>this.editForm));
-    console.log('thisfjk.userdfe',this.users);
-    this.store.pipe(select(selectServicePackUser)).subscribe(data => {
-      console.log('vinh-serd-user', data);
+
+    // subscrible service pack
+    this.store.pipe(
+      takeUntil(this.subscription),
+      select(selectServicePackUser)
+    ).subscribe(data => {
       this.servicePacks = [];
       if (data && data.data && data.data instanceof Array) {
         (<[]>data.data).forEach(el => this.servicePacks.push(Object.assign({}, el)));
@@ -133,17 +180,27 @@ export class UserNewComponent implements OnInit {
       this.listAuthority = this.servicePacks;
     });
 
-    this.authorityPackById$ = this.store.pipe(select(selectAuthorityPackById));
+    // subscrible authority pack by id
+    this.authorityPackById$ = this.store.pipe(
+      takeUntil(this.subscription),
+      select(selectAuthorityPackById)
+    );
+
+    // subcrible category position
+    this.categoryPosition$ = this.store.pipe(select(selectCategoryPosition));
+    // subscrible category department
+    this.categoryDepartment$ = this.store.pipe(select(selectCategoryDepartment));
 
     this.searchAuthorityForm = this._formBuilder.group({
       searchInput: [''],
     });
+
     const date = new Date();
-    this.today = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() -1 };
+    this.today = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() - 1 };
     const token = this.localStorage.getItem(AUTH_TOKEN);
     var decoded = jwt_decode(token);
     this.Token = `${decoded.orgCode}_`
-    console.log('this.Token', this.Token);
+
     // convert to Object
     this.users = Object.assign({}, this.users);
     if (this.users.id === undefined) {
@@ -155,24 +212,32 @@ export class UserNewComponent implements OnInit {
       this.users.position = '0';
       this.users.isLock = false;
       this.store.dispatch(new UserServicePack({ userId: 0 }));
-    }
-    else {
+    } else {
       this.store.dispatch(new UserServicePack({ userId: this.users.id }));
       this.users = Object.assign({}, this.users);
       if (this.users.birthDay) {
         this.users.birthDay = moment(this.users.birthDay);
       }
     }
+    // clone origin object
     this.userTemp = Object.assign({}, this.users);
-
-    this.categoryPosition$ = this.store.pipe(select(selectCatrgoryPosition));
-    this.loadCategoryPosition();
-    this.categoryDepartment$ = this.store.pipe(select(selectCatrgoryDepartment));
-    this.loadCategoryDepartment();
-
+    // do fetch category positions and departments
+    this.store.dispatch(new LoadCategoryPositions({ pagination: {} }));
+    this.store.dispatch(new LoadCategoryDepartments({ pagination: {} }));
   }
 
+  /**
+   * check control with any name want to manipulation was rendered
+   * @author daibh
+   * @param name name of form control
+   * @readonly please confirm before change or remove this object
+   */
+  isDefinedControl = name => isDefined(this.editForm) && isDefined(this.editForm.controls) && isDefined(this.editForm.controls[name]);
 
+  /**
+   * search authority
+   * @author vinhpv
+   */
   searchAuthority() {
     const { searchInput } = this.searchAuthorityForm.value;
     if (searchInput) {
@@ -180,172 +245,121 @@ export class UserNewComponent implements OnInit {
     } else {
       this.servicePacks = this.listAuthority;
     }
-   
   }
 
-
-
-  CloseConfigAttr() {
+  /**
+   * handle event fired by click ok on modal confirm cancel save
+   * @author vinhpv
+   */
+  closeConfigAttr() {
     this.modalDefault.hide();
     this.close();
   }
 
-
-  listRole() {
-    if (this.txtSearch) {
-      // console.log('txtSearch111', this.txtSearch);
-      return this.arrRole.filter(role => {
-        return role.authorityName.toLowerCase().includes(this.txtSearch.toLowerCase())
-      });
-    } else {
-      return this.arrRole;
-    }
-
-  }
-
-  changeLock(e) {
-
-  }
+  /**
+   * handle event when keyboard was pressed in username control
+   * @param event keyboard event fired
+   * @author vinhpv
+   */
   keyPress(event: KeyboardEvent) {
     if (event.keyCode >= 48 && event.keyCode <= 57) {
       return true;
-    }
-    else if (event.keyCode >= 65 && event.keyCode <= 90) {
+    } else if (event.keyCode >= 65 && event.keyCode <= 90) {
       return true;
-    }
-    else if (event.keyCode >= 97 && event.keyCode <= 122) {
+    } else if (event.keyCode >= 97 && event.keyCode <= 122) {
       return true;
-    }
-    else if (event.keyCode == 95) {
+    } else if (event.keyCode == 95) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
+  /**
+   * handle event when keyboard was pressed in fullname control
+   * @param event keyboard event fired
+   * @author vinhpv
+   */
   keyPressFullname(event: KeyboardEvent) {
     if (event.keyCode >= 33 && event.keyCode <= 47) {
       return false;
-    }
-    else if (event.keyCode >= 58 && event.keyCode <= 64) {
+    } else if (event.keyCode >= 58 && event.keyCode <= 64) {
       return false;
-    }
-    else if (event.keyCode >= 91 && event.keyCode <= 96) {
+    } else if (event.keyCode >= 91 && event.keyCode <= 96) {
       return false;
-    }
-    else if (event.keyCode >= 123 && event.keyCode <= 126) {
+    } else if (event.keyCode >= 123 && event.keyCode <= 126) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
+
+  /**
+   * handle event when keyboard was pressed in phonenumber control
+   * @param event keyboard event fired
+   * @author vinhpv
+   */
   keyPressPhoneNumber(event: KeyboardEvent) {
     if (event.keyCode >= 48 && event.keyCode <= 57) {
       return true;
-    }
-    else if (event.keyCode == 43) {
+    } else if (event.keyCode == 43) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
+  /**
+   * handle event when keyboard was pressed in birthday control
+   * @param event keyboard event fired
+   * @author vinhpv
+   */
   keyPressBirthDay(event: KeyboardEvent) {
     if (event.keyCode == 12) {
       return true;
-    }
-    else if (event.keyCode === 8) {
+    } else if (event.keyCode === 8) {
       return false;
-    }
-    else {
-      return false;
-    }
-  }
-
-
-  save() {
-
-    this.users.fullName = this.users.fullName.replace(/\s+/g, ' ');
-    this.users.fullName = this.users.fullName.trim();
-
-
-
-    if (this.editForm.valid) {
-      let birthDay = null;
-      if (isDefined(this.users) && isDefined(this.users.birthDay)) {
-        birthDay = (<moment.Moment>this.users.birthDay).format('YYYY-MM-DD');
-      }
-
-      const serviceTemp = this.servicePacks.filter(data => data.checkPack === true);
-      console.log('serviceTemp',serviceTemp);
-      const creatObj = {
-        TblUsers: { ...this.users, birthDay },
-        tblAuthority: serviceTemp,
-      }
-      if (this.users.id !== undefined) {
-
-        this.store.dispatch(new UserUpdate({ user: creatObj }));
-      } else {
-        this.store.dispatch(new UserCreate({ user: creatObj }));
-      }
-      this.store.pipe(select(selectUserUpdate)).subscribe(isLoading => {
-        if (isLoading) {
-          if (this.authorityLoadUser) {
-            this.store.dispatch(new ListUserByAuthorityId({ authorityId: this.authorityLoadUser.authorityId }));
-          }
-          this.close();
-        }
-        this.store.pipe(select(selectError)).subscribe(err => {
-          if (err && err.error) {
-            this.isValidate = true;
-            if (err.error.value && err.error.value.errorKey.endsWith('duplicateemail')) {
-              (<FormControl>this.editForm.controls['email']).setErrors({ notUnique: true });
-              this.isValidate = true;
-            }
-          }
-
-          if (err && err.error) {
-            if (err.error.value && err.error.value.errorKey.endsWith('duplicateusername')) {
-              (<FormControl>this.editForm.controls['userName']).setErrors({ notUnique: true });
-              this.isValidate = true;
-            }
-          }
-
-          if (err && err.error) {
-            if (err.error.value && err.error.value.errorKey.endsWith('duplicatephonenumber')) {
-              (<FormControl>this.editForm.controls['phoneNumber']).setErrors({ notUnique: true });
-              this.isValidate = true;
-            }
-          }
-
-          if (err && err.error) {
-            if (err.error.value && err.error.value.errorKey === 'error.maxuser') {
-              this.close();
-            }
-          }
-
-        });
-      });
-
     } else {
-      this.isValidate = true;
+      return false;
     }
   }
 
-  // lưu và tiếp tục
-  SaveAndSave() {
+  /**
+   * handle event when clicked button save
+   * @author vinhpv
+   * @readonly maintained by daibh
+   */
+  onSave = event => {
+    event.preventDefault();
+    this.onSubmit();
+  }
 
-    this.users.fullName = this.users.fullName.replace(/\s+/g, ' ');
-    this.users.fullName = this.users.fullName.trim();
+  /**
+   * handle event when clicked button save and continue
+   * @author vinhpv
+   * @readonly maintained by daibh
+   */
+  onSaveAnContinue = event => {
+    event.preventDefault();
+    this.isContinue = true;
+    this.onSubmit();
+  }
+
+  /**
+   * process data when before send request to server
+   * @author vinhpv
+   * @readonly maintained by daibh
+   */
+  onSubmit = () => {
+    this.users.fullName = this.users.fullName ? this.users.fullName.replace(/\s+/g, ' ') : '';
+    this.users.fullName = this.users.fullName ? this.users.fullName.trim() : '';
 
     if (this.editForm.valid) {
       let birthDay = null;
       if (isDefined(this.users) && isDefined(this.users.birthDay)) {
         birthDay = (<moment.Moment>this.users.birthDay).format('YYYY-MM-DD');
       }
+
       const serviceTemp = this.servicePacks.filter(data => data.checkPack === true);
       const creatObj = {
         TblUsers: { ...this.users, birthDay },
@@ -357,51 +371,20 @@ export class UserNewComponent implements OnInit {
       } else {
         this.store.dispatch(new UserCreate({ user: creatObj }));
       }
-      this.store.pipe(select(selectUserUpdate)).subscribe(isLoading => {
-        if (isLoading) {
-          if (this.authorityLoadUser) {
-            this.store.dispatch(new ListUserByAuthorityId({ authorityId: this.authorityLoadUser.authorityId }));
-          }
-          this.clean();
-        }
-        this.store.pipe(select(selectError)).subscribe(err => {
-          if (err && err.error) {
-            this.isValidate = true;
-            if (err.error.value && err.error.value.errorKey.endsWith('duplicateemail')) {
-              (<FormControl>this.editForm.controls['email']).setErrors({ notUnique: true });
-              this.isValidate = true;
-            }
-          }
-
-          if (err && err.error) {
-            if (err.error.value && err.error.value.errorKey.endsWith('duplicateusername')) {
-              (<FormControl>this.editForm.controls['userName']).setErrors({ notUnique: true });
-              this.isValidate = true;
-            }
-          }
-
-          if (err && err.error) {
-            if (err.error.value && err.error.value.errorKey.endsWith('duplicatephonenumber')) {
-              (<FormControl>this.editForm.controls['phoneNumber']).setErrors({ notUnique: true });
-              this.isValidate = true;
-            }
-          }
-
-          if (err && err.error) {
-            if (err.error.value && err.error.value.errorKey === 'error.maxuser') {
-              this.close();
-            }
-          }
-
-        });
-      });
-
     } else {
-      this.isValidate = true;
+      if (this.editForm && this.editForm.controls) {
+        const firstError = Object.keys(this.editForm.controls).find(c => this.editForm.controls[c] && this.editForm.controls[c].invalid);
+        if (firstError) {
+          setTimeout(() => (<HTMLElement>this.elRefForm.nativeElement.querySelector(`[name=${firstError}]`)).focus(), 0);
+        }
+      }
     }
   }
-  
 
+  /**
+   * reset form after save data
+   * @author vinhpv
+   */
   clean() {
     (<NgForm>this.editForm).resetForm();
     if ((<NgForm>this.editForm).controls['categoryPosition']) {
@@ -420,13 +403,19 @@ export class UserNewComponent implements OnInit {
     this.userTemp = Object.assign({}, this.users);
   }
 
+  /**
+   * close modal
+   * @author vinhpv
+   */
   close() {
     this.activeModal.dismiss('cancel');
   }
 
+  /**
+   * handle event when close modal event was clicked
+   * @author vinhpv
+   */
   openClose() {
-    console.log(JSON.stringify(this.users));
-    console.log(JSON.stringify(this.userTemp));
     if (JSON.stringify(this.users) === JSON.stringify(this.userTemp)) {
       this.close();
     } else {
@@ -434,38 +423,9 @@ export class UserNewComponent implements OnInit {
     }
   }
 
-  // load authority
-  loadAuthority() {
-    this.store.dispatch(new LoadAuthorities({ textSearch: '', currPage: 0, Record: 15 }));
-  }
-
-  // Load Category Department
-  loadCategoryDepartment() {
-    this.store.dispatch(new LoadCategoryDepartments({
-      pagination: {
-
-      }
-    }));
-  }
-
-  // Load Category Position
-  loadCategoryPosition() {
-    this.store.dispatch(new LoadCategoryPositions({
-      pagination: {
-
-      }
-    }));
-  }
-
-
-
-  checkRole(e, role) {
-
-    this.arrRole.push({
-      AuthorityId: Number(e.target.value),
-      RoleName: role.authorityName
-    });
-    console.log(' this.arrRole', this.arrRole);
+  ngOnDestroy() {
+    this.subscription.next();
+    this.subscription.complete();
   }
 
 }

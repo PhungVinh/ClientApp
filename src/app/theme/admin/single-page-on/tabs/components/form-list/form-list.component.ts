@@ -15,14 +15,14 @@ import {selectCateChildByParent, selectCategory, selectConstraints} from '../../
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {DataTypeService} from '../../services/dataType/data-type.service';
 import {TypeObjectService} from '../../services/typeObject/type-object.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-form-list',
     templateUrl: './form-list.component.html',
-    styleUrls: ['./form-list.component.css']
+    styleUrls: ['./form-list.component.css'],
 })
-export class FormListComponent implements OnInit, AfterViewInit {
+export class FormListComponent implements OnInit {
     @Input() listAttrFormInfor: any[];
     @Output() dataLissAttr = new EventEmitter<any[]>();
     @Output() deleteAttr = new EventEmitter<any[]>();
@@ -103,11 +103,6 @@ export class FormListComponent implements OnInit, AfterViewInit {
         this.selectCategory$ = this.store.pipe(select(selectCategory));
     }
 
-    // openVerticallyCentered(content) {
-    //     this.modalService.open(content, {centered: true});
-    // }
-
-
     getData() {
         const allAttr = [];
         const listTitleTableNotChange1 = [];
@@ -179,16 +174,12 @@ export class FormListComponent implements OnInit, AfterViewInit {
             });
     }
 
-    showInfoFormList() {
-        this.modalShowFormList.show();
+    showInfoFormList(content) {
+        this.modalService.open(content, { centered: true, size: 'lg' });
     }
 
-    openModalConfigTable() {
-        this.modalLarge.show();
-    }
-
-    ngAfterViewInit() {
-        // this.dataLissAttr.emit(this.listAttributes);
+    openModalConfigTable(content) {
+        this.modalService.open(content, { centered: true, size: 'lg' });
     }
 
     addRow() {
@@ -200,12 +191,13 @@ export class FormListComponent implements OnInit, AfterViewInit {
         this.checkChangeEmit.emit(this.checkChangeFormList);
     }
 
-    deleteRow(row, index) {
+    deleteRow(row, index, content) {
         this.rowToDelete = [];
         this.rowToDelete = [...row];
         this.indexRowTodelete = index;
         if (row.length > 0) {
-            this.modalAcceptDeleteRow.show();
+            // this.modalAcceptDeleteRow.show();
+            this.modalService.open(content, { centered: true });
         } else {
             this.lengthOfarrayAttributeDropItem = this.lengthOfarrayAttributeDropItem - 1;
             this.arrayAttributeDrop.splice(index, 1);
@@ -219,7 +211,8 @@ export class FormListComponent implements OnInit, AfterViewInit {
 
     deleteRowAcceptFormList() {
         if (this.arrayAttributeDrop.length > 1) {
-            this.modalAcceptDeleteRow.hide();
+            // this.modalAcceptDeleteRow.hide();
+            this.modalService.dismissAll();
             this.checkChangeFormList = true;
             this.checkChangeEmit.emit(this.checkChangeFormList);
             this.lengthOfarrayAttributeDropItem = this.arrayAttributeDrop.length - 1;
@@ -247,7 +240,7 @@ export class FormListComponent implements OnInit, AfterViewInit {
         this.checkChangeFormList = true;
         this.checkChangeEmit.emit(this.checkChangeFormList);
         if (event.previousContainer === event.container) {
-            this.modalConfigFieldSearch.hide();
+            this.modalService.dismissAll();
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
             event.container.data.forEach((item, index) => {
                 const newObj: any = item;
@@ -271,7 +264,8 @@ export class FormListComponent implements OnInit, AfterViewInit {
                 console.log(arrTotal);
                 console.log(event.previousContainer.data);
                 if (!arrTotal.includes(event.previousContainer.data)) {
-                    this.modalConfigFieldSearch.show();
+                    // this.modalConfigFieldSearch.show();
+                    this.modalService.open(this.modalConfigFieldSearch, { centered: true });
                     this.getInfoConfigSearch((Object.assign((event.item.data as any), {IsShowLabel: true})));
                 }
                 transferArrayItem(event.previousContainer.data,
@@ -378,13 +372,14 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    pushToTable() {
+    pushToTable(content) {
         if (this.checkAllListDrag) {
             (document.getElementById('allDrag') as HTMLInputElement).checked = false;
         }
 
         if (this.listToTable.length === 0) {
-            this.modalNullItemDragDrop.show();
+            // this.modalNullItemDragDrop.show();
+            this.modalService.open(content, { centered: true });
         } else {
             this.listTitleTable = [...this.listTitleTable, ...this.listToTable];
 
@@ -402,13 +397,14 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    pushToListDrag() {
+    pushToListDrag(content) {
         if (this.checkAllListTitleTable) {
             (document.getElementById('allTitle') as HTMLInputElement).checked = false;
         }
 
         if (this.listOutTable.length === 0) {
-            this.modalNullItemDragDrop.show();
+            // this.modalNullItemDragDrop.show();
+            this.modalService.open(content, { centered: true });
         } else {
             this.listTitleToDrag = [...this.listTitleToDrag, ...this.listOutTable];
 
@@ -468,9 +464,10 @@ export class FormListComponent implements OnInit, AfterViewInit {
         this.indexItemMove = index;
     }
 
-    moveFirst() {
+    moveFirst(content) {
         if (Object.keys(this.itemMove).length === 0) {
-            this.modalNullItemDragDrop.show();
+            // this.modalNullItemDragDrop.show();
+            this.modalService.open(content, { centered: true });
         } else {
             if (this.indexItemMove > 0 && this.indexItemMove <= (this.listTitleTable.length - 1)) {
                 this.listTitleTable.splice(0, 0, this.listTitleTable.splice(this.indexItemMove, 1)[0]);
@@ -480,9 +477,10 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    moveLast() {
+    moveLast(content) {
         if (Object.keys(this.itemMove).length === 0) {
-            this.modalNullItemDragDrop.show();
+            // this.modalNullItemDragDrop.show();
+            this.modalService.open(content, { centered: true });
         } else {
             if (this.indexItemMove >= 0 && this.indexItemMove < (this.listTitleTable.length - 1)) {
                 this.listTitleTable.splice(this.listTitleTable.length, 0, this.listTitleTable.splice(this.indexItemMove, 1)[0]);
@@ -492,9 +490,10 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    moveUp() {
+    moveUp(content) {
         if (Object.keys(this.itemMove).length === 0) {
-            this.modalNullItemDragDrop.show();
+            // this.modalNullItemDragDrop.show();
+            this.modalService.open(content, { centered: true });
         } else {
             if (this.indexItemMove > 0 && this.indexItemMove <= (this.listTitleTable.length - 1)) {
                 this.listTitleTable.splice(this.indexItemMove - 1, 0, this.listTitleTable.splice(this.indexItemMove, 1)[0]);
@@ -504,9 +503,10 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    moveDown() {
+    moveDown(content) {
         if (Object.keys(this.itemMove).length === 0) {
-            this.modalNullItemDragDrop.show();
+            // this.modalNullItemDragDrop.show();
+            this.modalService.open(content, { centered: true });
         } else {
             if (this.indexItemMove >= 0 && this.indexItemMove < (this.listTitleTable.length - 1)) {
                 this.listTitleTable.splice(this.indexItemMove + 1, 0, this.listTitleTable.splice(this.indexItemMove, 1)[0]);
@@ -516,8 +516,11 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    submitFormList() {
+    submitFormList(content) {
         if (this.listTitleTable.length > 0) {
+            this.modalService.dismissAll();
+            this.checkChangeFormList = false;
+            this.checkChangeEmit.emit(this.checkChangeFormList);
             const totalItem = [];
             const objFormConfig = <any>{};
             this.arrayAttributeDrop.forEach((item, k) => {
@@ -553,18 +556,10 @@ export class FormListComponent implements OnInit, AfterViewInit {
                     console.log(data);
                 });
             }
-
-            this.modalAcceptForm.hide();
-            this.checkChangeFormList = false;
-            this.checkChangeEmit.emit(this.checkChangeFormList);
         } else {
-            this.titleTableNull.show();
+            // this.titleTableNull.show();
+            this.modalService.open(content, { centered: true });
         }
-    }
-
-    closeTitleTableNull() {
-        this.titleTableNull.hide();
-        this.modalAcceptForm.hide();
     }
 
     cancelConfigFormList() {
@@ -573,14 +568,15 @@ export class FormListComponent implements OnInit, AfterViewInit {
         this.listTitleToDrag = [];
         this.listTitleTable = [...this.listTitleTableNotChange];
         this.listTitleToDrag = [...this.listdragNotChange];
-        this.modalCancelFormList.hide();
+        // this.modalCancelFormList.hide();
+        this.modalService.dismissAll();
         this.checkChangeFormList = false;
         this.checkChangeEmit.emit(this.checkChangeFormList);
     }
 
     cancelConfigTable() {
-        this.modalCancelTable.hide();
-        this.modalLarge.hide();
+        this.modalService.dismissAll();
+        this.getData();
         this.indexItemMove = this.listTitleTable.length + 1;
         this.listTitleTable.forEach((val, key) => {
             (document.getElementById('itemActive' + key) as HTMLElement).className = '';
@@ -626,11 +622,13 @@ export class FormListComponent implements OnInit, AfterViewInit {
         });
     }
 
-    saveConfigTable() {
+    saveConfigTable(content) {
         if (this.listTitleTable.length === 0) {
-            this.titleTableNull.show();
+            // this.titleTableNull.show();
+            this.modalService.open(content, { centered: true });
         } else {
-            this.modalLarge.hide();
+            // this.modalLarge.hide();
+            this.modalService.dismissAll();
             this.listTitleTable.forEach((item, index) => {
                 const object: any = {};
                 object.IsTableShow = true;
@@ -707,35 +705,36 @@ export class FormListComponent implements OnInit, AfterViewInit {
             });
         });
 
-        this.modalConfigFieldSearch.hide();
+        this.modalService.dismissAll();
     }
 
     cancelConfigWhenTabListChange() {
         this.checkChangeFormList = false;
         this.checkChangeEmit.emit(this.checkChangeFormList);
-        this.CancelFormListTabChange.hide();
+        // this.CancelFormListTabChange.hide();
+        this.modalService.dismissAll();
         this.checkActiveTab.emit('ngb-tab-4');
     }
 
-    cancelModalConfigLisst() {
+    cancelModalConfigLisst(content) {
         if (this.checkChange) {
-            this.modalCancelTable.show();
+            this.modalService.open(content, { centered: true });
         } else {
-            this.modalLarge.hide();
+            this.modalService.dismissAll();
         }
     }
 
-    cancelFormList() {
+    cancelFormList(content) {
         if (this.checkChangeFormList) {
-            this.modalCancelFormList.show();
+            // this.modalCancelFormList.show();
+            this.modalService.open(content, { centered: true });
         } else {
 
         }
     }
 
     cancelConfigAttrSearch() {
-        this.modalCancelAttrSearch.hide();
-        this.modalConfigFieldSearch.hide();
+        this.modalService.dismissAll();
         this.configSearch.markAsPristine({onlySelf: true});
     }
 
@@ -754,13 +753,22 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }
     }
 
-    acceptFormList() {
+    acceptFormList(content) {
         if (this.listTitleTable.length === 0) {
             this.showErrorNull = true;
             this.cancelMessage();
         } else {
-            this.modalAcceptForm.show();
+            // this.modalAcceptForm.show();
+            this.modalService.open(content, { centered: true });
         }
+    }
+
+    openModalCancelWhenTabChange(content) {
+        this.modalService.open(content, { centered: true });
+    }
+
+    openModalConfigSearch(content) {
+        this.modalService.open(content, { centered: true });
     }
 
     cancelMessage() {
@@ -769,11 +777,13 @@ export class FormListComponent implements OnInit, AfterViewInit {
         }, 3000);
     }
 
-    CancelAttrSearchBtn() {
+    CancelAttrSearchBtn(content) {
         if (this.configSearch.pristine) {
-            this.modalConfigFieldSearch.hide();
+            // this.modalConfigFieldSearch.hide();
+            this.modalService.dismissAll();
         } else {
-            this.modalCancelAttrSearch.show();
+            // this.modalCancelAttrSearch.show();
+            this.modalService.open(content, { centered: true });
         }
     }
 

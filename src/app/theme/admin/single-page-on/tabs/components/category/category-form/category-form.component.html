@@ -21,7 +21,7 @@
           <label class="form-control-label label__black_14" for="CategoryTypeCode">Danh mục liên kết</label>
           <select class="form-control" formControlName="CategoryTypeCode">
             <option selected value="">-- Chọn danh mục liên kết --</option>
-            <option *ngFor="let cate of (categoryParent$ | async)" [value]="cate.categoryCode">{{ cate.categoryName }}
+            <option *ngFor="let cate of (categoryParent$ | async)" [value]="cate.categoryCode" [hidden]="categoryEdit && cate.categoryCode === categoryEdit.categoryCode">{{ cate.categoryName }}
             </option>
           </select>
         </div>
@@ -62,7 +62,7 @@
 
           </div>
           <hr>
-          <div formArrayName="children" *ngFor="let child of children['controls']; let i=index; let last = last">
+          <div formArrayName="children" *ngFor="let child of children['controls']; let i=index; let last = last" >
             <div [formGroupName]="i" style="display: flex" [hidden]="displayControlArray(i)">
               <div style="flex: 2 0 0; padding-right: 25px">
                 <div class="form-group">
@@ -79,7 +79,7 @@
                   <div class="form-group" style="flex: 1">
                     <input class="form-control"
                       [ngClass]="{'is-invalid': child.get('CategoryName').invalid && (child.get('CategoryName').dirty || child.get('CategoryName').touched)}"
-                      type="text" required maxlength="200" formControlName="CategoryName">
+                      type="text" required maxlength="200" formControlName="CategoryName" appControlTrimReactiveForm [ControlTrim]="'deep'">
                     <small class="form-text text-danger"
                       *ngIf="child.get('CategoryName').errors?.required && (child.get('CategoryName').dirty || child.get('CategoryName').touched)">Thông
                       tin không được để trống</small>

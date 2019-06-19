@@ -289,6 +289,51 @@ tbody {
     /*border: 1px solid red;*/
 /*}*/
 
+/*css for date ranger*/
+.custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+}
+.custom-day.focused {
+    background-color: #e6e6e6;
+}
+.custom-day.range, .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+}
+.custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+}
+
+.form-control-org{
+    width: auto;
+    position: relative;
+}
+.input-datepicker{
+    width: calc((100% - 45px)/2);
+    border: none;
+    text-align: center;
+}
+.span-control {
+    border: none;
+    display: inline-block;
+    font-size: 15px;
+    text-align: right;
+    margin-top: 0px;
+    background: transparent;
+    -webkit-appearance: none;
+}
+.icon-calendar-box{
+    position: absolute;
+    right: 8px;
+    top: 10px;
+}
+/*end css for date ranger*/
+
+
 
 
 
